@@ -46,7 +46,8 @@ What your project **is**. Changes rarely.
 - Agent roles and responsibilities
 - Architectural patterns and playbooks
 - Quality policies and standards
-- Tool definitions
+- Tool definitions and contracts
+- Graph schema for knowledge queries
 
 </td>
 <td width="50%" valign="top">
