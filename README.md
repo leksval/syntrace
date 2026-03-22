@@ -5,7 +5,7 @@
 <h1 align="center">Syntrace</h1>
 
 <p align="center">
-  <strong>Dual-inheritance knowledge architecture for AI-assisted projects.</strong>
+  <strong>Persistent, portable knowledge for agentic AI. Any platform. Any agent. Just folders and markdown.</strong>
 </p>
 
 <p align="center">
@@ -24,15 +24,26 @@
 
 ---
 
+## The Problem
+
+You switch between Cursor, Claude Code, Perplexity, your own agents, mobile tools. Every switch is a factory reset. The patterns your agent found, the decisions it made, the architecture it finally understood: gone.
+
+Vector databases lock you to one provider's embeddings. Custom instructions don't transfer. Platform-specific memory features disappear the moment you leave that platform.
+
+**Memory should be a property of the project, not the platform.**
+
 ## What is Syntrace?
 
-Syntrace is a filesystem-native project template that separates knowledge into two layers
--- **schema** (stable structure) and **memory** (evolving experience) --
-so that humans and AI agents share a single source of truth.
-Folders and markdown only. Clone it for every new project.
+Syntrace makes project knowledge persistent and portable across any agentic AI platform. It's just folders and markdown, the one format every agent already knows how to read and write.
+
+Two layers:
+- **Schema** (stable structure): agent roles, patterns, policies. Changes rarely.
+- **Memory** (evolving experience): decisions, work logs, insights. Changes every session.
+
+Agents read both before they act. They write to both when they're done. Switch platforms, switch models, switch everything. The knowledge stays with the project.
 
 > [!TIP]
-> Syntrace is a **template**, not a dependency. Copy the folder, initialize git, and start building. No install step, no lock-in, any stack.
+> Syntrace is a **template**, not a dependency. Copy the folder into any project and start. No install, no API keys, no database. Works with any stack, any platform, any agent.
 
 ---
 
@@ -40,12 +51,12 @@ Folders and markdown only. Clone it for every new project.
 
 | Feature | Description |
 |---|---|
-| **Dual-layer architecture** | Schema (roles, policies, patterns) changes rarely; Memory (decisions, episodes, insights) evolves continuously |
-| **AI-agent ready** | `AGENTS.md` gives any LLM full workspace orientation, save protocol, and end-of-session checklist |
-| **Zero dependencies** | Plain markdown and folders -- works with any language, framework, or toolchain |
-| **Tiered save protocol** | Quick captures land in inbox by default; full saves create episodes and decisions; `/distill` promotes knowledge upward |
-| **Template-based consistency** | `_template.md` files in each folder enforce frontmatter schemas and structure |
-| **Git-native milestones** | Use `git tag` for releases -- no archive folders or manual versioning |
+| **Platform-portable** | Folders and markdown. Works in Cursor, Claude Code, Perplexity, custom agents, mobile tools, anything. |
+| **Dual-layer architecture** | Schema (stable structure) changes rarely; Memory (evolving experience) changes every session |
+| **Knowledge extraction** | Raw captures distill into insights; stable insights promote into reusable patterns across projects |
+| **Tiered save protocol** | `/syntrace` for quick capture, `/syntrace full` for structured saves, `/distill` to extract knowledge |
+| **Zero dependencies** | No API, no database, no embeddings. Copy a folder and go. Any stack. |
+| **Git-native** | Version your knowledge alongside your code. Diff it, branch it, merge it. |
 
 ---
 

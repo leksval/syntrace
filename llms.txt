@@ -1,11 +1,15 @@
 # Syntrace
 
-> Dual-inheritance knowledge architecture for AI-assisted projects.
+> Persistent, portable knowledge for agentic AI. Any platform. Any agent. Just folders and markdown.
 
-Syntrace is a filesystem-native project template that separates knowledge into two layers:
+Syntrace makes project knowledge persistent and portable across any agentic AI platform (Cursor, Claude Code, Perplexity, custom agents, mobile tools, etc). It's just folders and markdown, the one format every agent already knows how to read and write.
 
-- **Schema** (`schema/`): Stable structural knowledge -- agent roles, architectural patterns, policies, tool definitions. Changes rarely, always with a decision record.
-- **Memory** (`memory/`): Evolving experiential knowledge -- design decisions, work episodes, distilled insights, inbox captures. Changes continuously.
+Two layers:
+
+- **Schema** (`schema/`): Stable structural knowledge. Agent roles, architectural patterns, policies, tool definitions. Changes rarely, always with a decision record.
+- **Memory** (`memory/`): Evolving experiential knowledge. Design decisions, work episodes, distilled insights, inbox captures. Changes every session.
+
+Memory should be a property of the project, not the platform.
 
 Code lives at the project root (`src/`, `tests/`, `docs/`).
 
