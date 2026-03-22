@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/leksval/syntrace"><img src="https://img.shields.io/github/stars/leksval/syntrace?style=for-the-badge&logo=github&label=Star" alt="Star this repo" /></a>&nbsp;
+  <a href="https://github.com/leksval/syntrace"><img src="https://img.shields.io/badge/%E2%AD%90_Star_this_repo-black?style=for-the-badge" alt="Star this repo" /></a>&nbsp;
   <a href="#license"><img src="https://img.shields.io/badge/license-CC--BY%204.0-blue.svg?style=for-the-badge" alt="CC-BY 4.0 License" /></a>&nbsp;
   <img src="https://img.shields.io/badge/zero_dependencies-orange?style=for-the-badge" alt="Zero Dependencies" />&nbsp;
   <img src="https://img.shields.io/badge/just_markdown-brightgreen?style=for-the-badge" alt="Just Markdown" />
@@ -215,11 +215,19 @@ For structural changes to `schema/`, include a decision record in `memory/decisi
 ---
 
 <p align="center">
-  If Syntrace is useful, <a href="https://github.com/leksval/syntrace">star the repo</a> - it helps others find it.
+  If Syntrace is useful, star the repo. It helps others find it.<br/><br/>
+  <a href="https://github.com/leksval/syntrace"><img src="https://img.shields.io/badge/%E2%AD%90_Star_this_repo-black?style=for-the-badge" alt="Star this repo" /></a>
 </p>
 
 ---
 
-## License
+<p align="center">
+  <a href="https://creativecommons.org/licenses/by/4.0/">
+    <img src="https://img.shields.io/badge/license-CC--BY%204.0-blue.svg?style=for-the-badge" alt="CC-BY 4.0" />
+  </a>
+</p>
 
-This work is licensed under [Creative Commons Attribution 4.0 International (CC-BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+<p align="center">
+  This work is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International</a>.<br/>
+  Use it, remix it, share it. Just give credit.
+</p>
