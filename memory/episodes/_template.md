@@ -5,6 +5,8 @@ agent: <agent-name or "human">
 outcome: SUCCESS | FAIL | SURPRISE | PARTIAL
 duration:
 tags: []
+source:
+related: []
 ---
 
 # Episode: <Short title>
@@ -18,9 +20,9 @@ Brief description of the interaction or run.
 - Any surprising emergent behavior
 
 ## Reusable takeaways
-- [ ] Pattern worth adding to `culture/insights/`?
-- [ ] Policy worth adding to `genome/policies/`?
-- [ ] Should this trigger a genome update?
+- [ ] Pattern worth adding to `memory/insights/`?
+- [ ] Policy worth adding to `schema/policies/`?
+- [ ] Should this trigger a schema update?
 
 ## Insights produced
 - (none yet)

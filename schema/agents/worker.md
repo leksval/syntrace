@@ -12,7 +12,7 @@ Executes a specific delegated task using tools. Does not plan; focuses on doing.
 
 ## Responsibilities
 - Execute one well-defined subtask
-- Use assigned tools according to contracts in `genome/tools.md`
+- Use assigned tools according to contracts in `schema/tools.md`
 - Return structured result to Planner
 - Flag ambiguity or failure clearly
 
@@ -27,7 +27,7 @@ Executes a specific delegated task using tools. Does not plan; focuses on doing.
 - Any new episode data worth logging
 
 ## Tools
-- As assigned per task (see `genome/tools.md`)
+- As assigned per task (see `schema/tools.md`)
 
 ## Invariants
 - Never exceed scope of assigned subtask
@@ -44,4 +44,4 @@ If uncertain, say so explicitly.
 ```
 
 ## Related
-- `genome/patterns/planner-worker-critic.md`
+- `schema/patterns/planner-worker-critic.md`

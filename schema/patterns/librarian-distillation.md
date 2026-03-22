@@ -7,11 +7,11 @@ tags: [memory, meta, maintenance]
 # Librarian Distillation Pattern
 
 ## Overview
-A periodic maintenance loop that converts raw cultural artifacts (episodes, inbox) into durable insights, and proposes genome updates when patterns stabilize.
+A periodic maintenance loop that converts raw memory artifacts (episodes, inbox) into durable insights, and proposes schema updates when patterns stabilize.
 
 ## Cycle
 ```
-[culture/episodes/]  [culture/inbox/]
+[memory/episodes/]  [memory/inbox/]
          |                 |
          +--------+--------+
                   | (weekly or on-demand)
@@ -19,21 +19,21 @@ A periodic maintenance loop that converts raw cultural artifacts (episodes, inbo
            [Librarian Agent]
                   |
                   v
-         culture/insights/
+         memory/insights/
                   |
                   | (when pattern appears 3+ times)
                   v
-  [Proposed genome update]  --> [Human review] --> genome/
+  [Proposed schema update]  --> [Human review] --> schema/
                   |
                   v
-  culture/episodes/YYYY-MM-DD-distillation.md
+  memory/episodes/YYYY-MM-DD-distillation.md
 ```
 
 ## Distillation rules
 1. An episode becomes an insight if it contains a reusable pattern or surprising finding.
 2. An insight becomes a policy when it has appeared in 3+ episodes or been validated by the Critic.
-3. A policy becomes a genome update when it is stable across 2+ projects or retrospectives.
+3. A policy becomes a schema update when it is stable across 2+ projects or retrospectives.
 
 ## Related
-- `genome/agents/librarian.md`
-- `culture/insights/_template.md`
+- `schema/agents/librarian.md`
+- `memory/insights/_template.md`

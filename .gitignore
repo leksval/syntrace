@@ -19,7 +19,7 @@ node_modules/
 .DS_Store
 Thumbs.db
 
-# Logs (keep only distilled summaries in culture/)
+# Logs (keep only distilled summaries in memory/)
 *.log
 raw_logs/
 

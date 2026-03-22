@@ -18,20 +18,20 @@ Plans and delegates tasks to specialist agents. Maintains the overall goal in vi
 
 ## Inputs
 - User request (text / structured goal)
-- Context retrieved from `culture/insights/`
-- Tool registry (from `genome/tools.md`)
+- Context retrieved from `memory/insights/`
+- Tool registry (from `schema/tools.md`)
 
 ## Outputs
 - Final answer or artifact
-- Updated episode log (to `culture/episodes/`)
+- Updated episode log (to `memory/episodes/`)
 
 ## Tools
-- See `genome/tools.md`
+- See `schema/tools.md`
 
 ## Invariants (never violate)
 - Never make irreversible external actions without human confirmation
 - Always log decisions with rationale
-- Always check `genome/policies/` for standing policies before acting
+- Always check `schema/policies/` for standing policies before acting
 
 ## Prompt template
 ```
@@ -39,10 +39,10 @@ You are the Planner for [PROJECT NAME].
 Your goal: [GOAL].
 Available agents: [LIST].
 Context: [RETRIEVED SNIPPETS].
-Constraints: [FROM genome/agents/planner.md invariants].
+Constraints: [FROM schema/agents/planner.md invariants].
 Think step by step. State your plan before executing.
 ```
 
 ## Related
-- `genome/patterns/planner-worker-critic.md`
-- `culture/decisions/` (rationale for design choices)
+- `schema/patterns/planner-worker-critic.md`
+- `memory/decisions/` (rationale for design choices)

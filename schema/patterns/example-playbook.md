@@ -36,5 +36,5 @@ Conditions or triggers for this playbook.
 - YYYY-MM-DD: revised because <reason>
 
 ## Related
-- `genome/patterns/`
-- `genome/policies/`
+- `schema/patterns/`
+- `schema/policies/`

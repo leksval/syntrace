@@ -3,7 +3,7 @@
 Dump unsorted captures here: links, ideas, snippets, voice-note transcripts.
 
 **Rule**: process inbox weekly during retrospective.
-- Useful -> move to `culture/insights/`
+- Useful -> move to `memory/insights/`
 - Actionable -> create decision or experiment
 - Irrelevant -> delete
 

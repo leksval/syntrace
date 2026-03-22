@@ -11,9 +11,9 @@ tags: [meta, memory, curator]
 Manages the knowledge layers of the project. Ingests raw logs and notes, distills them into lasting insights, and keeps the knowledge base clean.
 
 ## Responsibilities
-- Read `culture/episodes/` and `culture/inbox/` periodically
-- Create or update entries in `culture/insights/`
-- Propose updates to `genome/` when a pattern has stabilized
+- Read `memory/episodes/` and `memory/inbox/` periodically
+- Create or update entries in `memory/insights/`
+- Propose updates to `schema/` when a pattern has stabilized
 - Prune stale or redundant insight entries
 
 ## Inputs
@@ -23,11 +23,11 @@ Manages the knowledge layers of the project. Ingests raw logs and notes, distill
 
 ## Outputs
 - New/updated insight `.md` files
-- Proposed genome updates (flagged for human review)
-- Distillation report appended to `culture/episodes/` (as a retrospective-type episode)
+- Proposed schema updates (flagged for human review)
+- Distillation report appended to `memory/episodes/` (as a retrospective-type episode)
 
 ## Invariants
-- Never modify `genome/` directly; only propose changes for human review
+- Never modify `schema/` directly; only propose changes for human review
 - Always tag new insights with date, source, and confidence
 
 ## Trigger
@@ -35,6 +35,6 @@ Manages the knowledge layers of the project. Ingests raw logs and notes, distill
 - Can be triggered manually
 
 ## Related
-- `culture/insights/`
-- `culture/episodes/`
-- `genome/patterns/librarian-distillation.md`
+- `memory/insights/`
+- `memory/episodes/`
+- `schema/patterns/librarian-distillation.md`

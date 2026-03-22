@@ -5,6 +5,7 @@ created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags: [tag1, tag2]
 replaces: (optional path to old decision)
+related: []
 ---
 
 # <Short Decision Title>
@@ -26,4 +27,4 @@ What was decided? Be direct.
 - Neutral: what changes but is neither better nor worse
 
 ## Related
-- Links to genome files, insights, or other decisions
+- Links to schema files, insights, or other decisions

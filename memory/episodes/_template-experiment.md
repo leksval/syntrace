@@ -7,6 +7,8 @@ duration:
 project: <project-name>
 agent: <agent-name or "human">
 tags: []
+source:
+related: []
 ---
 
 # Experiment: <Title>
@@ -30,9 +32,9 @@ Was the hypothesis confirmed? What did you learn?
 
 ## Next steps
 - [ ] Follow-up experiment?
-- [ ] Promote to `culture/insights/`?
-- [ ] Update `genome/`?
+- [ ] Promote to `memory/insights/`?
+- [ ] Update `schema/`?
 
 ## Related
-- `culture/insights/`
-- `culture/decisions/`
+- `memory/insights/`
+- `memory/decisions/`

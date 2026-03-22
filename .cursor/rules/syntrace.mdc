@@ -9,21 +9,21 @@ Dual-inheritance knowledge architecture. Folders and markdown only.
 
 | Path | Purpose | Changes |
 |------|---------|---------|
-| `genome/agents/` | Agent role definitions (responsibilities, invariants) | Rarely |
-| `genome/patterns/` | Architectural patterns and playbooks | Rarely |
-| `genome/policies/` | Standing rules and quality standards | Rarely |
-| `genome/tools.md` | Tool definitions and contracts | Rarely |
-| `culture/decisions/` | ADR-style records explaining why something changed | When choices are made |
-| `culture/episodes/` | Work logs, experiments, retrospectives | After work sessions |
-| `culture/insights/` | Distilled reusable knowledge | When patterns emerge |
-| `culture/inbox/` | Unsorted captures | Anytime |
+| `schema/agents/` | Agent role definitions (responsibilities, invariants) | Rarely |
+| `schema/patterns/` | Architectural patterns and playbooks | Rarely |
+| `schema/policies/` | Standing rules and quality standards | Rarely |
+| `schema/tools.md` | Tool definitions and contracts | Rarely |
+| `memory/decisions/` | ADR-style records explaining why something changed | When choices are made |
+| `memory/episodes/` | Work logs, experiments, retrospectives | After work sessions |
+| `memory/insights/` | Distilled reusable knowledge | When patterns emerge |
+| `memory/inbox/` | Unsorted captures | Anytime |
 | `src/`, `tests/`, `docs/` | Code, tests, technical docs | Normal development |
 
 ## Before You Act
 
-1. Check `genome/policies/` for rules relevant to your task.
-2. Check `culture/insights/` for prior knowledge on the topic.
-3. Check `genome/patterns/` for established workflows.
+1. Check `schema/policies/` for rules relevant to your task.
+2. Check `memory/insights/` for prior knowledge on the topic.
+3. Check `schema/patterns/` for established workflows.
 
 ## After You Finish
 
@@ -31,15 +31,15 @@ Save results using today's date. Follow `_template.md` files in each folder. Eve
 
 | What happened | Save to | Filename |
 |---------------|---------|----------|
-| Design choice made | `culture/decisions/` | `YYYY-MM-DD-HHMM-slug.md` |
-| Work worth logging | `culture/episodes/` | `YYYY-MM-DD-slug.md` |
-| Reusable pattern found | `culture/insights/` | `YYYY-MM-DD-slug.md` |
-| Quick capture | `culture/inbox/` | `YYYY-MM-DD-slug.md` |
+| Design choice made | `memory/decisions/` | `YYYY-MM-DD-HHMM-slug.md` |
+| Work worth logging | `memory/episodes/` | `YYYY-MM-DD-slug.md` |
+| Reusable pattern found | `memory/insights/` | `YYYY-MM-DD-slug.md` |
+| Quick capture | `memory/inbox/` | `YYYY-MM-DD-slug.md` |
 | Notable change | `CHANGELOG.md` | Append: `[YYYY-MM-DD] type: description` |
 
 ## Invariants
 
-- Never modify `genome/` without a decision record in `culture/decisions/`.
+- Never modify `schema/` without a decision record in `memory/decisions/`.
 - Filenames: `YYYY-MM-DD` prefix, lowercase, hyphens, no spaces.
 - Max ~300 lines per `.md` file.
 - Never commit secrets; use `.env`.

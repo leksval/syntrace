@@ -9,6 +9,6 @@ Types: `init`, `agent`, `pattern`, `tool`, `decision`, `experiment`, `milestone`
 
 ## [YYYY-MM-DD] init: project scaffold from syntrace template
 
-- Created genome/, culture/ folders
-- Defined initial agent roles (see genome/agents/)
-- Established architectural pattern (see genome/patterns/)
+- Created schema/, memory/ folders
+- Defined initial agent roles (see schema/agents/)
+- Established architectural pattern (see schema/patterns/)

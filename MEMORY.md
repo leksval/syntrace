@@ -1,45 +1,32 @@
 # Syntrace Memory Router
 
-This is a filesystem-native knowledge base. Agents from other projects write here to persist learnings. Everything is folders and markdown.
+This is a filesystem-native knowledge base. Folders and markdown only.
 
 ## Read: Before You Act
 
-1. `genome/policies/` -- standing rules relevant to your task
-2. `culture/insights/` -- prior knowledge and reusable patterns
-3. `genome/patterns/` -- established workflows and playbooks
+1. `schema/policies/` -- rules relevant to your task
+2. `memory/insights/` -- prior knowledge and reusable patterns
+3. `schema/patterns/` -- established workflows
 
 ## Write: After You Finish
 
-Determine what happened and save to the correct folder. Every file needs YAML frontmatter with `tags: [...]`. Use the `_template.md` in each folder.
+Use `_template.md` in each folder. Every file needs YAML frontmatter with `tags: [...]`.
 
-| What happened | Save to | Filename pattern |
+| What happened | Save to | Filename |
 |---|---|---|
-| Design choice | `culture/decisions/` | `YYYY-MM-DD-HHMM-slug.md` |
-| Work log or experiment | `culture/episodes/` | `YYYY-MM-DD-slug.md` |
-| Reusable pattern found | `culture/insights/` | `YYYY-MM-DD-slug.md` |
-| Quick unstructured note | `culture/inbox/` | `YYYY-MM-DD-slug.md` |
-| Notable change | `CHANGELOG.md` | Append: `[YYYY-MM-DD] type: description` |
+| Design choice | `memory/decisions/` | `YYYY-MM-DD-HHMM-slug.md` |
+| Work log or experiment | `memory/episodes/` | `YYYY-MM-DD-slug.md` |
+| Reusable pattern found | `memory/insights/` | `YYYY-MM-DD-slug.md` |
+| Quick note | `memory/inbox/` | `YYYY-MM-DD-slug.md` |
+| Notable change | `CHANGELOG.md` | Append line |
 
-## Knowledge Promotion Flow
+## Rules
 
-```
-work done ──→ culture/episodes/
-                   ↓  distillation
-              culture/insights/
-                   ↓  stable across 3+ episodes
-              genome/ (patterns, policies, agents)
-                   ↓  always paired with
-              culture/decisions/
-```
-
-## Quick Rules
-
-- Never modify `genome/` without a decision record in `culture/decisions/`.
+- Never modify `schema/` without a decision record in `memory/decisions/`.
 - Filenames: `YYYY-MM-DD` prefix, lowercase, hyphens, no spaces.
-- Max ~300 lines per file; split if longer.
-- Never commit secrets; use `.env`.
-- CHANGELOG types: `init`, `agent`, `pattern`, `tool`, `decision`, `experiment`, `milestone`, `fix`.
+- Max ~300 lines per file.
 
-## Full Reference
+## More
 
-See [`AGENTS.md`](AGENTS.md) for frontmatter schemas, end-of-session checklist, and complete conventions.
+- [AGENTS.md](AGENTS.md) -- full schemas, checklist, conventions
+- [docs/graph-queries.md](docs/graph-queries.md) -- graph traversal and cross-project queries

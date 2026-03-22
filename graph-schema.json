@@ -1,0 +1,105 @@
+{
+  "$description": "Syntrace knowledge graph schema. Agents read this to scan files, extract nodes/edges, and build a queryable graph in-memory.",
+  "nodes": {
+    "agent": {
+      "glob": "schema/agents/*.md",
+      "exclude": ["_template*"],
+      "id_field": "agent",
+      "frontmatter": ["agent", "version", "tags"]
+    },
+    "pattern": {
+      "glob": "schema/patterns/*.md",
+      "exclude": ["_template*"],
+      "id_field": "pattern",
+      "frontmatter": ["pattern", "version", "tags"]
+    },
+    "policy": {
+      "glob": "schema/policies/*.md",
+      "exclude": ["_template*"],
+      "id_field": "id",
+      "frontmatter": ["id", "type", "tags"]
+    },
+    "tool": {
+      "glob": "schema/tools.md",
+      "exclude": [],
+      "id_field": "schema",
+      "frontmatter": ["schema", "version", "tags"],
+      "note": "Single file; each ### heading is a logical sub-node (tool entry)"
+    },
+    "decision": {
+      "glob": "memory/decisions/*.md",
+      "exclude": ["_template*"],
+      "id_field": "id",
+      "frontmatter": ["id", "status", "created", "updated", "tags", "replaces", "related"]
+    },
+    "episode": {
+      "glob": "memory/episodes/*.md",
+      "exclude": ["_template*"],
+      "id_field": "date",
+      "frontmatter": ["date", "project", "agent", "type", "outcome", "tags", "source", "related"]
+    },
+    "insight": {
+      "glob": "memory/insights/*.md",
+      "exclude": ["_template*", "README*"],
+      "id_field": "id",
+      "frontmatter": ["id", "type", "confidence", "episode_count", "created", "updated", "source", "tags", "related"]
+    },
+    "inbox-item": {
+      "glob": "memory/inbox/*.md",
+      "exclude": ["README*"],
+      "id_field": null,
+      "frontmatter": ["tags"],
+      "note": "Minimal structure; id derived from filename"
+    }
+  },
+  "edges": {
+    "related": {
+      "source_field": "related",
+      "type": "frontmatter_list",
+      "description": "Explicit relationship declared in frontmatter. Bidirectional by convention.",
+      "expected_on": ["decision", "episode", "insight", "pattern", "agent"]
+    },
+    "source": {
+      "source_field": "source",
+      "type": "frontmatter_value",
+      "description": "Origin of this node. Points backward to the episode/experiment/human that created it.",
+      "expected_on": ["insight", "episode"]
+    },
+    "replaces": {
+      "source_field": "replaces",
+      "type": "frontmatter_value",
+      "description": "This decision replaces an older one. Creates a lineage chain.",
+      "expected_on": ["decision"]
+    },
+    "references": {
+      "extract_from": "## Related",
+      "type": "markdown_links",
+      "description": "Markdown links found in the ## Related section of the document body.",
+      "expected_on": ["agent", "pattern", "policy", "decision", "episode", "insight"]
+    },
+    "tagged": {
+      "source_field": "tags",
+      "type": "shared_values",
+      "description": "Implicit edge: two nodes sharing the same tag value are connected.",
+      "expected_on": ["all"]
+    }
+  },
+  "queries": {
+    "find_related": {
+      "description": "Find all nodes connected to a given node",
+      "method": "Follow related, references, and tagged edges from the starting node. Rank by edge count."
+    },
+    "trace_lineage": {
+      "description": "Trace how knowledge evolved: episode -> insight -> schema",
+      "method": "From an insight, follow source edges backward to episodes. From a schema file, find decisions whose related field points to it."
+    },
+    "detect_gaps": {
+      "description": "Find nodes missing expected connections",
+      "method": "For each insight: check source field is non-empty. For each decision: check related field contains at least one schema/ path. For each policy: check at least one decision references it."
+    },
+    "cross_project": {
+      "description": "Query across multiple Syntrace instances",
+      "method": "Scan a second Syntrace at a given path. Merge node lists. Use project: frontmatter field to disambiguate. Find shared tags across instances."
+    }
+  }
+}

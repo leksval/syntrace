@@ -8,46 +8,48 @@ You are working inside a Syntrace workspace: a filesystem-native, dual-inheritan
 
 | Path | Purpose |
 |------|---------|
-| `genome/agents/` | One `.md` per agent role -- responsibilities, inputs, outputs, invariants |
-| `genome/patterns/` | Architectural patterns and playbooks for multi-agent workflows |
-| `genome/policies/` | Standing rules and quality standards (Critic agent uses these) |
-| `genome/tools.md` | Tool definitions, contracts, and agent assignments |
-| `culture/decisions/` | ADR-style records explaining why something changed |
-| `culture/episodes/` | Work logs, experiment results, retrospectives |
-| `culture/insights/` | Distilled reusable knowledge extracted from episodes |
-| `culture/inbox/` | Unsorted captures to be triaged later |
+| `schema/agents/` | One `.md` per agent role -- responsibilities, inputs, outputs, invariants |
+| `schema/patterns/` | Architectural patterns and playbooks for multi-agent workflows |
+| `schema/policies/` | Standing rules and quality standards (Critic agent uses these) |
+| `schema/tools.md` | Tool definitions, contracts, and agent assignments |
+| `memory/decisions/` | ADR-style records explaining why something changed |
+| `memory/episodes/` | Work logs, experiment results, retrospectives |
+| `memory/insights/` | Distilled reusable knowledge extracted from episodes |
+| `memory/inbox/` | Unsorted captures to be triaged later |
+| `graph-schema.json` | Node/edge type definitions for graph queries |
 | `src/` | Source code |
 | `tests/` | Tests |
 | `docs/` | Technical documentation |
 | `CHANGELOG.md` | Human-readable project history |
 
-**Genome** = structural knowledge that rarely changes. Never modify without a decision record.
-**Culture** = experiential knowledge that evolves continuously.
+**Schema** = structural knowledge that rarely changes. Never modify without a decision record.
+**Memory** = experiential knowledge that evolves continuously.
 
 ---
 
 ## Knowledge Flow
 
-Work produces episodes. Episodes get distilled into insights. Stable insights get promoted to genome. Every genome change gets a decision record.
+Work produces episodes. Episodes get distilled into insights. Stable insights get promoted to schema. Every schema change gets a decision record.
 
 ```
-work done ──→ culture/episodes/
+work done ──→ memory/episodes/
                    ↓  (distillation)
-              culture/insights/
+              memory/insights/
                    ↓  (when stable across 3+ episodes)
-              genome/patterns/ or genome/policies/
+              schema/patterns/ or schema/policies/
                    ↓  (always paired with)
-              culture/decisions/
+              memory/decisions/
 ```
 
 ---
 
 ## Before You Act
 
-1. Check `genome/policies/` for rules relevant to your task.
-2. Check `culture/insights/` for prior knowledge on the topic.
-3. Check `genome/patterns/` for established workflows.
-4. On first session, also read `genome/agents/` for role definitions.
+1. Check `schema/policies/` for rules relevant to your task.
+2. Check `memory/insights/` for prior knowledge on the topic.
+3. Check `schema/patterns/` for established workflows.
+4. On first session, also read `schema/agents/` for role definitions.
+5. For deeper retrieval, use graph queries -- see [docs/graph-queries.md](docs/graph-queries.md) and `schema/patterns/graph-scan.md`.
 
 ---
 
@@ -59,11 +61,11 @@ Save results using today's date. Every file needs YAML frontmatter with `tags: [
 
 | What happened | Folder | Filename | Template |
 |---------------|--------|----------|----------|
-| Design or architecture choice | `culture/decisions/` | `YYYY-MM-DD-HHMM-slug.md` | `_template.md` in folder |
-| Focused work, experiment run | `culture/episodes/` | `YYYY-MM-DD-slug.md` | `_template-experiment.md` |
-| Review, retro, periodic summary | `culture/episodes/` | `YYYY-MM-DD-slug.md` | `_template-retrospective.md` |
-| Reusable pattern discovered | `culture/insights/` | `YYYY-MM-DD-slug.md` | `_template.md` in folder |
-| Quick unstructured capture | `culture/inbox/` | `YYYY-MM-DD-slug.md` | None required |
+| Design or architecture choice | `memory/decisions/` | `YYYY-MM-DD-HHMM-slug.md` | `_template.md` in folder |
+| Focused work, experiment run | `memory/episodes/` | `YYYY-MM-DD-slug.md` | `_template-experiment.md` |
+| Review, retro, periodic summary | `memory/episodes/` | `YYYY-MM-DD-slug.md` | `_template-retrospective.md` |
+| Reusable pattern discovered | `memory/insights/` | `YYYY-MM-DD-slug.md` | `_template.md` in folder |
+| Quick unstructured capture | `memory/inbox/` | `YYYY-MM-DD-slug.md` | None required |
 | Notable project change | `CHANGELOG.md` | Append entry | `[YYYY-MM-DD] type: description` |
 
 CHANGELOG types: `init`, `agent`, `pattern`, `tool`, `decision`, `experiment`, `milestone`, `fix`.
@@ -79,6 +81,8 @@ project: <project-name>
 agent: <agent-name or "human">
 outcome: SUCCESS | FAIL | SURPRISE | PARTIAL
 tags: [tag1, tag2]
+source: (what triggered this episode)
+related: []
 ---
 ```
 
@@ -95,6 +99,7 @@ created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags: [tag1, tag2]
 replaces: (optional -- path to old decision)
+related: []
 ---
 ```
 
@@ -118,9 +123,9 @@ related: [path/to/related.md]
 ## End-of-Session Checklist
 
 1. **Code committed?** If you wrote code, commit with a descriptive message.
-2. **Episode logged?** If non-trivial work was done, create one in `culture/episodes/`.
-3. **Decision recorded?** If you made a design choice, record it in `culture/decisions/`.
-4. **Insight captured?** If you discovered something reusable, add it to `culture/insights/`.
+2. **Episode logged?** If non-trivial work was done, create one in `memory/episodes/`.
+3. **Decision recorded?** If you made a design choice, record it in `memory/decisions/`.
+4. **Insight captured?** If you discovered something reusable, add it to `memory/insights/`.
 5. **CHANGELOG updated?** If the change is notable, append to `CHANGELOG.md`.
 
 ---

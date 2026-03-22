@@ -37,7 +37,7 @@ A three-node cycle that separates planning, execution, and review. Prevents agen
 
 ## Failure modes
 - Critic too strict -> infinite revision loops (add max_revisions limit)
-- Critic too lenient -> garbage passes (calibrate with examples in `genome/policies/quality-standards.md`)
+- Critic too lenient -> garbage passes (calibrate with examples in `schema/policies/quality-standards.md`)
 - Planner over-decomposes -> too many workers -> coordination overhead
 
 
@@ -46,6 +46,6 @@ A three-node cycle that separates planning, execution, and review. Prevents agen
 - `critic_model`: can be smaller than worker model for efficiency
 
 ## Related
-- `genome/agents/planner.md`
-- `genome/agents/worker.md`
-- `genome/agents/critic.md`
+- `schema/agents/planner.md`
+- `schema/agents/worker.md`
+- `schema/agents/critic.md`

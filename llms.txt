@@ -1,0 +1,33 @@
+# Syntrace
+
+> Dual-inheritance knowledge architecture for AI-assisted projects.
+
+Syntrace is a filesystem-native project template that separates knowledge into two layers:
+
+- **Schema** (`schema/`): Stable structural knowledge -- agent roles, architectural patterns, policies, tool definitions. Changes rarely, always with a decision record.
+- **Memory** (`memory/`): Evolving experiential knowledge -- design decisions, work episodes, distilled insights, unsorted inbox. Changes continuously.
+
+Code lives at the project root (`src/`, `tests/`, `docs/`).
+
+## Key files
+
+- `AGENTS.md` -- Full agent orientation: workspace map, save protocol, frontmatter schemas, end-of-session checklist.
+- `CHANGELOG.md` -- Human-readable project history.
+- `schema/agents/*.md` -- One file per agent role (responsibilities, inputs, outputs, invariants).
+- `schema/patterns/*.md` -- Architectural patterns and playbooks.
+- `schema/policies/*.md` -- Standing rules and quality standards.
+- `memory/decisions/*.md` -- ADR-style records explaining design choices.
+- `memory/episodes/*.md` -- Work logs, experiments, retrospectives.
+- `memory/insights/*.md` -- Distilled reusable knowledge.
+
+## Knowledge flow
+
+Episodes and inbox items are distilled into insights. When an insight is stable across 3+ episodes, it promotes to schema. Every schema change is paired with a decision record.
+
+## Stack
+
+No dependencies. Markdown and folders only. Works with any language, framework, or toolchain.
+
+## License
+
+MIT

@@ -12,14 +12,14 @@ Reviews outputs from Worker agents for quality, correctness, and policy complian
 
 ## Responsibilities
 - Validate outputs against task requirements
-- Check for policy violations (see `genome/policies/quality-standards.md`)
+- Check for policy violations (see `schema/policies/quality-standards.md`)
 - Score output quality (pass / revise / reject)
 - Write critique with specific, actionable feedback
 
 ## Inputs
 - Worker output
 - Original task specification
-- Relevant policies from `genome/policies/`
+- Relevant policies from `schema/policies/`
 
 ## Outputs
 - Verdict: PASS | REVISE | REJECT
@@ -37,10 +37,10 @@ You are the Critic Agent for [PROJECT NAME].
 Review the following output against the task and policies.
 Task: [TASK].
 Output to review: [OUTPUT].
-Policies: [FROM genome/policies/].
+Policies: [FROM schema/policies/].
 Return: verdict (PASS/REVISE/REJECT) and specific critique.
 ```
 
 ## Related
-- `genome/patterns/planner-worker-critic.md`
-- `genome/policies/quality-standards.md`
+- `schema/patterns/planner-worker-critic.md`
+- `schema/policies/quality-standards.md`
