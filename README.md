@@ -9,6 +9,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/user/syntrace/stargazers"><img src="https://img.shields.io/github/stars/user/syntrace?style=for-the-badge" alt="GitHub Stars" /></a>
   <a href="#license"><img src="https://img.shields.io/badge/license-CC--BY%204.0-blue.svg?style=for-the-badge" alt="CC-BY 4.0 License" /></a>
   <img src="https://img.shields.io/badge/stack-agnostic-orange?style=for-the-badge" alt="Stack Agnostic" />
   <img src="https://img.shields.io/badge/format-markdown-brightgreen?style=for-the-badge" alt="Markdown Only" />
@@ -42,8 +43,10 @@ Two layers:
 
 Agents read both before they act. They write to both when they're done. Switch platforms, switch models, switch everything. The knowledge stays with the project.
 
+Because it's just files, the whole workflow lives wherever your files live. Store it in Google Drive, Dropbox, OneDrive, iCloud, or any cloud storage. Edit it from any device. Fork it for a new project. Share it with a team. No sync service, no proprietary format, no walled garden.
+
 > [!TIP]
-> Syntrace is a **template**, not a dependency. Copy the folder into any project and start. No install, no API keys, no database. Works with any stack, any platform, any agent.
+> Syntrace is a **template**, not a dependency. Copy the folder into any project and start. No install, no API keys, no database. Works with any stack, any platform, any agent, any cloud storage.
 
 ---
 
@@ -159,9 +162,17 @@ flowchart TD
 
 ---
 
+## Support the Project
+
+If Syntrace is useful to you, star the repo. It helps others discover it and tells me this direction is worth pushing further.
+
+[![Star this repo](https://img.shields.io/github/stars/user/syntrace?style=social)](https://github.com/user/syntrace)
+
+---
+
 ## Contributing
 
-Contributions are welcome. To get started:
+Contributions, ideas, and alternative approaches are all welcome. To get started:
 
 1. Fork the repository.
 2. Create a feature branch: `git checkout -b my-feature`.
