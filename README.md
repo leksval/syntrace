@@ -26,7 +26,10 @@
 
 ## What is Syntrace?
 
-Syntrace is a filesystem-native project template that separates knowledge into two layers -- **schema** (stable structure) and **memory** (evolving experience) -- so that humans and AI agents share a single source of truth. Folders and markdown only. Clone it for every new project.
+Syntrace is a filesystem-native project template that separates knowledge into two layers
+-- **schema** (stable structure) and **memory** (evolving experience) --
+so that humans and AI agents share a single source of truth.
+Folders and markdown only. Clone it for every new project.
 
 > [!TIP]
 > Syntrace is a **template**, not a dependency. Copy the folder, initialize git, and start building. No install step, no lock-in, any stack.
