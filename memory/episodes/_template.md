@@ -3,6 +3,7 @@ date:                    # auto
 outcome: SUCCESS | FAIL | SURPRISE | PARTIAL
 tags: []
 changelog:               # optional — type: description
+links: []                # optional — external URLs (cloud docs, Figma, Notion, etc.)
 related: []
 ---
 

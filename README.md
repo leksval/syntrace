@@ -54,6 +54,7 @@ Agents read both before they act. They write to both when they're done. Switch p
 | **Platform-portable** | Folders and markdown. Works in Cursor, Claude Code, Perplexity, custom agents, mobile tools, anything. |
 | **Dual-layer architecture** | Schema (stable structure) changes rarely; Memory (evolving experience) changes every session |
 | **Knowledge extraction** | Raw captures distill into insights; stable insights promote into reusable patterns across projects |
+| **Cloud-connected** | Link to Google Drive, Figma, Notion, Dropbox, or any URL from frontmatter. Agents with web search or browsing capabilities can follow these links to pull in external context. |
 | **Tiered save protocol** | `/syntrace` for quick capture, `/syntrace full` for structured saves, `/distill` to extract knowledge |
 | **Zero dependencies** | No API, no database, no embeddings. Copy a folder and go. Any stack. |
 | **Git-native** | Version your knowledge alongside your code. Diff it, branch it, merge it. |

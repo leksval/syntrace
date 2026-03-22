@@ -128,6 +128,7 @@ date:                    # auto
 outcome: SUCCESS | FAIL | SURPRISE | PARTIAL
 tags: []
 changelog:               # optional — type: description
+links: []                # optional — external URLs (cloud docs, Figma, Notion, etc.)
 related: []
 ---
 ```
@@ -144,6 +145,7 @@ status: accepted
 tags: []
 changelog:               # optional — type: description
 replaces:                # optional — path to old decision
+links: []                # optional — external URLs (cloud docs, Figma, Notion, etc.)
 related: []
 ---
 ```
@@ -157,6 +159,7 @@ type: concept | howto
 confidence: low | medium | high
 episode_count: 1
 tags: []
+links: []                # optional — external URLs (cloud docs, Figma, Notion, etc.)
 related: []
 ---
 ```
@@ -169,6 +172,12 @@ related: []
 2. **Memory saved?** Run `/syntrace` (quick) or `/syntrace full` (significant work).
 
 The save protocol handles routing, CHANGELOG, and frontmatter.
+
+---
+
+## External Links
+
+Any file can include a `links:` field in frontmatter with URLs to cloud documents, Figma files, Notion pages, or any public resource. If you have web search or browsing capabilities, follow these links to pull in external context when relevant. If you don't have web access, treat them as references for the human to consult.
 
 ---
 

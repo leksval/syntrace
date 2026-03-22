@@ -4,6 +4,7 @@ status: accepted
 tags: []
 changelog:               # optional — type: description
 replaces:                # optional — path to old decision
+links: []                # optional — external URLs (cloud docs, Figma, Notion, etc.)
 related: []
 ---
 
