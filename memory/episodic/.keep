@@ -1,0 +1,4 @@
+# Episodic memory store
+# Add key episodes here (pruned, distilled).
+# Full raw logs stay in culture/episodes/.
+# Use schema from genome/schemas/memory-entry.md

@@ -1,0 +1,27 @@
+# Secrets
+.env
+*.env
+secrets/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs (keep only distilled summaries in culture/)
+*.log
+raw_logs/
+
+# Archives (managed manually)
+archive/*/raw/
