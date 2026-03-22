@@ -19,7 +19,7 @@ A step-by-step procedure for agents to build an in-memory knowledge graph from S
 
 ## Step 1: Read the graph schema
 
-Read `graph-schema.json` at the Syntrace root. It defines:
+Read `schema/graph-schema.json`. It defines:
 
 - **Node types** with glob patterns (e.g., `schema/agents/*.md`)
 - **Edge types** with extraction rules (which frontmatter fields produce which edges)
@@ -27,7 +27,7 @@ Read `graph-schema.json` at the Syntrace root. It defines:
 
 ## Step 2: Discover nodes
 
-For each node type in `graph-schema.json`:
+For each node type in `schema/graph-schema.json`:
 
 1. Glob the file pattern (e.g., `memory/insights/*.md`)
 2. Exclude files matching the `exclude` patterns (`_template*`, `README*`)
@@ -135,4 +135,4 @@ Insights stable across 2+ project instances get promoted to global.
 
 - `schema/patterns/librarian-distillation.md`
 - `schema/agents/librarian.md`
-- `graph-schema.json`
+- `schema/graph-schema.json`

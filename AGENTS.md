@@ -16,7 +16,7 @@ You are working inside a Syntrace workspace: a filesystem-native, dual-inheritan
 | `memory/episodes/` | Work logs, experiment results, retrospectives |
 | `memory/insights/` | Distilled reusable knowledge extracted from episodes |
 | `memory/context/` | Quick captures -- default landing zone for knowledge |
-| `graph-schema.json` | Node/edge type definitions for graph queries |
+| `schema/graph-schema.json` | Node/edge type definitions for graph queries |
 | `src/` | Source code |
 | `tests/` | Tests |
 | `CHANGELOG.md` | Human-readable project history (auto-appended from frontmatter) |
@@ -47,7 +47,7 @@ work done ──→ memory/context/   (quick capture, default)
 2. Check `memory/insights/` for prior knowledge on the topic.
 3. Check `schema/patterns/` for established workflows.
 4. On first session, also read `schema/agents/` for role definitions.
-5. For deeper retrieval, use graph queries -- see `schema/patterns/graph-scan.md` and `graph-schema.json`.
+5. For deeper retrieval, use graph queries -- see `schema/patterns/graph-scan.md` and `schema/graph-schema.json`.
 
 ---
 
