@@ -8,7 +8,7 @@ tags: [memory, meta, maintenance]
 
 ## Overview
 
-A maintenance loop that converts raw captures (inbox, episodes) into durable insights, and proposes schema updates when patterns stabilize.
+A maintenance loop that converts raw captures (context, episodes) into durable insights, and proposes schema updates when patterns stabilize.
 
 ## Trigger
 
@@ -17,7 +17,7 @@ A maintenance loop that converts raw captures (inbox, episodes) into durable ins
 ## Workflow
 
 ```
-1. Scan memory/inbox/ for unprocessed captures
+1. Scan memory/context/ for unprocessed captures
 2. Scan recent memory/episodes/ for patterns
 3. For each reusable finding:
    a. Create or update memory/insights/YYYY-MM-DD-slug.md
@@ -26,19 +26,19 @@ A maintenance loop that converts raw captures (inbox, episodes) into durable ins
    a. Propose schema update (schema/patterns/ or schema/policies/)
    b. Flag for human review before applying
 5. Log this run as memory/episodes/YYYY-MM-DD-distillation.md
-6. Delete or archive processed inbox items
+6. Delete or archive processed context items
 ```
 
 ## Distillation rules
 
-1. An inbox item or episode becomes an insight if it contains a reusable pattern or surprising finding.
+1. A context item or episode becomes an insight if it contains a reusable pattern or surprising finding.
 2. An insight is flagged for schema promotion when `episode_count >= 3` or validated by the Critic.
 3. Every schema change requires a decision record in `memory/decisions/`.
 
 ## Cycle diagram
 
 ```
-[memory/inbox/]  [memory/episodes/]
+[memory/context/]  [memory/episodes/]
        |                 |
        +--------+--------+
                 | (/distill)
@@ -62,4 +62,4 @@ memory/insights/    [Schema proposal]
 
 - `schema/agents/librarian.md`
 - `memory/insights/_template.md`
-- `memory/inbox/_template.md`
+- `memory/context/_template.md`

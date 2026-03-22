@@ -15,11 +15,10 @@ You are working inside a Syntrace workspace: a filesystem-native, dual-inheritan
 | `memory/decisions/` | ADR-style records explaining why something changed |
 | `memory/episodes/` | Work logs, experiment results, retrospectives |
 | `memory/insights/` | Distilled reusable knowledge extracted from episodes |
-| `memory/inbox/` | Quick captures -- default landing zone for knowledge |
+| `memory/context/` | Quick captures -- default landing zone for knowledge |
 | `graph-schema.json` | Node/edge type definitions for graph queries |
 | `src/` | Source code |
 | `tests/` | Tests |
-| `docs/` | Technical documentation |
 | `CHANGELOG.md` | Human-readable project history (auto-appended from frontmatter) |
 
 **Schema** = structural knowledge that rarely changes. Never modify without a decision record.
@@ -30,7 +29,7 @@ You are working inside a Syntrace workspace: a filesystem-native, dual-inheritan
 ## Knowledge Flow
 
 ```
-work done ──→ memory/inbox/     (quick capture, default)
+work done ──→ memory/context/   (quick capture, default)
               memory/episodes/  (full save)
                    ↓  (distillation — /distill)
               memory/insights/
@@ -48,7 +47,7 @@ work done ──→ memory/inbox/     (quick capture, default)
 2. Check `memory/insights/` for prior knowledge on the topic.
 3. Check `schema/patterns/` for established workflows.
 4. On first session, also read `schema/agents/` for role definitions.
-5. For deeper retrieval, use graph queries -- see [docs/graph-queries.md](docs/graph-queries.md) and `schema/patterns/graph-scan.md`.
+5. For deeper retrieval, use graph queries -- see `schema/patterns/graph-scan.md` and `graph-schema.json`.
 
 ---
 
@@ -58,7 +57,7 @@ Three tiers. Use the lightest one that fits.
 
 ### Tier 1: Quick save (`/syntrace`) — default
 
-Create `memory/inbox/YYYY-MM-DD-slug.md`. Read `_template.md` in folder.
+Create `memory/context/YYYY-MM-DD-slug.md`. Read `_template.md` in folder.
 
 ```yaml
 ---
@@ -89,7 +88,7 @@ After saving, **reflect**: step back and consider what insights emerged from thi
 ### Tier 3: Distill (`/distill`)
 
 Periodic librarian run. See `schema/patterns/librarian-distillation.md`.
-Scans inbox + episodes → proposes insights → flags schema promotions.
+Scans context + episodes → proposes insights → flags schema promotions.
 
 ### Auto-derived fields
 

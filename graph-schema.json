@@ -44,8 +44,8 @@
       "id_field": "id",
       "frontmatter": ["id", "type", "confidence", "episode_count", "created", "updated", "source", "tags", "related"]
     },
-    "inbox-item": {
-      "glob": "memory/inbox/*.md",
+    "context-item": {
+      "glob": "memory/context/*.md",
       "exclude": ["README*"],
       "id_field": null,
       "frontmatter": ["tags"],

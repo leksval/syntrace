@@ -120,6 +120,17 @@ To query across multiple Syntrace instances:
 - For lineage queries, start from the target and walk backward -- don't build the full graph
 - For gap detection, a full scan is needed but only frontmatter parsing (skip body content)
 
+## Multi-Project Queries
+
+Each project embeds its own Syntrace instance. Optionally, a global Syntrace holds cross-project knowledge.
+
+| Instance | Path | Contains |
+|---|---|---|
+| Per-project | `<project>/syntrace/` | Project-specific episodes, decisions, insights |
+| Global | shared path (configured per environment) | Cross-project insights and stable patterns |
+
+Insights stable across 2+ project instances get promoted to global.
+
 ## Related
 
 - `schema/patterns/librarian-distillation.md`

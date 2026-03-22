@@ -7,18 +7,18 @@ Syntrace makes project knowledge persistent and portable across any agentic AI p
 Two layers:
 
 - **Schema** (`schema/`): Stable structural knowledge. Agent roles, architectural patterns, policies, tool definitions. Changes rarely, always with a decision record.
-- **Memory** (`memory/`): Evolving experiential knowledge. Design decisions, work episodes, distilled insights, inbox captures. Changes every session.
+- **Memory** (`memory/`): Evolving experiential knowledge. Design decisions, work episodes, distilled insights, context captures. Changes every session.
 
 Memory should be a property of the project, not the platform.
 
-Code lives at the project root (`src/`, `tests/`, `docs/`).
+Code lives at the project root (`src/`, `tests/`).
 
 ## Save protocol
 
 Three tiers, lightest first:
-- `/syntrace` — quick capture to `memory/inbox/` (default)
+- `/syntrace` — quick capture to `memory/context/` (default)
 - `/syntrace full` — episode + decision + CHANGELOG for significant work
-- `/distill` — librarian run: inbox/episodes → insights → schema proposals
+- `/distill` — librarian run: context/episodes → insights → schema proposals
 
 ## Key files
 
@@ -27,7 +27,7 @@ Three tiers, lightest first:
 - `schema/agents/*.md` — One file per agent role.
 - `schema/patterns/*.md` — Architectural patterns and playbooks.
 - `schema/policies/*.md` — Standing rules and quality standards.
-- `memory/inbox/` — Default landing zone for quick captures.
+- `memory/context/` — Default landing zone for quick captures.
 - `memory/decisions/*.md` — ADR-style records explaining design choices.
 - `memory/episodes/*.md` — Work logs, experiments, retrospectives.
 - `memory/insights/*.md` — Distilled reusable knowledge.

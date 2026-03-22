@@ -85,9 +85,9 @@ Three commands are now available:
 
 | Command | What it does |
 |---------|-------------|
-| `/syntrace` or `update memory` | Quick save to `memory/inbox/` |
+| `/syntrace` or `update memory` | Quick save to `memory/context/` |
 | `/syntrace full` | Full save: episode + decision + CHANGELOG |
-| `/distill` | Librarian run: inbox/episodes → insights → schema proposals |
+| `/distill` | Librarian run: context/episodes → insights → schema proposals |
 
 <details>
 <summary><strong>Next steps after scaffolding</strong></summary>
@@ -120,11 +120,10 @@ Three commands are now available:
 │   ├── decisions/                <- ADR-style design decisions
 │   ├── episodes/                 <- Work logs, experiment results, retrospectives
 │   ├── insights/                 <- Distilled reusable knowledge
-│   └── inbox/                    <- Unsorted captures, to be processed
+│   └── context/                  <- Quick captures and external context
 │
 ├── src/                          <- Source code
-├── tests/                        <- Tests
-└── docs/                         <- Technical documentation
+└── tests/                        <- Tests
 ```
 
 ---
@@ -133,7 +132,7 @@ Three commands are now available:
 
 ```mermaid
 flowchart TD
-    Work["You learn / agents run"] -->|"/syntrace"| Inbox["memory/inbox/"]
+    Work["You learn / agents run"] -->|"/syntrace"| Context["memory/context/"]
     Work -->|"/syntrace full"| Episodes["memory/episodes/"]
     Inbox -->|"/distill"| Insights["memory/insights/"]
     Episodes -->|"/distill"| Insights

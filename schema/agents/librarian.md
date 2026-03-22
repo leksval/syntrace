@@ -11,7 +11,7 @@ tags: [meta, memory, curator]
 Manages the knowledge layers of the project. Ingests raw logs and notes, distills them into lasting insights, and keeps the knowledge base clean.
 
 ## Responsibilities
-- Read `memory/episodes/` and `memory/inbox/` periodically
+- Read `memory/episodes/` and `memory/context/` periodically
 - Create or update entries in `memory/insights/`
 - Propose updates to `schema/` when a pattern has stabilized
 - Prune stale or redundant insight entries

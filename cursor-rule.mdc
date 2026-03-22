@@ -17,9 +17,9 @@ This project uses Syntrace as its knowledge base. Folders and markdown only.
 
 | Command | What it does |
 |---------|-------------|
-| `/syntrace` or `update memory` | Quick save to `syntrace/memory/inbox/` |
+| `/syntrace` or `update memory` | Quick save to `syntrace/memory/context/` |
 | `/syntrace full` | Full save: episode + decision if needed + CHANGELOG |
-| `/distill` | Librarian run: inbox/episodes → insights → schema proposals |
+| `/distill` | Librarian run: context/episodes → insights → schema proposals |
 
 When triggered, read `syntrace/MEMORY.md` for the save protocol.
 
