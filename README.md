@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="Syntrace" width="300" />
+  <img src="assets/logo.svg" alt="Syntrace" width="300" />
 </p>
 
 <h1 align="center">Syntrace</h1>
@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge" alt="MIT License" /></a>
+  <a href="#license"><img src="https://img.shields.io/badge/license-CC--BY%204.0-blue.svg?style=for-the-badge" alt="CC-BY 4.0 License" /></a>
   <img src="https://img.shields.io/badge/stack-agnostic-orange?style=for-the-badge" alt="Stack Agnostic" />
   <img src="https://img.shields.io/badge/format-markdown-brightgreen?style=for-the-badge" alt="Markdown Only" />
 </p>
@@ -163,4 +163,4 @@ Please follow the conventions above and include a decision record in `memory/dec
 
 ## License
 
-MIT. See [LICENSE](LICENSE) for details.
+This work is licensed under [Creative Commons Attribution 4.0 International (CC-BY 4.0)](https://creativecommons.org/licenses/by/4.0/).

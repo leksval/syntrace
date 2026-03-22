@@ -38,4 +38,4 @@ No dependencies. Markdown and folders only. Works with any language, framework, 
 
 ## License
 
-MIT
+CC-BY 4.0
