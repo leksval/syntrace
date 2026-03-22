@@ -12,14 +12,14 @@ Brief description of what this project does and its main components.
 ## Component map
 ```
 [Entry point]
-      │
-      ▼
+      |
+      v
 [Orchestrator]
-   │       │
-   ▼       ▼
+   |       |
+   v       v
 [Worker] [Librarian]
-   │
-   ▼
+   |
+   v
 [Tools]
 ```
 

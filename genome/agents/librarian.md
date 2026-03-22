@@ -8,34 +8,33 @@ tags: [meta, memory, curator]
 # Librarian Agent
 
 ## Role
-Manages the memory and knowledge layers of the project. Ingests raw logs and notes, distills them into lasting memories, and keeps the knowledge base clean.
+Manages the knowledge layers of the project. Ingests raw logs and notes, distills them into lasting insights, and keeps the knowledge base clean.
 
 ## Responsibilities
-- Read `culture/episodes/` and `learning/inbox/` periodically
-- Create or update entries in `memory/semantic/`, `memory/procedural/`, `memory/episodic/`
+- Read `culture/episodes/` and `culture/inbox/` periodically
+- Create or update entries in `culture/insights/`
 - Propose updates to `genome/` when a pattern has stabilized
-- Prune stale or redundant memory entries
+- Prune stale or redundant insight entries
 
 ## Inputs
 - Raw episode logs
-- Learning inbox items
-- Existing memory entries
+- Inbox items
+- Existing insight entries
 
 ## Outputs
-- New/updated memory `.md` files
+- New/updated insight `.md` files
 - Proposed genome updates (flagged for human review)
-- Distillation report appended to `culture/retrospectives/`
+- Distillation report appended to `culture/episodes/` (as a retrospective-type episode)
 
 ## Invariants
-- Never delete without archiving to `archive/`
 - Never modify `genome/` directly; only propose changes for human review
-- Always tag new memories with date, source, and confidence
+- Always tag new insights with date, source, and confidence
 
 ## Trigger
 - Run weekly (or after significant project events)
-- Can be triggered manually: `scripts/run-librarian.sh`
+- Can be triggered manually
 
 ## Related
-- `memory/`
-- `culture/retrospectives/`
-- `genome/schemas/memory-entry.md`
+- `culture/insights/`
+- `culture/episodes/`
+- `genome/patterns/librarian-distillation.md`

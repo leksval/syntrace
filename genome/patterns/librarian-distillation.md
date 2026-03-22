@@ -7,35 +7,33 @@ tags: [memory, meta, maintenance]
 # Librarian Distillation Pattern
 
 ## Overview
-A periodic maintenance loop that converts raw cultural artifacts (episodes, inbox) into durable structured memory, and proposes genome updates when patterns stabilize.
+A periodic maintenance loop that converts raw cultural artifacts (episodes, inbox) into durable insights, and proposes genome updates when patterns stabilize.
 
 ## Cycle
 ```
-[culture/episodes/]  [learning/inbox/]
-         │                 │
-         └────────┬────────┘
-                  │ (weekly or on-demand)
-                  ▼
+[culture/episodes/]  [culture/inbox/]
+         |                 |
+         +--------+--------+
+                  | (weekly or on-demand)
+                  v
            [Librarian Agent]
-                  │
-         ┌────────┴──────────────┐
-         ▼                       ▼
-  memory/semantic/         memory/procedural/
-  memory/episodic/
-         │
-         │ (when pattern appears 3+ times)
-         ▼
-  [Proposed genome update]  ──► [Human review] ──► genome/
-         │
-         ▼
-  culture/retrospectives/YYYY-MM-DD-distillation.md
+                  |
+                  v
+         culture/insights/
+                  |
+                  | (when pattern appears 3+ times)
+                  v
+  [Proposed genome update]  --> [Human review] --> genome/
+                  |
+                  v
+  culture/episodes/YYYY-MM-DD-distillation.md
 ```
 
 ## Distillation rules
-1. An episode becomes a semantic memory if it contains a reusable pattern or surprising finding.
-2. A pattern becomes procedural memory when it has appeared in 3+ episodes or been validated by the Critic.
-3. Procedural memory becomes a genome update when it is stable across 2+ projects or retrospectives.
+1. An episode becomes an insight if it contains a reusable pattern or surprising finding.
+2. An insight becomes a policy when it has appeared in 3+ episodes or been validated by the Critic.
+3. A policy becomes a genome update when it is stable across 2+ projects or retrospectives.
 
 ## Related
 - `genome/agents/librarian.md`
-- `genome/schemas/memory-entry.md`
+- `culture/insights/_template.md`

@@ -18,20 +18,20 @@ Plans and delegates tasks to specialist agents. Maintains the overall goal in vi
 
 ## Inputs
 - User request (text / structured goal)
-- Memory context (retrieved from `memory/`)
-- Tool registry (from `genome/tools/`)
+- Context retrieved from `culture/insights/`
+- Tool registry (from `genome/tools.md`)
 
 ## Outputs
 - Final answer or artifact
 - Updated episode log (to `culture/episodes/`)
 
 ## Tools
-- See `genome/tools/tool-registry.md`
+- See `genome/tools.md`
 
 ## Invariants (never violate)
 - Never make irreversible external actions without human confirmation
 - Always log decisions with rationale
-- Always check `memory/procedural/` for standing policies before acting
+- Always check `genome/policies/` for standing policies before acting
 
 ## Prompt template
 ```

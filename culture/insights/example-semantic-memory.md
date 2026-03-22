@@ -15,7 +15,7 @@ related: []
 When calling external APIs that intermittently timeout, exponential backoff with jitter reduces total failure rate significantly compared to fixed-interval retries.
 
 ## Detail
-Observed in 4+ episodes. Fixed retry (1s interval) caused thundering-herd on rate-limited APIs. Exponential backoff (base 2, max 30s, ±10% jitter) reduced failures by ~70% in experiments.
+Observed in 4+ episodes. Fixed retry (1s interval) caused thundering-herd on rate-limited APIs. Exponential backoff (base 2, max 30s, +/-10% jitter) reduced failures by ~70% in experiments.
 
 ## When to apply
 - Any tool or agent making external HTTP/API calls

@@ -1,17 +1,4 @@
 ---
-schema: decision-entry
-version: 0.1.0
-tags: [schema, decision, ADR]
----
-
-# Design Decision Schema (ADR-style)
-
-Use this format for all files in `culture/decisions/`.
-
-Filename: `culture/decisions/YYYY-MM-DD-HHMM-<slug>.md`
-
-```markdown
----
 id: YYYY-MM-DD-HHMM-<slug>
 status: proposed | accepted | superseded | deprecated
 created: YYYY-MM-DD
@@ -39,5 +26,4 @@ What was decided? Be direct.
 - Neutral: what changes but is neither better nor worse
 
 ## Related
-- Links to genome files, memory entries, or other decisions
-```
+- Links to genome files, insights, or other decisions

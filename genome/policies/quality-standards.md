@@ -13,7 +13,7 @@ tags: [quality, critic, standards]
 Standing policies the Critic agent uses when evaluating outputs.
 
 ## Mandatory checks
-- [ ] Output matches schema defined in `genome/schemas/`
+- [ ] Output matches expected format
 - [ ] No invariants from agent specs are violated
 - [ ] No hallucinated tool outputs (verify actual tool was called)
 - [ ] Rationale is present for non-obvious decisions

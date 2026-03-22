@@ -1,7 +1,11 @@
 ---
-id: YYYY-MM-DD-<slug>
+date: YYYY-MM-DD
+type: experiment
 status: planned | running | done | abandoned
-created: YYYY-MM-DD
+outcome: SUCCESS | FAIL | SURPRISE | PARTIAL
+duration:
+project: <project-name>
+agent: <agent-name or "human">
 tags: []
 ---
 
@@ -26,9 +30,9 @@ Was the hypothesis confirmed? What did you learn?
 
 ## Next steps
 - [ ] Follow-up experiment?
-- [ ] Promote to memory/semantic/?
-- [ ] Update genome/?
+- [ ] Promote to `culture/insights/`?
+- [ ] Update `genome/`?
 
 ## Related
-- `learning/notes/`
+- `culture/insights/`
 - `culture/decisions/`

@@ -3,9 +3,9 @@
 Dump unsorted captures here: links, ideas, snippets, voice-note transcripts.
 
 **Rule**: process inbox weekly during retrospective.
-- Useful → move to `learning/notes/` or `memory/`
-- Actionable → create decision or experiment
-- Irrelevant → delete
+- Useful -> move to `culture/insights/`
+- Actionable -> create decision or experiment
+- Irrelevant -> delete
 
 ## Format
 Just create a file named `YYYY-MM-DD-<anything>.md` and drop your capture in.

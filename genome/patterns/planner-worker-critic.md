@@ -4,7 +4,7 @@ version: 0.1.0
 tags: [architecture, multi-agent, review]
 ---
 
-# Planner → Worker → Critic Pattern
+# Planner -> Worker -> Critic Pattern
 
 ## Overview
 A three-node cycle that separates planning, execution, and review. Prevents agents from grading their own work.
@@ -12,18 +12,18 @@ A three-node cycle that separates planning, execution, and review. Prevents agen
 ## Graph
 ```
 [User / Goal]
-      │
-      ▼
-[Orchestrator / Planner]  ──────────────────────────┐
-      │                                             │
-      │ subtask                                     │ revised task
-      ▼                                             │
-  [Worker]  ──── result ──►  [Critic]  ──REVISE──►──┘
-                                │
+      |
+      v
+[Orchestrator / Planner]  -------------------------+
+      |                                             |
+      | subtask                                     | revised task
+      v                                             |
+  [Worker]  ---- result --->  [Critic]  --REVISE-->-+
+                                |
                               PASS
-                                │
-                                ▼
-                         [Orchestrator]  ──► [Output]
+                                |
+                                v
+                         [Orchestrator]  ---> [Output]
 ```
 
 ## When to use
@@ -36,9 +36,9 @@ A three-node cycle that separates planning, execution, and review. Prevents agen
 - Real-time interactive loops where critique cycle is too slow
 
 ## Failure modes
-- Critic too strict → infinite revision loops (add max_revisions limit)
-- Critic too lenient → garbage passes (calibrate with examples in `memory/procedural/quality-standards.md`)
-- Planner over-decomposes → too many workers → coordination overhead
+- Critic too strict -> infinite revision loops (add max_revisions limit)
+- Critic too lenient -> garbage passes (calibrate with examples in `genome/policies/quality-standards.md`)
+- Planner over-decomposes -> too many workers -> coordination overhead
 
 ## Parameters
 - `max_revisions`: 2 (default); increase for high-stakes tasks

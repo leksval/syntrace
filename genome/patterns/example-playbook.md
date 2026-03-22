@@ -1,5 +1,6 @@
 ---
-playbook: example-playbook
+pattern: example-playbook
+type: playbook
 version: 0.1.0
 created: YYYY-MM-DD
 validated: false
@@ -36,4 +37,4 @@ Conditions or triggers for this playbook.
 
 ## Related
 - `genome/patterns/`
-- `memory/procedural/`
+- `genome/policies/`

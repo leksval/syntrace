@@ -23,5 +23,5 @@ Thumbs.db
 *.log
 raw_logs/
 
-# Archives (managed manually)
-archive/*/raw/
+# Build artifacts
+*.out

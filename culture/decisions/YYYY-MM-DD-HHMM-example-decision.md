@@ -27,3 +27,4 @@ Adopt the planner-worker-critic pattern (see `genome/patterns/planner-worker-cri
 ## Related
 - `genome/patterns/planner-worker-critic.md`
 - `genome/agents/critic.md`
+- `genome/policies/quality-standards.md`
