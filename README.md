@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.png" alt="Syntrace" width="300" />
+</p>
+
 <h1 align="center">Syntrace</h1>
 
 <p align="center">
