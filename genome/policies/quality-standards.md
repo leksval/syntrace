@@ -1,6 +1,6 @@
 ---
 id: YYYY-MM-DD-quality-standards
-type: procedural
+type: howto
 confidence: high
 created: YYYY-MM-DD
 updated: YYYY-MM-DD

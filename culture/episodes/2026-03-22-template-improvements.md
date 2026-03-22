@@ -20,7 +20,7 @@ Reviewed the full workspace against project tracking and learning best practices
 - "Before You Act" told agents to check insights but gave no guidance on how to search them
 - Adding `duration` as an optional field across all episode types enables future effort estimation
 
-## Distillable patterns
+## Reusable takeaways
 - [x] Schema consistency across sibling templates matters -- when subtypes diverge from the base schema, querying and automation break silently
 - [ ] Policy worth adding to `genome/policies/`? Not yet -- observe whether the new fields are actually used first
 

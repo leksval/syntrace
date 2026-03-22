@@ -14,7 +14,7 @@ A three-node cycle that separates planning, execution, and review. Prevents agen
 [User / Goal]
       |
       v
-[Orchestrator / Planner]  -------------------------+
+[Planner]  ------------------------------------+
       |                                             |
       | subtask                                     | revised task
       v                                             |
@@ -23,7 +23,7 @@ A three-node cycle that separates planning, execution, and review. Prevents agen
                               PASS
                                 |
                                 v
-                         [Orchestrator]  ---> [Output]
+                           [Planner]  ---> [Output]
 ```
 
 ## When to use
@@ -40,11 +40,12 @@ A three-node cycle that separates planning, execution, and review. Prevents agen
 - Critic too lenient -> garbage passes (calibrate with examples in `genome/policies/quality-standards.md`)
 - Planner over-decomposes -> too many workers -> coordination overhead
 
+
 ## Parameters
 - `max_revisions`: 2 (default); increase for high-stakes tasks
 - `critic_model`: can be smaller than worker model for efficiency
 
 ## Related
-- `genome/agents/orchestrator.md`
+- `genome/agents/planner.md`
 - `genome/agents/worker.md`
 - `genome/agents/critic.md`

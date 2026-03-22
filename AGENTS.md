@@ -90,11 +90,11 @@ Retrospectives add: `type: retrospective`, `subtype: weekly | milestone | post-m
 ```yaml
 ---
 id: YYYY-MM-DD-HHMM-slug
-status: proposed | accepted | superseded | deprecated
+status: proposed | accepted | replaced | deprecated
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags: [tag1, tag2]
-supersedes: (optional -- path to old decision)
+replaces: (optional -- path to old decision)
 ---
 ```
 
@@ -103,7 +103,7 @@ supersedes: (optional -- path to old decision)
 ```yaml
 ---
 id: YYYY-MM-DD-slug
-type: semantic | procedural
+type: concept | howto
 confidence: low | medium | high
 created: YYYY-MM-DD
 updated: YYYY-MM-DD

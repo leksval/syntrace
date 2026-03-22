@@ -1,6 +1,6 @@
 ---
 id: YYYY-MM-DD-<slug>
-type: semantic | procedural
+type: concept | howto
 confidence: low | medium | high
 episode_count: 0
 created: YYYY-MM-DD

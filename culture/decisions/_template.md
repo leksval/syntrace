@@ -1,10 +1,10 @@
 ---
 id: YYYY-MM-DD-HHMM-<slug>
-status: proposed | accepted | superseded | deprecated
+status: proposed | accepted | replaced | deprecated
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags: [tag1, tag2]
-supersedes: (optional path to old decision)
+replaces: (optional path to old decision)
 ---
 
 # <Short Decision Title>

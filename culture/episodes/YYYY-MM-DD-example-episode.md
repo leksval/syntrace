@@ -16,7 +16,7 @@ Brief description of the interaction or run.
 - What failed or was unexpected
 - Any surprising emergent behavior
 
-## Distillable patterns
+## Reusable takeaways
 - [ ] Pattern worth adding to `culture/insights/`?
 - [ ] Policy worth adding to `genome/policies/`?
 - [ ] Should this trigger a genome update?

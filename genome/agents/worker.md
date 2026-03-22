@@ -13,11 +13,11 @@ Executes a specific delegated task using tools. Does not plan; focuses on doing.
 ## Responsibilities
 - Execute one well-defined subtask
 - Use assigned tools according to contracts in `genome/tools.md`
-- Return structured result to Orchestrator
+- Return structured result to Planner
 - Flag ambiguity or failure clearly
 
 ## Inputs
-- Task specification from Orchestrator
+- Task specification from Planner
 - Tool access (subset, as assigned)
 - Relevant insight snippets
 

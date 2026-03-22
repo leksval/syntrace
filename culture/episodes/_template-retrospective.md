@@ -28,5 +28,5 @@ tags: []
 - [ ] Action 1 -- owner: <you/agent> -- due: YYYY-MM-DD
 - [ ] Action 2
 
-## Distillation summary
+## Knowledge promoted
 What was promoted from `culture/episodes/` to `culture/insights/` or `genome/` this cycle?

@@ -14,7 +14,7 @@ Brief description of what this project does and its main components.
 [Entry point]
       |
       v
-[Orchestrator]
+[Planner]
    |       |
    v       v
 [Worker] [Librarian]

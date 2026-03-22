@@ -1,7 +1,8 @@
 ---
-id: YYYY-MM-DD-example-semantic
-type: semantic
+id: YYYY-MM-DD-example-insight
+type: concept
 confidence: medium
+episode_count: 4
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 source: episode/YYYY-MM-DD-example-episode.md
