@@ -1,10 +1,9 @@
 ---
-id: YYYY-MM-DD-HHMM-<slug>
-status: proposed | accepted | replaced | deprecated
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
-tags: [tag1, tag2]
-replaces: (optional path to old decision)
+id:                      # auto — YYYY-MM-DD-HHMM-slug
+status: accepted
+tags: []
+changelog:               # optional — type: description
+replaces:                # optional — path to old decision
 related: []
 ---
 
@@ -12,7 +11,6 @@ related: []
 
 ## Context
 What situation or problem led to this decision?
-What constraints existed?
 
 ## Decision
 What was decided? Be direct.
@@ -24,7 +22,3 @@ What was decided? Be direct.
 ## Consequences
 - Positive: what gets better
 - Negative: what gets worse or more complex
-- Neutral: what changes but is neither better nor worse
-
-## Related
-- Links to schema files, insights, or other decisions

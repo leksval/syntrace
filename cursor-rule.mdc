@@ -1,0 +1,30 @@
+---
+description: Syntrace knowledge base -- triggers for memory capture and distillation
+alwaysApply: true
+---
+
+# Syntrace
+
+This project uses Syntrace as its knowledge base. Folders and markdown only.
+
+## Before You Act
+
+1. Check `syntrace/schema/policies/` for rules.
+2. Check `syntrace/memory/insights/` for prior knowledge.
+3. Check `syntrace/schema/patterns/` for workflows.
+
+## Triggers
+
+| Command | What it does |
+|---------|-------------|
+| `/syntrace` or `update memory` | Quick save to `syntrace/memory/inbox/` |
+| `/syntrace full` | Full save: episode + decision if needed + CHANGELOG |
+| `/distill` | Librarian run: inbox/episodes → insights → schema proposals |
+
+When triggered, read `syntrace/MEMORY.md` for the save protocol.
+
+## Rules
+
+- Never modify `syntrace/schema/` without a decision record.
+- Filenames: `YYYY-MM-DD` prefix, lowercase, hyphens.
+- Full reference: `syntrace/AGENTS.md`.

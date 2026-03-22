@@ -1,17 +1,14 @@
 ---
-date: YYYY-MM-DD
+date:                    # auto
 type: experiment
 status: planned | running | done | abandoned
 outcome: SUCCESS | FAIL | SURPRISE | PARTIAL
-duration:
-project: <project-name>
-agent: <agent-name or "human">
 tags: []
-source:
+changelog:               # optional — type: description
 related: []
 ---
 
-# Experiment: <Title>
+# Experiment: <title>
 
 ## Hypothesis
 What do you expect to happen and why?
@@ -25,16 +22,7 @@ What do you expect to happen and why?
 Step-by-step what you did.
 
 ## Results
-What happened? Include raw numbers or outputs if possible.
+What happened? Include raw numbers or outputs.
 
 ## Conclusion
-Was the hypothesis confirmed? What did you learn?
-
-## Next steps
-- [ ] Follow-up experiment?
-- [ ] Promote to `memory/insights/`?
-- [ ] Update `schema/`?
-
-## Related
-- `memory/insights/`
-- `memory/decisions/`
+Was the hypothesis confirmed? What was learned?

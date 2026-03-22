@@ -15,25 +15,24 @@ You are working inside a Syntrace workspace: a filesystem-native, dual-inheritan
 | `memory/decisions/` | ADR-style records explaining why something changed |
 | `memory/episodes/` | Work logs, experiment results, retrospectives |
 | `memory/insights/` | Distilled reusable knowledge extracted from episodes |
-| `memory/inbox/` | Unsorted captures to be triaged later |
+| `memory/inbox/` | Quick captures -- default landing zone for knowledge |
 | `graph-schema.json` | Node/edge type definitions for graph queries |
 | `src/` | Source code |
 | `tests/` | Tests |
 | `docs/` | Technical documentation |
-| `CHANGELOG.md` | Human-readable project history |
+| `CHANGELOG.md` | Human-readable project history (auto-appended from frontmatter) |
 
 **Schema** = structural knowledge that rarely changes. Never modify without a decision record.
-**Memory** = experiential knowledge that evolves continuously.
+**Memory** = experiential knowledge that evolves continuously. Inbox is the default entry point.
 
 ---
 
 ## Knowledge Flow
 
-Work produces episodes. Episodes get distilled into insights. Stable insights get promoted to schema. Every schema change gets a decision record.
-
 ```
-work done ──→ memory/episodes/
-                   ↓  (distillation)
+work done ──→ memory/inbox/     (quick capture, default)
+              memory/episodes/  (full save)
+                   ↓  (distillation — /distill)
               memory/insights/
                    ↓  (when stable across 3+ episodes)
               schema/patterns/ or schema/policies/
@@ -53,35 +52,78 @@ work done ──→ memory/episodes/
 
 ---
 
-## After You Finish -- Save Protocol
+## Save Protocol
 
-Save results using today's date. Every file needs YAML frontmatter with `tags: [...]`.
+Three tiers. Use the lightest one that fits.
 
-### Where to save
+### Tier 1: Quick save (`/syntrace`) — default
 
-| What happened | Folder | Filename | Template |
-|---------------|--------|----------|----------|
-| Design or architecture choice | `memory/decisions/` | `YYYY-MM-DD-HHMM-slug.md` | `_template.md` in folder |
-| Focused work, experiment run | `memory/episodes/` | `YYYY-MM-DD-slug.md` | `_template-experiment.md` |
-| Review, retro, periodic summary | `memory/episodes/` | `YYYY-MM-DD-slug.md` | `_template-retrospective.md` |
-| Reusable pattern discovered | `memory/insights/` | `YYYY-MM-DD-slug.md` | `_template.md` in folder |
-| Quick unstructured capture | `memory/inbox/` | `YYYY-MM-DD-slug.md` | None required |
-| Notable project change | `CHANGELOG.md` | Append entry | `[YYYY-MM-DD] type: description` |
-
-CHANGELOG types: `init`, `agent`, `pattern`, `tool`, `decision`, `experiment`, `milestone`, `fix`.
-
-### Frontmatter schemas
-
-**Episode** (base fields -- all episode types share these):
+Create `memory/inbox/YYYY-MM-DD-slug.md`. Read `_template.md` in folder.
 
 ```yaml
 ---
-date: YYYY-MM-DD
-project: <project-name>
-agent: <agent-name or "human">
+date:        # auto
+tags: []
+---
+```
+
+Body: a few sentences or bullets. No structure required.
+Use this for most sessions. Capture first, structure later.
+
+### Tier 2: Full save (`/syntrace full`)
+
+For sessions with significant work. Read `_template.md` in the target folder.
+
+| What happened | Save to | Filename |
+|---|---|---|
+| Focused work, experiment, retro | `memory/episodes/` | `YYYY-MM-DD-slug.md` |
+| Design or architecture choice | `memory/decisions/` | `YYYY-MM-DD-HHMM-slug.md` |
+| Reusable pattern discovered | `memory/insights/` | `YYYY-MM-DD-slug.md` |
+
+If a design choice was made, create **both** an episode and a decision.
+
+### Tier 3: Distill (`/distill`)
+
+Periodic librarian run. See `schema/patterns/librarian-distillation.md`.
+Scans inbox + episodes → proposes insights → flags schema promotions.
+
+### Auto-derived fields
+
+Fill these automatically — never prompt for them:
+
+| Field | Value |
+|-------|-------|
+| `date` / `created` / `updated` | Today's date |
+| `agent` | Current agent or `"human"` |
+| `project` | Workspace/project name |
+| `source` | `"session"` unless more specific context exists |
+
+### CHANGELOG integration
+
+When a change is notable, add `changelog:` to the frontmatter:
+
+```yaml
+changelog: "pattern: streamlined save protocol"
+```
+
+Format: `type: description`. Types: `init`, `agent`, `pattern`, `tool`, `decision`, `experiment`, `milestone`, `fix`.
+
+After creating the file, auto-append `[YYYY-MM-DD] <changelog value>` to `CHANGELOG.md`.
+
+---
+
+## Frontmatter Schemas
+
+Fields marked `# auto` are filled by the agent. Fields marked `# optional` can be omitted.
+
+### Episode
+
+```yaml
+---
+date:                    # auto
 outcome: SUCCESS | FAIL | SURPRISE | PARTIAL
-tags: [tag1, tag2]
-source: (what triggered this episode)
+tags: []
+changelog:               # optional — type: description
 related: []
 ---
 ```
@@ -89,32 +131,29 @@ related: []
 Experiments add: `type: experiment`, `status: planned | running | done | abandoned`.
 Retrospectives add: `type: retrospective`, `subtype: weekly | milestone | post-mortem`.
 
-**Decision:**
+### Decision
 
 ```yaml
 ---
-id: YYYY-MM-DD-HHMM-slug
-status: proposed | accepted | replaced | deprecated
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
-tags: [tag1, tag2]
-replaces: (optional -- path to old decision)
+id:                      # auto — YYYY-MM-DD-HHMM-slug
+status: accepted
+tags: []
+changelog:               # optional — type: description
+replaces:                # optional — path to old decision
 related: []
 ---
 ```
 
-**Insight:**
+### Insight
 
 ```yaml
 ---
-id: YYYY-MM-DD-slug
+id:                      # auto — YYYY-MM-DD-slug
 type: concept | howto
 confidence: low | medium | high
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
-source: episode/filename | experiment/filename | human
-tags: [tag1, tag2]
-related: [path/to/related.md]
+episode_count: 1
+tags: []
+related: []
 ---
 ```
 
@@ -122,11 +161,10 @@ related: [path/to/related.md]
 
 ## End-of-Session Checklist
 
-1. **Code committed?** If you wrote code, commit with a descriptive message.
-2. **Episode logged?** If non-trivial work was done, create one in `memory/episodes/`.
-3. **Decision recorded?** If you made a design choice, record it in `memory/decisions/`.
-4. **Insight captured?** If you discovered something reusable, add it to `memory/insights/`.
-5. **CHANGELOG updated?** If the change is notable, append to `CHANGELOG.md`.
+1. **Code committed?** Commit with a descriptive message.
+2. **Memory saved?** Run `/syntrace` (quick) or `/syntrace full` (significant work).
+
+The save protocol handles routing, CHANGELOG, and frontmatter.
 
 ---
 

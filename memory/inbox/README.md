@@ -1,12 +1,10 @@
 # Inbox
 
-Dump unsorted captures here: links, ideas, snippets, voice-note transcripts.
+The default landing zone for knowledge capture. Low friction, no ceremony.
 
-**Rule**: process inbox weekly during retrospective.
-- Useful -> move to `memory/insights/`
-- Actionable -> create decision or experiment
-- Irrelevant -> delete
+**Quick save** (`/syntrace`): creates a file here with just `date` + `tags` + a brief note.
 
-## Format
-Just create a file named `YYYY-MM-DD-<anything>.md` and drop your capture in.
-No required structure — inbox is a staging area, not permanent storage.
+**Triage rule**: process inbox during `/distill` or weekly retrospective.
+- Reusable pattern → promote to `memory/insights/`
+- Design choice → create `memory/decisions/`
+- Irrelevant → delete

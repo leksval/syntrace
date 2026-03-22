@@ -5,24 +5,32 @@
 Syntrace is a filesystem-native project template that separates knowledge into two layers:
 
 - **Schema** (`schema/`): Stable structural knowledge -- agent roles, architectural patterns, policies, tool definitions. Changes rarely, always with a decision record.
-- **Memory** (`memory/`): Evolving experiential knowledge -- design decisions, work episodes, distilled insights, unsorted inbox. Changes continuously.
+- **Memory** (`memory/`): Evolving experiential knowledge -- design decisions, work episodes, distilled insights, inbox captures. Changes continuously.
 
 Code lives at the project root (`src/`, `tests/`, `docs/`).
 
+## Save protocol
+
+Three tiers, lightest first:
+- `/syntrace` — quick capture to `memory/inbox/` (default)
+- `/syntrace full` — episode + decision + CHANGELOG for significant work
+- `/distill` — librarian run: inbox/episodes → insights → schema proposals
+
 ## Key files
 
-- `AGENTS.md` -- Full agent orientation: workspace map, save protocol, frontmatter schemas, end-of-session checklist.
-- `CHANGELOG.md` -- Human-readable project history.
-- `schema/agents/*.md` -- One file per agent role (responsibilities, inputs, outputs, invariants).
-- `schema/patterns/*.md` -- Architectural patterns and playbooks.
-- `schema/policies/*.md` -- Standing rules and quality standards.
-- `memory/decisions/*.md` -- ADR-style records explaining design choices.
-- `memory/episodes/*.md` -- Work logs, experiments, retrospectives.
-- `memory/insights/*.md` -- Distilled reusable knowledge.
+- `AGENTS.md` — Canonical agent reference: workspace map, save protocol, frontmatter schemas, conventions.
+- `MEMORY.md` — Thin router: points to AGENTS.md, describes the three tiers.
+- `schema/agents/*.md` — One file per agent role.
+- `schema/patterns/*.md` — Architectural patterns and playbooks.
+- `schema/policies/*.md` — Standing rules and quality standards.
+- `memory/inbox/` — Default landing zone for quick captures.
+- `memory/decisions/*.md` — ADR-style records explaining design choices.
+- `memory/episodes/*.md` — Work logs, experiments, retrospectives.
+- `memory/insights/*.md` — Distilled reusable knowledge.
 
 ## Knowledge flow
 
-Episodes and inbox items are distilled into insights. When an insight is stable across 3+ episodes, it promotes to schema. Every schema change is paired with a decision record.
+Inbox and episodes are distilled into insights via `/distill`. When an insight is stable across 3+ episodes, it promotes to schema. Every schema change is paired with a decision record.
 
 ## Stack
 

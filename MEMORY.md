@@ -1,32 +1,42 @@
 # Syntrace Memory Router
 
-This is a filesystem-native knowledge base. Folders and markdown only.
+When triggered, follow the tier that matches.
 
-## Read: Before You Act
+---
 
-1. `schema/policies/` -- rules relevant to your task
-2. `memory/insights/` -- prior knowledge and reusable patterns
-3. `schema/patterns/` -- established workflows
+## `/syntrace` — Quick save (default)
 
-## Write: After You Finish
+1. Review what happened this session.
+2. Create `memory/inbox/YYYY-MM-DD-slug.md` (read `_template.md` in folder).
+3. Frontmatter: `date` (auto), `tags`. Body: a few sentences or bullets.
 
-Use `_template.md` in each folder. Every file needs YAML frontmatter with `tags: [...]`.
+## `/syntrace full` — Full save
 
-| What happened | Save to | Filename |
-|---|---|---|
-| Design choice | `memory/decisions/` | `YYYY-MM-DD-HHMM-slug.md` |
-| Work log or experiment | `memory/episodes/` | `YYYY-MM-DD-slug.md` |
-| Reusable pattern found | `memory/insights/` | `YYYY-MM-DD-slug.md` |
-| Quick note | `memory/inbox/` | `YYYY-MM-DD-slug.md` |
-| Notable change | `CHANGELOG.md` | Append line |
+1. Review what happened this session.
+2. Create `memory/episodes/YYYY-MM-DD-slug.md` (read `_template.md` in folder).
+3. If a design choice was made, also create `memory/decisions/YYYY-MM-DD-HHMM-slug.md`.
+4. If a reusable pattern emerged, also create `memory/insights/YYYY-MM-DD-slug.md`.
+5. If any file has a `changelog:` frontmatter field, auto-append it to `CHANGELOG.md`.
 
-## Rules
+## `/distill` — Librarian distillation
 
-- Never modify `schema/` without a decision record in `memory/decisions/`.
-- Filenames: `YYYY-MM-DD` prefix, lowercase, hyphens, no spaces.
-- Max ~300 lines per file.
+1. Scan `memory/inbox/` and recent `memory/episodes/`.
+2. Propose new insights or update existing ones in `memory/insights/`.
+3. Flag any insight with `episode_count >= 3` for schema promotion.
+4. Log the distillation run as an episode in `memory/episodes/`.
+5. See `schema/patterns/librarian-distillation.md` for full rules.
 
-## More
+## Auto-derived fields
 
-- [AGENTS.md](AGENTS.md) -- full schemas, checklist, conventions
-- [docs/graph-queries.md](docs/graph-queries.md) -- graph traversal and cross-project queries
+Fill these automatically — never prompt for them:
+
+| Field | Value |
+|-------|-------|
+| `date` / `created` / `updated` | Today's date |
+| `agent` | Current agent or `"human"` |
+| `project` | Workspace/project name |
+| `source` | `"session"` unless more specific context exists |
+
+---
+
+Full reference: [AGENTS.md](AGENTS.md) — frontmatter schemas, conventions, workspace map.

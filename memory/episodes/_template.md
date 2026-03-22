@@ -1,37 +1,22 @@
 ---
-date: YYYY-MM-DD
-project: <project-name>
-agent: <agent-name or "human">
+date:                    # auto
 outcome: SUCCESS | FAIL | SURPRISE | PARTIAL
-duration:
 tags: []
-source:
+changelog:               # optional — type: description
 related: []
 ---
 
-# Episode: <Short title>
+# Episode: <title>
 
 ## What happened
-Brief description of the interaction or run.
+Brief description of the work done.
 
-## Key observations
+## Takeaways
+- What was learned
+- What would you do differently
+
+## Observations
+<!-- optional — remove if not needed -->
 - What worked well
 - What failed or was unexpected
-- Any surprising emergent behavior
-
-## Reusable takeaways
-- [ ] Pattern worth adding to `memory/insights/`?
-- [ ] Policy worth adding to `schema/policies/`?
-- [ ] Should this trigger a schema update?
-
-## Insights produced
-- (none yet)
-
-## Raw trace (optional)
-Keep only the essential parts. Prune verbose logs.
-
-```
-[agent]: ...
-[tool]: ...
-[result]: ...
-```
+- Surprising behavior

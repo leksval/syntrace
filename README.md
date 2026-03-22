@@ -43,7 +43,7 @@ Folders and markdown only. Clone it for every new project.
 | **Dual-layer architecture** | Schema (roles, policies, patterns) changes rarely; Memory (decisions, episodes, insights) evolves continuously |
 | **AI-agent ready** | `AGENTS.md` gives any LLM full workspace orientation, save protocol, and end-of-session checklist |
 | **Zero dependencies** | Plain markdown and folders -- works with any language, framework, or toolchain |
-| **Built-in knowledge flow** | Episodes distill into insights; stable insights promote to schema; every schema change gets a decision record |
+| **Tiered save protocol** | Quick captures land in inbox by default; full saves create episodes and decisions; `/distill` promotes knowledge upward |
 | **Template-based consistency** | `_template.md` files in each folder enforce frontmatter schemas and structure |
 | **Git-native milestones** | Use `git tag` for releases -- no archive folders or manual versioning |
 
@@ -51,18 +51,35 @@ Folders and markdown only. Clone it for every new project.
 
 ## Quick Start
 
+**New project from template:**
+
 ```bash
-cp -r syntrace/ my-new-project/
+cp -r syntrace/ my-new-project/syntrace/
 cd my-new-project/
-git init && git add . && git commit -m "init: project scaffold from syntrace template"
+git init
 ```
+
+**Enable AI memory trigger** (one-time):
+
+```bash
+mkdir -p .cursor/rules
+cp syntrace/cursor-rule.mdc .cursor/rules/syntrace.mdc
+```
+
+Three commands are now available:
+
+| Command | What it does |
+|---------|-------------|
+| `/syntrace` or `update memory` | Quick save to `memory/inbox/` |
+| `/syntrace full` | Full save: episode + decision + CHANGELOG |
+| `/distill` | Librarian run: inbox/episodes → insights → schema proposals |
 
 <details>
 <summary><strong>Next steps after scaffolding</strong></summary>
 
-1. Edit `schema/agents/*.md` to define your agent roles.
-2. Edit `schema/patterns/*.md` to define your architecture.
-3. Log your first design decision in `memory/decisions/`.
+1. Edit `syntrace/schema/agents/*.md` to define your agent roles.
+2. Edit `syntrace/schema/patterns/*.md` to define your architecture.
+3. Log your first design decision in `syntrace/memory/decisions/`.
 4. Start coding in `src/`.
 
 </details>
@@ -101,10 +118,10 @@ git init && git add . && git commit -m "init: project scaffold from syntrace tem
 
 ```mermaid
 flowchart TD
-    Work["You learn / agents run"] --> Episodes["memory/episodes/"]
-    Work --> Inbox["memory/inbox/"]
-    Episodes --> Insights["memory/insights/"]
-    Inbox -->|triage| Insights
+    Work["You learn / agents run"] -->|"/syntrace"| Inbox["memory/inbox/"]
+    Work -->|"/syntrace full"| Episodes["memory/episodes/"]
+    Inbox -->|"/distill"| Insights["memory/insights/"]
+    Episodes -->|"/distill"| Insights
     Insights -->|"stable across 3+ episodes"| Schema["schema/patterns/\nschema/policies/\nschema/agents/"]
     Schema --> Decisions["memory/decisions/"]
 ```

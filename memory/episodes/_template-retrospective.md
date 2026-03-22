@@ -1,16 +1,14 @@
 ---
-date: YYYY-MM-DD
+date:                    # auto
 type: retrospective
 subtype: weekly | milestone | post-mortem
 outcome: SUCCESS | FAIL | SURPRISE | PARTIAL
-duration:
-project: <project-name>
-agent: <agent-name or "human">
 tags: []
+changelog:               # optional — type: description
 related: []
 ---
 
-# Retrospective: <Period or Milestone>
+# Retrospective: <period or milestone>
 
 ## What went well
 - ...
@@ -18,16 +16,8 @@ related: []
 ## What didn't go well
 - ...
 
-## Surprising findings
-- ...
-
-## Insight updates triggered
-- [ ] `memory/insights/<file>.md` -- added/updated
-- [ ] Schema update proposed: `schema/<file>.md`
+## Insights produced
+- (links to new or updated insights)
 
 ## Action items
-- [ ] Action 1 -- owner: <you/agent> -- due: YYYY-MM-DD
-- [ ] Action 2
-
-## Knowledge promoted
-What was promoted from `memory/episodes/` to `memory/insights/` or `schema/` this cycle?
+- [ ] Action — owner — due: YYYY-MM-DD
