@@ -209,7 +209,7 @@ Fill these automatically -- never ask the user for them:
 |-------|-------|---------|
 | date in heading | Today's date | `### 2026-03-23-fix-auth-flow` |
 | **context_read** | Files, sections, entries, tickets, logs, or specs you read before writing | `src/auth.ts, docs/auth.md, 2026-01-20-dev-defaults-leak` |
-| **tags** | 2-5 lowercase keywords from the Tag Canon | `api, error-handling, config` |
+| **tags** | 2-5 lowercase keywords from the Tag Canon (see below) | `api, error-handling, config` |
 | **outcome** | Best match from SUCCESS / FAIL / SURPRISE / PARTIAL | `SURPRISE` |
 | **slug** | Descriptive, lowercase, hyphenated, no filler words | `fix-payment-timeout` not `todays-work` |
 | **status** | Default for entry type | Context: `active`, Decision: `accepted` |
@@ -220,25 +220,11 @@ Fill these automatically -- never ask the user for them:
 
 ## Tag canon
 
-Canonical tags prevent drift. Use these when they fit; add new canonical tags only when no existing tag covers the concept.
+The tag canon is project-specific. On the first `/syntrace` run for a new project, scan the codebase and create an initial set of canonical tags that reflect the project's actual domains, technologies, and concerns. Use lowercase single words or hyphenated compounds. Each tag should have at least one alias. Tags exist for retrieval -- use domain terms, not generic ones (`important`, `misc`, `todo`). Add new canonical tags in subsequent saves when no existing tag covers the concept.
 
 | Canonical | Aliases | Domain |
 |-----------|---------|--------|
-| `api` | `rest`, `http`, `endpoint`, `graphql` | Integration |
-| `auth` | `authentication`, `authorization`, `login`, `oauth` | Security |
-| `config` | `configuration`, `settings`, `env`, `feature-flags` | Operations |
-| `db` | `database`, `sql`, `postgres`, `mysql`, `mongo` | Storage |
-| `cache` | `caching`, `redis`, `memcached` | Performance |
-| `deploy` | `deployment`, `ci-cd`, `pipeline`, `docker` | Operations |
-| `error-handling` | `errors`, `exceptions`, `retry`, `fallback` | Reliability |
-| `performance` | `perf`, `latency`, `throughput`, `optimization` | Performance |
-| `architecture` | `arch`, `design`, `system-design`, `patterns` | Architecture |
-| `testing` | `tests`, `test`, `qa`, `e2e`, `unit-test` | Quality |
-| `tooling` | `dx`, `developer-experience`, `ide`, `cursor` | Tooling |
-| `security` | `sec`, `vulnerability`, `encryption`, `secrets` | Security |
-| `monitoring` | `observability`, `logging`, `alerting`, `tracing` | Operations |
-
-To add a new canonical tag: lowercase single word or hyphenated compound with at least one alias. Tags exist for retrieval -- use domain terms, not generic ones (`important`, `misc`, `todo`).
+| _populate on first `/syntrace` run_ | | |
 
 ## Interoperability
 
@@ -251,6 +237,26 @@ To add a new canonical tag: lowercase single word or hyphenated compound with at
 3. **Keep lineage in Syntrace**: external formats cannot fully represent `derived_from`, `evidence`, or `supersedes`. Export human-readable summaries.
 4. **No manual round-trips**: exported files are derived artifacts. Hand edits to them are treated as new source material on re-import.
 5. **Privacy preserved**: imports and exports must still omit secrets, tokens, passwords, API keys, and PII.
+
+### Lessons extraction
+
+When a user asks for lessons, guidance, reusable rules, or "what have we learned?", treat Syntrace as a **read-only memory source** unless they explicitly ask for `/syntrace` or to update the file.
+
+**Source priority**:
+
+1. Read the local `syntrace.md` in the current workspace if available.
+2. Otherwise read a provided raw markdown URL for the file.
+3. If neither is accessible, ask the user to paste the markdown contents.
+
+**Extraction rules**:
+
+- Prefer **Insights** first: they already hold distilled reusable knowledge.
+- Use accepted **Decisions** as durable constraints, defaults, and tradeoffs.
+- Use **Episodes** and **Context** as evidence, especially when multiple entries reinforce the same lesson.
+- Deduplicate overlapping ideas; merge repeated evidence into one stronger lesson.
+- Separate stable lessons from tentative hypotheses and anti-patterns.
+- Surface repeated open questions or unresolved tensions if they appear across entries.
+- Output a concise markdown summary or reusable rules. **Do not rewrite the full Syntrace file** unless the user explicitly triggered `/syntrace`.
 
 ### Adapter mappings
 

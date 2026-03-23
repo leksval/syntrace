@@ -87,6 +87,75 @@ The LLM may ask 1-2 brief clarification questions before saving if the session s
 
 ---
 
+## Generate lessons from Syntrace
+
+You can also use `syntrace.md` as a **read-only memory source** to ask Cursor for reusable lessons from prior LLM-assisted work.
+
+Best markdown-only workflow:
+
+- Prefer the local `syntrace.md` in the current workspace
+- Fall back to a raw GitHub markdown URL when you want to reuse memory across repos
+- If neither is accessible, paste the markdown contents into chat
+
+Use this prompt in Cursor:
+
+```md
+Give me all reusable lessons from this project's Syntrace memory.
+
+Source priority:
+1. If `syntrace.md` exists in the current workspace, read that file first.
+2. Otherwise read this raw markdown URL: <RAW_GITHUB_URL>
+3. If you cannot access either source, ask me to paste the markdown contents.
+
+Instructions:
+- Read the full Syntrace file, but focus especially on `Insights`, `Decisions`, `Episodes`, `Context`, and `Memory Index`.
+- Extract reusable lessons learned from prior LLM-assisted work and development sessions.
+- Deduplicate overlapping ideas.
+- Merge repeated evidence into one stronger lesson instead of listing variants.
+- Prefer high-confidence insights and accepted decisions.
+- Use episodes and context entries as supporting evidence when they reinforce a lesson.
+- Distinguish:
+  - stable lessons
+  - tentative lessons
+  - anti-patterns / things to avoid
+- Ignore filler, one-off narration, and anything not useful for future work.
+- Do not rewrite the whole Syntrace file.
+- Output only markdown.
+
+Return format:
+
+# Lessons From Syntrace
+
+## Stable Lessons
+For each item include:
+- Lesson
+- Why it matters
+- When to apply it
+- Evidence
+
+## Tentative Lessons
+For each item include:
+- Hypothesis
+- What evidence supports it
+- What would confirm or disprove it
+
+## Anti-Patterns
+For each item include:
+- What to avoid
+- Why
+- Evidence
+
+## Open Questions
+List unresolved questions or gaps that appear repeatedly.
+
+## Suggested Reusable Rules
+Turn the strongest lessons into short agent rules I could reuse in future chats.
+```
+
+This works well because Syntrace already separates durable patterns from raw session history: `Insights` hold distilled lessons, `Decisions` capture durable rationale, and `Episodes` / `Context` supply evidence. Asking for lessons is therefore different from asking the LLM to append new memory with `/syntrace`.
+
+---
+
 ## What it captures
 
 Every `/syntrace` evaluates the full session and writes what's appropriate:
