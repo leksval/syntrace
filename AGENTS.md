@@ -69,7 +69,7 @@ tags: []
 Body: a few sentences or bullets. No structure required.
 Use this for most sessions. Capture first, structure later.
 
-After saving, **reflect**: did a reusable pattern, surprising finding, or recurring theme emerge? If yes, also create `memory/insights/YYYY-MM-DD-slug.md`.
+After saving, **reflect**: did a reusable pattern, surprising finding, or recurring theme emerge? If yes, also create `memory/insights/YYYY-MM-DD-slug.md`. Also check `schema/policies/architectural-reflection.md` for project-level lessons.
 
 ### Tier 2: Full save (`/syntrace full`)
 
@@ -83,7 +83,7 @@ For sessions with significant work. Read `_template.md` in the target folder.
 
 If a design choice was made, create **both** an episode and a decision.
 
-After saving, **reflect**: step back and consider what insights emerged from this session. Check `memory/insights/` for existing ones that should be updated (increment `episode_count`). Create new insights for any reusable pattern, surprising finding, or lesson learned.
+After saving, **reflect**: step back and consider what insights emerged from this session. Check `memory/insights/` for existing ones that should be updated (increment `episode_count`). Create new insights for any reusable pattern, surprising finding, or lesson learned. Also check `schema/policies/architectural-reflection.md` for project-level lessons.
 
 ### Tier 3: Distill (`/distill`)
 

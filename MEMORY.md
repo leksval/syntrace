@@ -9,7 +9,7 @@ When triggered, follow the tier that matches.
 1. Review what happened this session.
 2. Create `memory/context/YYYY-MM-DD-slug.md` (read `_template.md` in folder).
 3. Frontmatter: `date` (auto), `tags`. Body: a few sentences or bullets.
-4. **Reflect**: did a reusable pattern, surprising finding, or recurring theme emerge? If yes, also create `memory/insights/YYYY-MM-DD-slug.md`.
+4. **Reflect**: did a reusable pattern, surprising finding, or recurring theme emerge? If yes, also create `memory/insights/YYYY-MM-DD-slug.md`. Also check `schema/policies/architectural-reflection.md` for project-level lessons.
 
 ## `/syntrace full` — Full save
 
@@ -17,7 +17,7 @@ When triggered, follow the tier that matches.
 2. Create `memory/episodes/YYYY-MM-DD-slug.md` (read `_template.md` in folder).
 3. If a design choice was made, also create `memory/decisions/YYYY-MM-DD-HHMM-slug.md`.
 4. If any file has a `changelog:` frontmatter field, auto-append it to `CHANGELOG.md`.
-5. **Reflect**: step back and consider what insights emerged. Check `memory/insights/` for existing ones that should be updated (increment `episode_count`). Create new insights for any reusable pattern, surprising finding, or lesson learned.
+5. **Reflect**: step back and consider what insights emerged. Check `memory/insights/` for existing ones that should be updated (increment `episode_count`). Create new insights for any reusable pattern, surprising finding, or lesson learned. Also check `schema/policies/architectural-reflection.md` for project-level lessons.
 
 ## `/distill` — Librarian distillation
 
