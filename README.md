@@ -17,7 +17,8 @@
 
 <p align="center">
   <strong>Start here:</strong><br/>
-  <a href="https://raw.githubusercontent.com/leksval/syntrace/main/syntrace.md"><img src="https://img.shields.io/badge/USE_THIS_RAW_PROMPT-syntrace.md-ff1744?style=for-the-badge" alt="Use this raw prompt" /></a>
+  <a href="https://raw.githubusercontent.com/leksval/syntrace/main/syntrace.md"><img src="https://img.shields.io/badge/USE_THIS_RAW_PROMPT-%7E7.5k_tokens-ff1744?style=for-the-badge" alt="Use this raw prompt, approximately 7.5k tokens" /></a><br/>
+  <sub>Approximate prompt size: ~7.5k tokens</sub>
 </p>
 
 <p align="center">
@@ -73,7 +74,7 @@ Syntrace gives the project one durable file that both humans and LLMs can reuse.
 5. Save the full updated file.
 6. Reuse it next session.
 
-Raw prompt: [open `syntrace.md` as raw markdown](https://raw.githubusercontent.com/leksval/syntrace/main/syntrace.md)
+Raw prompt: [open `syntrace.md` as raw markdown](https://raw.githubusercontent.com/leksval/syntrace/main/syntrace.md) (`~7.5k` tokens)
 
 What `/syntrace` saves:
 
