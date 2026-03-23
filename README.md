@@ -56,7 +56,7 @@ You are encouraged to fork this repo and adjust the format for your own team, st
 
 ---
 
-## Why people use it
+## Why use it
 
 Project history gets lost fast. Decisions, debugging lessons, and hard-won patterns end up scattered across chats, commits, docs, and memory.
 
