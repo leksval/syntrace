@@ -130,10 +130,10 @@ syntrace/
 │
 ├── schema/                  🔒 STABLE - your project's structure
 │   ├── agents/              Who does what (planner, worker, critic, librarian)
-│   ├── patterns/            How things are built (playbooks, workflows)
+│   ├── patterns/            How things are built (playbooks, workflows, scaling)
 │   ├── policies/            Quality standards and rules
 │   ├── tools.md             Tool definitions and contracts
-│   └── graph-schema.json    Node/edge types for knowledge graph queries
+│   └── graph-schema.json    Node/edge types, validation rules, query recipes
 │
 └── memory/                  🔄 EVOLVING - your project's experience
     ├── context/             Quick captures - default landing zone
@@ -162,6 +162,54 @@ flowchart TD
     Insights -->|"stable across 3+ episodes"| Schema["schema/\n- permanent knowledge"]
     Schema -.->|"always paired with"| Decisions["memory/decisions/\n- rationale record"]
 ```
+
+---
+
+## Architecture
+
+Four constraints shape every design choice. Changing any requires a decision record.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### Agent model
+
+Two concerns, four roles:
+
+**Task execution** (planner-worker-critic cycle):
+- **Planner** -- decomposes goals, delegates, synthesizes
+- **Worker** -- executes one subtask using tools
+- **Critic** -- reviews output; PASS / REVISE / REJECT
+
+**Knowledge maintenance** (separate cadence):
+- **Librarian** -- distills notes into insights, proposes schema promotions
+
+New roles are added as specialized workers, not new top-level roles.
+
+</td>
+<td width="50%" valign="top">
+
+### Graph queries
+
+Agents query relationships between files (which episode produced which insight?) using file tools -- no database.
+
+- `schema/graph-schema.json` maps node types to globs, edges to frontmatter fields
+- `schema/patterns/graph-scan.md` walks the procedure step by step
+- Scales via tag-first filtering, recency windows, and walk-backward queries
+
+</td>
+</tr>
+</table>
+
+### Design invariants
+
+| Invariant | Implication |
+|-----------|-------------|
+| Zero external dependencies | Markdown and folders only. No database, no embeddings, no API keys. |
+| Platform-portable | Any agent that can read files can use the system. No IDE lock-in. |
+| Git-native | All knowledge is diffable, branchable, mergeable alongside code. |
+| Convention-enforced | The system trusts agents to follow specs. No runtime enforcement. |
 
 ---
 

@@ -11,7 +11,6 @@ You are working inside a Syntrace workspace: a filesystem-native, dual-inheritan
 | `schema/agents/` | One `.md` per agent role -- responsibilities, inputs, outputs, invariants |
 | `schema/patterns/` | Architectural patterns and playbooks for multi-agent workflows |
 | `schema/policies/` | Standing rules and quality standards (Critic agent uses these) |
-| `schema/architecture.md` | Foundational constraints: dual-layer split, agent model, save protocol, graph scan |
 | `schema/tools.md` | Tool definitions, contracts, and agent assignments |
 | `memory/decisions/` | ADR-style records explaining why something changed |
 | `memory/episodes/` | Work logs, experiment results, retrospectives |
