@@ -4,16 +4,61 @@
 
 ---
 
+## Minimal cheat sheet
+
+- **Output rule**: when triggered, output the **COMPLETE file** as a single markdown code block. Never output only the new entry.
+- **Where to write**: append new entries **only** under the five MEMORY sections below (Context → Changelog). Do **not** append to **EXAMPLES** at the bottom unless the user asks to merge or replace samples.
+- **Read before you write**: scan existing Memory sections; update Insights instead of duplicating; link `replaces` on decisions when superseding.
+- **Triggers**: `/syntrace` → Context (+ Insight if a pattern emerged). `/syntrace full` → Episode + Decision if needed + Changelog. `/distill` → promote Context → Insights, mark `[distilled]`.
+
+**Full protocol, formats, writing rules, and architecture** → see **REFERENCE** at the end of this file.
+
+---
+
 <!-- ============================================================ -->
-<!-- SPEC — replication instructions (do not modify)               -->
+<!-- MEMORY — entries below grow over time                         -->
+<!-- ============================================================ -->
+
+## Context
+
+Low-friction captures. The inbox.
+
+_Add entries below._
+
+## Episodes
+
+Structured work logs after significant sessions.
+
+_Add entries below._
+
+## Decisions
+
+Architecture and design choices with rationale.
+
+_Add entries below._
+
+## Insights
+
+Distilled, reusable patterns.
+
+_Add entries below._
+
+## Changelog
+
+_Add one-line session summaries below._
+
+---
+
+<!-- ============================================================ -->
+<!-- REFERENCE — full specification (do not delete; LLM reads)      -->
 <!-- ============================================================ -->
 
 ## How this file works
 
 This is a self-contained memory system. Two halves, like a DNA strand:
 
-1. **Spec** (above the MEMORY marker) — the replication instructions. Constant. Tells you what entries look like, when to create them, and how to write them well. Never modify the spec during normal use.
-2. **Memory** (below the MEMORY marker) — the accumulated data. Grows every session. Five sections: Context, Episodes, Decisions, Insights, Changelog.
+1. **Spec** — the replication instructions. Constant. Split for ergonomics: a **minimal cheat sheet** sits above MEMORY; the **REFERENCE** block below contains the full rules, formats, and architecture. Never delete REFERENCE; never append session output there. Optionally delete **EXAMPLES** in a fresh project.
+2. **Memory** (the MEMORY block near the top) — the accumulated data. Grows every session. Append new `###` entries only here: Context, Episodes, Decisions, Insights, Changelog. Five sections.
 
 **Output rule**: when triggered, output the **COMPLETE file** as a single markdown code block with the new entry appended to the correct section. The user saves it, replacing the old version. Never output just the new entry — always the full file, so nothing is lost.
 
@@ -297,10 +342,10 @@ When the file exceeds ~500 entries, consider splitting into multiple Syntrace fi
 ---
 
 <!-- ============================================================ -->
-<!-- MEMORY — entries below grow over time                         -->
+<!-- EXAMPLES — illustrative memory (optional; delete for clean)    -->
 <!-- ============================================================ -->
 
-## Context
+## Context (examples)
 
 Low-friction captures. The inbox. Write here when something is worth remembering but doesn't need structure yet. During `/distill`, promote the good ones to Insights and mark the rest `[distilled]`.
 
@@ -318,7 +363,7 @@ Spent 40 minutes debugging 401s before realizing refresh tokens expire after 7 d
 
 When a file exceeds ~800 lines, Cursor agents start ignoring instructions from the top of the file. Splitting the config into 3 smaller files fixed it immediately. Rule of thumb: keep any file an agent reads under 500 lines.
 
-## Episodes
+## Episodes (examples)
 
 Structured work logs. Write here after significant sessions -- not routine ones. Focus on the **why** and the **takeaway**, not a transcript of what you typed.
 
@@ -338,7 +383,7 @@ Payment endpoint timing out ~5% of requests during peak hours. Root cause: upstr
 - Dev-environment defaults silently persisting into production is a recurring theme (see also: context/auth-token-expiry-gotcha)
 - Would add a startup check that flags any timeout config under 2s in production
 
-## Decisions
+## Decisions (examples)
 
 Architecture and design choices with rationale. Write here when you chose X over Y and it matters enough that your future self would ask "why did we do it this way?"
 
@@ -367,7 +412,7 @@ Move to async processing: webhook handler writes to a queue (SQS), a separate wo
 - Positive: handler never backs up, events survive worker crashes, can scale workers independently
 - Negative: adds SQS dependency, eventual consistency (events processed seconds later, not instantly), need dead-letter queue monitoring
 
-## Insights
+## Insights (examples)
 
 Distilled patterns — reusable knowledge extracted from episodes and context. Each insight should be **findable** by tags, **actionable** with a concrete trigger, and **precise** enough to be proven wrong.
 
@@ -403,7 +448,7 @@ Development-environment defaults (short timeouts, relaxed validation, stub endpo
 
 When debugging production issues that "should work," check whether any config value is still at its development default. Add a startup validator that flags known dev-only values when `NODE_ENV=production`.
 
-## Changelog
+## Changelog (examples)
 
 - 2026-01-10: captured auth token expiry gotcha
 - 2026-01-15: fixed payment timeout, created retry-backoff insight
