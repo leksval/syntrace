@@ -254,8 +254,10 @@ When a user asks for lessons, guidance, reusable rules, or "what have we learned
 - Use accepted **Decisions** as durable constraints, defaults, and tradeoffs.
 - Use **Episodes** and **Context** as evidence, especially when multiple entries reinforce the same lesson.
 - Deduplicate overlapping ideas; merge repeated evidence into one stronger lesson.
-- Separate stable lessons from tentative hypotheses and anti-patterns.
-- Surface repeated open questions or unresolved tensions if they appear across entries.
+- Prefer doing this after each chat, or at most every couple of sessions, so memory stays compact and future prompts do not carry unnecessary history.
+- Organize the output into six sections: **Goal**, **Context**, **Decisions**, **Evidence**, **Lessons**, **Next Changes**.
+- In **Lessons**, include the distilled reusable knowledge: patterns, anti-patterns, stable lessons, tentative insights, and open questions.
+- In **Next Changes**, include action items, experiments, reusable rules, and revisit triggers.
 - Output a concise markdown summary or reusable rules as an **append-only markdown block** for the end of the destination file.
 - Treat Syntrace as a read-only source during lessons extraction. **Do not rewrite the full Syntrace file** unless the user explicitly triggered `/syntrace`.
 

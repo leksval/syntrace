@@ -97,6 +97,7 @@ Best markdown-only workflow:
 - Prefer the local `syntrace.md` in the current workspace
 - Fall back to a raw GitHub markdown URL when you want to reuse memory across repos
 - If neither is accessible, paste the markdown contents into chat
+- Run this after each chat, or at most every couple of sessions, so the source stays distilled and does not bloat the next prompt's context window
 
 Use this prompt in Cursor:
 
@@ -115,10 +116,8 @@ Instructions:
 - Merge repeated evidence into one stronger lesson instead of listing variants.
 - Prefer high-confidence insights and accepted decisions.
 - Use episodes and context entries as supporting evidence when they reinforce a lesson.
-- Distinguish:
-  - stable lessons
-  - tentative lessons
-  - anti-patterns / things to avoid
+- Use an elegant six-section structure: `Goal`, `Context`, `Decisions`, `Evidence`, `Lessons`, `Next Changes`.
+- In `Lessons`, call out patterns and anti-patterns explicitly.
 - Ignore filler, one-off narration, and anything not useful for future work.
 - Treat Syntrace as a read-only source file.
 - Do not rewrite the source file or regenerate the entire destination file.
@@ -129,33 +128,26 @@ Return format:
 
 # Lessons From Syntrace
 
-## Stable Lessons
-For each item include:
-- Lesson
-- Why it matters
-- When to apply it
-- Evidence
+## Goal
+What this work was trying to achieve, why it mattered, and what success looked like.
 
-## Tentative Lessons
-For each item include:
-- Hypothesis
-- What evidence supports it
-- What would confirm or disprove it
+## Context
+Constraints, assumptions, dependencies, stakeholders, and background that shaped the work.
 
-## Anti-Patterns
-For each item include:
-- What to avoid
-- Why
-- Evidence
+## Decisions
+The most important choices, tradeoffs, and rejected alternatives that matter for future work.
 
-## Open Questions
-List unresolved questions or gaps that appear repeatedly.
+## Evidence
+What actually happened in practice: key events, signals, metrics, impact, and concrete observations.
 
-## Suggested Reusable Rules
-Turn the strongest lessons into short agent rules I could reuse in future chats.
+## Lessons
+The distilled reusable knowledge: patterns, anti-patterns, stable lessons, tentative insights, and open questions.
+
+## Next Changes
+Action items, experiments, reusable rules, and revisit triggers.
 ```
 
-This works well because Syntrace already separates durable patterns from raw session history: `Insights` hold distilled lessons, `Decisions` capture durable rationale, and `Episodes` / `Context` supply evidence. Asking for lessons is therefore different from asking the LLM to append new memory with `/syntrace`: the agent reads Syntrace, distills lessons, and returns only the block to append.
+This works well because Syntrace already separates durable patterns from raw session history: `Insights` hold distilled lessons, `Decisions` capture durable rationale, and `Episodes` / `Context` supply evidence. Asking for lessons is therefore different from asking the LLM to append new memory with `/syntrace`: the agent reads Syntrace, distills lessons, and returns only the block to append. Ideally run this after each chat, or every few chats at most, so the memory stays compact and future prompts do not get bloated by long unresolved session history.
 
 ---
 
