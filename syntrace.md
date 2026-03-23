@@ -240,7 +240,11 @@ The tag canon is project-specific. On the first `/syntrace` run for a new projec
 
 ### Lessons extraction
 
-When a user asks for lessons, guidance, reusable rules, or "what have we learned?", treat Syntrace as a **read-only memory source** unless they explicitly ask for `/syntrace` or to update the file.
+When a user asks for lessons, guidance, reusable rules, or "what have we learned?", treat Syntrace as a **read-only memory source** unless they explicitly ask for `/syntrace` or to update the file. The extraction should synthesize from the current project chat, the actual changes made, and the durable memory already stored in Syntrace.
+
+**Goal**:
+
+Extract the highest-signal reusable knowledge from the current project chat and actual changes, grounded in Syntrace, so future chats can reuse the right patterns, anti-patterns, decisions, evidence, and next changes without rereading the full history.
 
 **Source priority**:
 
@@ -248,11 +252,20 @@ When a user asks for lessons, guidance, reusable rules, or "what have we learned
 2. Otherwise read a provided raw markdown URL for the file.
 3. If neither is accessible, ask the user to paste the markdown contents.
 
-**Extraction rules**:
+**Context handling**:
+
+- For long-context prompts, place the source material before the final extraction request so the task sits near the end of the prompt.
+- Separate source material from instructions clearly. Use short labeled sections such as `Goal`, `Context`, `Constraints`, `Source`, and `Output`.
+- When available, include the current chat summary, changed files, diffs, logs, and related artifacts alongside Syntrace so the extraction reflects what actually happened.
+- Include a formatting example only if the model keeps drifting from the required structure.
+
+**Constraints**:
 
 - Prefer **Insights** first: they already hold distilled reusable knowledge.
+- Treat the current project chat and actual file changes as the primary evidence of what was learned in this session.
 - Use accepted **Decisions** as durable constraints, defaults, and tradeoffs.
 - Use **Episodes** and **Context** as evidence, especially when multiple entries reinforce the same lesson.
+- Connect new observations from this session to prior patterns already captured in Syntrace.
 - Deduplicate overlapping ideas; merge repeated evidence into one stronger lesson.
 - Prefer doing this after each chat, or at most every couple of sessions, so memory stays compact and future prompts do not carry unnecessary history.
 - Organize the output into six sections: **Goal**, **Context**, **Decisions**, **Evidence**, **Lessons**, **Next Changes**.
@@ -260,6 +273,14 @@ When a user asks for lessons, guidance, reusable rules, or "what have we learned
 - In **Next Changes**, include action items, experiments, reusable rules, and revisit triggers.
 - Output a concise markdown summary or reusable rules as an **append-only markdown block** for the end of the destination file.
 - Treat Syntrace as a read-only source during lessons extraction. **Do not rewrite the full Syntrace file** unless the user explicitly triggered `/syntrace`.
+
+**Output contract**:
+
+- Return only markdown.
+- Use the six required sections in this order: **Goal**, **Context**, **Decisions**, **Evidence**, **Lessons**, **Next Changes**.
+- Keep each section concrete and evidence-based. Prefer short bullets over vague prose.
+- State uncertainty explicitly when evidence is weak or conflicting.
+- Do not include hidden reasoning, chain-of-thought, or speculative filler.
 
 ### Adapter mappings
 

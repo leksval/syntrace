@@ -89,7 +89,7 @@ The LLM may ask 1-2 brief clarification questions before saving if the session s
 
 ## Generate lessons from Syntrace
 
-You can also use `syntrace.md` as a **read-only memory source** to ask Cursor for reusable lessons from prior LLM-assisted work.
+You can also use `syntrace.md` as a **read-only memory source** to ask Cursor for reusable lessons from prior LLM-assisted work. The agent should synthesize from the current project chat, actual code or doc changes, and the durable memory already stored in Syntrace.
 When you want to save the result, the agent should return an **append-only markdown block** to place at the end of your destination file rather than rewriting the whole file.
 
 Best markdown-only workflow:
@@ -102,7 +102,7 @@ Best markdown-only workflow:
 Use this prompt in Cursor:
 
 ```md
-Give me all reusable lessons from this project's Syntrace memory.
+Extract the highest-signal reusable knowledge from this project's chat history and actual changes, using Syntrace as the durable memory source.
 
 Source priority:
 1. If `syntrace.md` exists in the current workspace, read that file first.
@@ -110,8 +110,10 @@ Source priority:
 3. If you cannot access either source, ask me to paste the markdown contents.
 
 Instructions:
+- Use the current project chat and the actual changes made in this session as the primary source of new learning.
 - Read the full Syntrace file, but focus especially on `Insights`, `Decisions`, `Episodes`, `Context`, and `Memory Index`.
 - Extract reusable lessons learned from prior LLM-assisted work and development sessions.
+- Connect what changed in this session with relevant prior patterns already stored in Syntrace.
 - Deduplicate overlapping ideas.
 - Merge repeated evidence into one stronger lesson instead of listing variants.
 - Prefer high-confidence insights and accepted decisions.
@@ -147,7 +149,7 @@ The distilled reusable knowledge: patterns, anti-patterns, stable lessons, tenta
 Action items, experiments, reusable rules, and revisit triggers.
 ```
 
-This works well because Syntrace already separates durable patterns from raw session history: `Insights` hold distilled lessons, `Decisions` capture durable rationale, and `Episodes` / `Context` supply evidence. Asking for lessons is therefore different from asking the LLM to append new memory with `/syntrace`: the agent reads Syntrace, distills lessons, and returns only the block to append. Ideally run this after each chat, or every few chats at most, so the memory stays compact and future prompts do not get bloated by long unresolved session history.
+This works well because Syntrace already separates durable patterns from raw session history: `Insights` hold distilled lessons, `Decisions` capture durable rationale, and `Episodes` / `Context` supply evidence. The agent should combine that durable memory with the current project chat and actual session changes, then return only the block to append. Ideally run this after each chat, or every few chats at most, so the memory stays compact and future prompts do not get bloated by long unresolved session history.
 
 ---
 
