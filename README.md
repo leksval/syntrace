@@ -108,6 +108,8 @@ If needed and possible, the LLM should ask 2-3 brief clarification questions bef
 
 You do **not** need to read the whole file to start. Paste the file, work, say `/syntrace`.
 
+If the biology analogy helps: the durable instruction and reference layer at the start of `syntrace.md` acts like DNA, while the mutable memory block at the end (`Memory Index` through `Changelog`) is the RNA transcript. The LLM is the ribosome that reads that structure and, inside the surrounding environment of the repo, file structure, workflow, and current session context, produces an updated file with learned lessons that can be reused in future work and even in other projects, so your system can evolve and adapt.
+
 As you get comfortable with it, customize the reference, tags, and examples so they match your team's actual language and workflows. Forking and tailoring Syntrace is a feature, not misuse.
 
 ---
