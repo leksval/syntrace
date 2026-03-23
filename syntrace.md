@@ -1,18 +1,19 @@
 # Syntrace
 
-> Paste this file into any LLM. `/syntrace` is only the explicit shorthand: the default behavior should be the same after paste. Infer intent, update Syntrace when safe, and extract reusable lessons when relevant. Treat "safe" to mean you can return the complete updated markdown in one response without truncation. Direct filesystem access is not required. If you can print the full updated file, do that. If not, return the lessons in chat only. Save it. Paste it next time. Your memory grows.
+> **LLM directive**: scan the full chat history above this paste. Extract reusable lessons, decisions, and patterns from it. Append them into the MEMORY sections at the end of this file. Output the COMPLETE updated file as a single markdown code block. Do not ask clarifying questions on first use of a fresh file. Do not say "nothing to save." The chat history IS the session.
 
 ---
 
 ## Cheat sheet
 
 - **Output rule**: when triggered, output the **COMPLETE file** as a single markdown code block. Never output only the new entry. If you can print the full markdown in chat, that counts as full-file output even without direct file access.
+- **Fresh-file rule**: do **not** reply with "nothing to save" only because this file is new or its history is empty. Do **not** ask clarifying questions on first use of a fresh file. Scan the chat, extract lessons, save, output.
 - **Where to write**: append new entries **only** under the six MEMORY sections at the **end of this file** (Memory Index → Changelog). Do **not** modify **REFERENCE** or **EXAMPLES**, except for in-place updates to the Tag Canon table.
 - **Separator rule**: separate each session save in the **Changelog only** with a horizontal rule: `---`. Do not add session separators inside Context, Episodes, Decisions, or Insights.
 - **Read before you write**: scan existing Memory sections; update Insights instead of duplicating; link `supersedes` on decisions when superseding; back-link `superseded_by` on the old entry.
 - **Trigger**: `/syntrace` is the explicit shorthand, but not a separate mode. After this file is pasted, use the same save protocol whenever the user is clearly asking to update memory, capture what was learned, or extract reusable lessons.
 - **Default intent handling**: infer whether the user wants a session save, lesson extraction, or both. Prefer returning the **COMPLETE updated file** with the distilled knowledge saved into Syntrace whenever you can print the whole markdown response without truncation. Do not treat lack of direct filesystem access as a reason to refuse. Only fall back to in-chat lessons or guidance when full-file output would be truncated, blocked, or unreliable.
-- **Clarification**: if needed and possible, the LLM should ask **2-3 clarification questions** before saving when the session scope, key decision, or intended takeaway is ambiguous. If the session is already clear, save without asking.
+- **Clarification**: on subsequent saves with existing history, the LLM may ask **2-3 clarification questions** before saving when the session scope, key decision, or intended takeaway is genuinely ambiguous. On a fresh file or first paste, skip clarification entirely and just extract from the chat.
 - **Privacy**: never persist secrets, API keys, passwords, or PII in entries. Omit or redact.
 
 **Full protocol, formats, lineage rules, and architecture** → see **REFERENCE** below. The append-only history lives at the end of the file.
@@ -21,7 +22,7 @@
 
 Hard boundaries. No exceptions.
 
-- **Do not fabricate entries**: never invent episodes, decisions, or context that didn't happen in the session.
+- **Do not fabricate entries**: never invent events that did not happen anywhere in the conversation. Extracting and distilling lessons from the live chat is **not** fabrication -- that is the primary job. Fabrication means making up episodes, decisions, or context with no basis in the chat.
 - **Do not modify REFERENCE**: the spec is immutable between explicit version bumps, except for the Tag Canon table, which is project state and may be updated in place.
 - **Do not merge or delete history entries**: entries are append-only. Use supersession and distillation, not editing or removal.
 - **Do not output partial files**: always output the **COMPLETE file**. Partial outputs cause data loss.
@@ -47,27 +48,14 @@ Hard boundaries. No exceptions.
 
 Three layers in one file: **Cheat sheet** (operating rules), **Reference** (stable protocol, schemas, examples -- never append history here), and **History** (append-only memory: Memory Index, Context, Episodes, Decisions, Insights, Changelog).
 
-**Context rule**: any files pasted alongside this one are additional context. A raw pasted copy of `syntrace.md` is also valid source material when local workspace access is unavailable. In workspace mode, consult the neighboring project files, docs, diffs, logs, prior entries, and, if possible, relevant git history that are relevant to the session before writing. Record what you actually consulted in `context_read` (source files, docs, tickets, specs, prior entries, logs, diffs, commits). Do **not** treat agent transcripts or chat history as project history. Works in two modes:
+**Context rule**: the surrounding live chat is the current session by default. Any files pasted alongside are additional context. Record what you consulted in `context_read`. Two modes:
 
-- **Paste mode** (plain LLM chat): user pastes this file + the relevant project files. Read the relevant source material, work, append.
-- **Workspace mode** (IDE agent): read the relevant neighboring project files directly before saving.
+- **Paste mode** (plain LLM chat): the chat history IS the session. Scan it, extract, append. Do not ask for a repaste.
+- **Workspace mode** (IDE agent): also consult neighboring project files, docs, diffs, logs, and git history before saving.
 
 ## LLM behavior on load
 
-If you are the LLM reading this file, do not treat it as passive documentation only. Treat it as an instruction-bearing memory system plus a source of durable project knowledge.
-
-When this file is pasted into chat, your default behavior is:
-
-1. Read the cheat sheet and reference before writing anything back.
-2. Infer the user's likely intent from the latest request.
-3. Treat `/syntrace` as an explicit shortcut for the same default behavior, not as a separate workflow.
-4. If the user is asking to save memory, capture what happened this session and update the Memory sections.
-5. If the user is asking for lessons, patterns, anti-patterns, reusable rules, guidance, or "what have we learned?", extract the highest-signal reusable knowledge from Syntrace plus the current session context.
-6. If both apply, do both in one pass: distill the lessons and save them into the appropriate Memory sections.
-7. If you can return the full updated markdown in one response, output the **COMPLETE file**.
-8. Do not say you "cannot save the file" merely because you lack direct filesystem access. Printing the complete updated markdown is the correct save behavior in plain chat.
-9. If full-file output would be truncated, blocked, or unreliable in the current system, return only the in-chat lessons or guidance. Do not output a partial file.
-10. If the user's intent is ambiguous, ask 2-3 brief clarification questions before writing.
+This file is an active memory protocol, not passive documentation. Follow the **LLM directive** at the top and the **Cheat sheet** above. On a fresh file, scan the chat, extract, append, and output the complete file without asking questions first.
 
 ## Save protocol
 
@@ -75,8 +63,8 @@ One trigger. One procedure. Always full depth.
 
 **Unified save step by step** (`/syntrace` or equivalent clear intent after paste):
 
-1. Review what happened this session
-2. If needed and possible, ask **2-3 clarification questions** when the session scope, a key decision, or the intended takeaway is ambiguous. If the session is already clear, do not ask unnecessary questions.
+1. Review what happened this session. In paste mode, the surrounding live chat IS the session. Do not require a repaste.
+2. On a fresh file, skip clarification and proceed directly to extraction. On subsequent saves with existing history, you may ask 2-3 brief clarification questions only if the scope is genuinely ambiguous.
 3. Scan the existing Memory sections and the session-relevant source material -- read before you write. If possible, also check relevant git history for the files or decisions involved.
 4. Append an Episode entry (outcome, takeaways, concrete details)
 5. If a design/architecture choice was made, append a Decision entry
@@ -263,49 +251,7 @@ The tag canon is project-specific. On the first `/syntrace` run for a new projec
 
 ### Lessons extraction
 
-When a user asks for lessons, guidance, reusable rules, or "what have we learned?", use Syntrace as the durable memory source for extraction as part of the same default behavior used by `/syntrace`. Do not split this into a separate mode. If you can return the complete updated markdown in one response, append the distilled knowledge back into Syntrace and output the full file. If output limits or platform constraints make that unreliable, return only the in-chat lessons or guidance.
-
-**Goal**:
-
-Extract the highest-signal reusable knowledge from the current project chat and actual changes, grounded in Syntrace, so future chats can reuse the right patterns, anti-patterns, decisions, evidence, and next changes without rereading the full history.
-
-**Source priority**:
-
-1. Read the local `syntrace.md` in the current workspace if available.
-2. Otherwise read a provided raw markdown URL for the file.
-3. If neither is accessible, ask the user to paste the markdown contents.
-
-**Context handling**:
-
-- For long-context prompts, place the source material before the final extraction request so the task sits near the end of the prompt.
-- Separate source material from instructions clearly. Use short labeled sections such as `Goal`, `Context`, `Constraints`, `Source`, and `Output`.
-- When available, include the current chat summary, changed files, diffs, logs, related artifacts, and relevant git history alongside Syntrace so the extraction reflects what actually happened.
-- Include a formatting example only if the model keeps drifting from the required structure.
-
-**Constraints**:
-
-- Prefer **Insights** first: they already hold distilled reusable knowledge.
-- Treat the current project chat and actual file changes as the primary evidence of what was learned in this session.
-- Use accepted **Decisions** as durable constraints, defaults, and tradeoffs.
-- Use **Episodes** and **Context** as evidence, especially when multiple entries reinforce the same lesson.
-- Connect new observations from this session to prior patterns already captured in Syntrace.
-- Deduplicate overlapping ideas; merge repeated evidence into one stronger lesson.
-- Prefer doing this after each chat, or at most every couple of sessions, so memory stays compact and future prompts do not carry unnecessary history.
-- Organize the output into six sections: **Goal**, **Context**, **Decisions**, **Evidence**, **Lessons**, **Next Changes**.
-- In **Lessons**, include the distilled reusable knowledge: patterns, anti-patterns, stable lessons, tentative insights, and open questions.
-- In **Next Changes**, include action items, experiments, reusable rules, and revisit triggers.
-- Output either:
-  1. the **COMPLETE updated Syntrace file** when you can print the full markdown in one response, or
-  2. only the in-chat lessons, guidance, or reusable rules when full-file output is not reliable because of truncation or platform limits.
-- During lessons extraction, do not silently rewrite history. Append distilled knowledge only when a full-file save is possible and clearly intended.
-
-**Output contract**:
-
-- Return only markdown.
-- Use the six required sections in this order: **Goal**, **Context**, **Decisions**, **Evidence**, **Lessons**, **Next Changes**.
-- Keep each section concrete and evidence-based. Prefer short bullets over vague prose.
-- State uncertainty explicitly when evidence is weak or conflicting.
-- Do not include hidden reasoning, chain-of-thought, or speculative filler.
+Lessons extraction uses the same default behavior as `/syntrace`. The live chat is the session evidence. Extract reusable knowledge, append it into the Memory sections, and output the complete file. Follow the save protocol above.
 
 ### Adapter mappings
 
