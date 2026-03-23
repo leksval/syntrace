@@ -74,9 +74,9 @@ This is a self-contained memory system. Three layers in one file, like a genome:
 
 **Output rule**: when triggered, output the **COMPLETE file** as a single markdown code block with new entries appended to the correct sections. The user saves it, replacing the old version. Never output just the new entry — always the full file, so nothing is lost.
 
-**Context rule**: any other files pasted alongside this one, or present in the same workspace, are additional context. Read them before writing entries. Reference what you consulted in `context_read`. This means the file works in two modes:
+**Context rule**: any other files pasted alongside this one, or present in the same workspace, are additional context. Read them before writing entries. Reference what you consulted in `context_read`. This includes IDE chat history when it is available as a local transcript file. This means the file works in two modes:
 - **Paste mode** (plain LLM chat): user pastes this file + any relevant project files. You read everything, work, append entries.
-- **Workspace mode** (IDE agent like Cursor, Claude Code): you can read neighboring files directly. Scan them before saving.
+- **Workspace mode** (IDE agent like Cursor, Claude Code): you can read neighboring files directly. Scan them before saving. In Cursor, agent chat histories commonly appear as JSONL files under paths like `C:\Users\<user>\.cursor\projects\<project>\agent-transcripts\<session-id>\<session-id>.jsonl`; if consulted, include that path in `context_read`.
 
 **Read before you write**: before creating any entry, scan the existing Memory sections. Check if an insight already covers this topic (update it instead of duplicating). Check if a prior decision is being superseded (add `supersedes` on the new entry and back-link `superseded_by` on the old one). The value of this system comes from connections between entries, not isolated notes.
 
@@ -294,7 +294,7 @@ Fill these automatically — never ask the user for them:
 | Field | Value | Example |
 |-------|-------|---------|
 | date in heading | Today's date | `### 2026-03-23-fix-auth-flow` |
-| **context_read** | Files, sections, or entries you read before writing | `src/auth.ts, 2026-01-20-dev-defaults-leak` |
+| **context_read** | Files, sections, entries, or local agent transcript files you read before writing | `src/auth.ts, C:\Users\<user>\.cursor\projects\<project>\agent-transcripts\<session-id>\<session-id>.jsonl, 2026-01-20-dev-defaults-leak` |
 | **tags** | 2-5 lowercase keywords from the Tag Canon | `api, error-handling, config` |
 | **outcome** | Best match from SUCCESS / FAIL / SURPRISE / PARTIAL | `SURPRISE` |
 | **slug** | Descriptive, lowercase, hyphenated, no filler words | `fix-payment-timeout` not `todays-work` |
@@ -533,53 +533,9 @@ Refresh behavior:
 - Prefer links by slug, not by paraphrased title alone
 - If a category has no items, render `_(none yet)_`
 
-## Planned CLI
+## File-only model
 
-Syntrace does not require a CLI to work, but a small CLI would reduce setup friction and make cross-tool workflows practical without changing the core one-file model.
-
-### Command surface
-
-`syntrace init`
-
-- Create a new `syntrace.md` from the canonical template
-- Optionally strip EXAMPLES for a clean project start
-
-`syntrace validate`
-
-- Run the validation rules above
-- Print errors and warnings separately
-- Exit non-zero on errors
-
-`syntrace search <query>`
-
-- Search slugs, tags, Memory Index, and entry bodies
-- Prefer exact and tag matches first; semantic search can remain optional later
-
-`syntrace import --from <source>`
-
-- Import from `claude`, `cursor`, or generic markdown instruction files
-- Convert imported material into draft Syntrace entries in the correct MEMORY sections
-- Never overwrite existing entries silently
-
-`syntrace export --to <target>`
-
-- Generate tool-native files for `claude`, `cursor`, or generic markdown views
-- Export only accepted Decisions and reusable Insights unless the user requests a fuller export
-
-`syntrace refresh-index`
-
-- Rebuild the Memory Index without changing any other entry bodies
-
-### Scope boundaries
-
-The first CLI should stay intentionally small:
-
-- no database
-- no mandatory background service
-- no proprietary sync layer
-- no requirement to stop using plain paste mode
-
-The CLI exists to support the file, not replace it.
+Syntrace is intentionally just a markdown file. It should remain usable with plain copy/paste, direct manual edits, and normal version control without requiring a database, background service, or proprietary sync layer. Any future tooling around Syntrace should support the file, not replace it.
 
 ## Architecture
 
@@ -647,7 +603,7 @@ Spent 40 minutes debugging 401s before realizing refresh tokens expire after 7 d
 
 - **status**: active
 - **tags**: tooling, architecture
-- **context_read**: (conversation history)
+- **context_read**: C:\Users\<user>\.cursor\projects\<project>\agent-transcripts\<session-id>\<session-id>.jsonl
 - **derived_from**: —
 
 When a file exceeds ~800 lines, Cursor agents start ignoring instructions from the top of the file. Splitting the config into 3 smaller files fixed it immediately. Rule of thumb: keep any file an agent reads under 500 lines.

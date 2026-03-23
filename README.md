@@ -1,10 +1,29 @@
 <p align="center">
-  <img src="logo.png" alt="Syntrace" width="300">
+  <img src="logo.png" alt="Syntrace" width="300" />
 </p>
 
-# Syntrace
+<h1 align="center">Syntrace</h1>
 
-**One memory file for every AI dev tool.** Portable. Local-first. No database. No API keys. Works with Cursor, Claude Code, ChatGPT, and anything that reads text.
+<p align="center">
+  <strong>One memory file for every AI dev tool.<br/>Portable. Local-first. No database. No API keys. Works with Cursor, Claude Code, ChatGPT, and anything that reads text.</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/leksval/syntrace"><img src="https://img.shields.io/badge/%E2%AD%90_Star_this_repo-black?style=for-the-badge" alt="Star this repo" /></a>&nbsp;
+  <a href="#license"><img src="https://img.shields.io/badge/license-CC--BY%204.0-blue.svg?style=for-the-badge" alt="CC-BY 4.0 License" /></a>&nbsp;
+  <img src="https://img.shields.io/badge/local--first-2f855a?style=for-the-badge" alt="Local first" />&nbsp;
+  <img src="https://img.shields.io/badge/just_markdown-brightgreen?style=for-the-badge" alt="Just Markdown" />
+</p>
+
+<p align="center">
+  <a href="#the-problem">The Problem</a> ·
+  <a href="#the-idea">The Idea</a> ·
+  <a href="#how-to-use">How To Use</a> ·
+  <a href="#works-with">Works With</a> ·
+  <a href="#get-started">Get Started</a>
+</p>
+
+---
 
 ## The problem
 
@@ -17,6 +36,8 @@ Your AI coding tools forget everything between sessions. Worse, each tool stores
 
 You end up repeating yourself, maintaining parallel files, and losing knowledge when you switch tools.
 
+---
+
 ## The idea
 
 `syntrace.md` is a single portable format that works like a **genome**:
@@ -27,6 +48,8 @@ You end up repeating yourself, maintaining parallel files, and losing knowledge 
 
 One file. One command. Copy it anywhere and it carries everything forward.
 
+---
+
 ## Who it's for
 
 Developers who use AI coding assistants and want:
@@ -36,7 +59,9 @@ Developers who use AI coding assistants and want:
 - **Portable knowledge** that moves with your repo, not locked to one vendor
 - **Traceable decisions** with lineage and evidence, not scattered notes
 
-If you use any LLM for coding -- in a chat window, in an IDE, or through a CLI agent -- Syntrace works.
+If you use any LLM for coding -- in a chat window or in an IDE -- Syntrace works.
+
+---
 
 ## How the file is laid out
 
@@ -49,6 +74,8 @@ If you use any LLM for coding -- in a chat window, in an IDE, or through a CLI a
 | **Bottom -- examples** | Sample entries with lineage fields populated. Delete in a fresh project or keep as a style guide. | You and the LLM as a pattern to imitate. |
 
 You do **not** need to read the whole file to start. Paste the file, work, say `/syntrace`.
+
+---
 
 ## How to use
 
@@ -63,17 +90,7 @@ You do **not** need to read the whole file to start. Paste the file, work, say `
 
 The LLM may ask 1-2 brief clarification questions before saving if the session scope or a key decision is ambiguous.
 
-### With the CLI (planned)
-
-```bash
-syntrace init                       # Create syntrace.md in current directory
-syntrace validate                   # Check entries for errors
-syntrace search "auth timeout"      # Find relevant entries
-syntrace import --from claude       # Import knowledge from CLAUDE.md
-syntrace export --to cursor         # Generate .cursor/rules/ files
-```
-
-The planned CLI, adapter mappings, and validation rules live in the `REFERENCE` block inside [`syntrace.md`](syntrace.md).
+---
 
 ## What it captures
 
@@ -90,6 +107,8 @@ Every `/syntrace` evaluates the full session and writes what's appropriate:
 
 Entries carry **lineage metadata** -- `derived_from`, `evidence`, `supersedes`, `superseded_by` -- so knowledge evolution is traceable. Each entry's heading slug is its stable identifier, used for all cross-references.
 
+---
+
 ## Works with
 
 Syntrace is the canonical format. Import from and export to tool-native formats:
@@ -103,6 +122,8 @@ Syntrace is the canonical format. Import from and export to tool-native formats:
 
 See the interoperability section in [`syntrace.md`](syntrace.md) for the field-by-field translation rules.
 
+---
+
 ## Two modes
 
 **Paste mode** -- copy the file into a plain LLM chat (ChatGPT, Claude). Paste any relevant project files alongside it. Work. Save the output.
@@ -110,6 +131,8 @@ See the interoperability section in [`syntrace.md`](syntrace.md) for the field-b
 **Workspace mode** -- use inside an IDE agent (Cursor, Claude Code, Windsurf). The agent reads neighboring files automatically and writes richer, more connected entries.
 
 Same file, same spec. Works both ways.
+
+---
 
 ## Example
 
@@ -140,19 +163,7 @@ should fail fast.
 
 The reference at the end of `syntrace.md` told the LLM how to write this. You just said `/syntrace`.
 
-## Migrating from v1
-
-If you have an existing `syntrace.md` with entries from the old format:
-
-1. Replace the cheat sheet and REFERENCE blocks with the new versions
-2. Add `- **status**: active` to existing Context entries
-3. Add `- **derived_from**: —` and `- **evidence**: ...` to existing Insights (use `—` if unknown)
-4. Add `- **supersedes**: —` and `- **superseded_by**: —` to existing Decisions
-5. Add `- **derived_from**: —` to existing Episodes
-6. Add an empty **Memory Index** section above Context
-7. Run `/syntrace` once -- the LLM will populate the Memory Index from your existing entries
-
-Existing entry slugs remain valid as identifiers. No data loss.
+---
 
 ## Get started
 
@@ -165,6 +176,8 @@ cp syntrace.md your-project/syntrace.md
 Optional: delete the **EXAMPLES** block at the bottom of `syntrace.md` for a clean slate -- the **REFERENCE** block stays; it is the replication machinery.
 
 One file. One command. Paste and go.
+
+---
 
 ## License
 
