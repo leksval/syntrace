@@ -75,6 +75,8 @@ Syntrace gives the project one durable file that both humans and LLMs can reuse.
 
 Raw prompt: [open `syntrace.md` as raw markdown](https://raw.githubusercontent.com/leksval/syntrace/main/syntrace.md) (`~7.5k` tokens)
 
+You can also paste the raw `syntrace.md` into another chat program to extract reusable lessons. If that system can safely return the full updated file, it can append those lessons back into Syntrace too.
+
 What `/syntrace` saves:
 
 > **Episode** if the session matters
@@ -116,7 +118,7 @@ As you get comfortable with it, customize the reference, tags, and examples so t
 
 ## Extract lessons
 
-You can also use `syntrace.md` as a read-only memory source to generate reusable lessons from previous AI-assisted work.
+You can also use `syntrace.md` to generate reusable lessons from previous AI-assisted work and, when the system can handle full-file output, save the distilled lessons back into the file.
 
 Use this when you want:
 
@@ -151,9 +153,9 @@ Instructions:
 - Use an elegant six-section structure: `Goal`, `Context`, `Decisions`, `Evidence`, `Lessons`, `Next Changes`.
 - In `Lessons`, call out patterns and anti-patterns explicitly.
 - Ignore filler, one-off narration, and anything not useful for future work.
-- Treat Syntrace as a read-only source file.
-- Do not rewrite the source file or regenerate the entire destination file.
-- Return only an append-only markdown block intended to be added at the end.
+- Treat Syntrace as the durable memory source for extraction.
+- If the system can safely return the full updated file and I want the lessons saved, append the distilled knowledge back into Syntrace.
+- Otherwise return only an append-only markdown block intended to be added at the end.
 - Output only markdown.
 
 Return format:

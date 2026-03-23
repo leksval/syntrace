@@ -1,6 +1,6 @@
 # Syntrace
 
-> Paste this file into any LLM. Work. Say `/syntrace` when done. The LLM outputs the updated file with your session appended. Save it. Paste it next time. Your memory grows.
+> Paste this file into any LLM. Work. Say `/syntrace` when done. The LLM outputs the updated file with your session appended. It can also extract reusable lessons from the memory already stored here and, if the system can safely return the full updated file, append those lessons back into Syntrace. Save it. Paste it next time. Your memory grows.
 
 ---
 
@@ -11,6 +11,7 @@
 - **Separator rule**: separate each session save in the **Changelog only** with a horizontal rule: `---`. Do not add session separators inside Context, Episodes, Decisions, or Insights.
 - **Read before you write**: scan existing Memory sections; update Insights instead of duplicating; link `supersedes` on decisions when superseding; back-link `superseded_by` on the old entry.
 - **Trigger**: `/syntrace` -- always-full save. Append Episode + Decision (if applicable) + Insight (if a pattern emerged) + Context (if a standalone observation) + Changelog line. Refresh Memory Index.
+- **Default intent handling**: if the user asks for lessons, reusable rules, guidance, patterns, anti-patterns, or "what have we learned?", extract knowledge from Syntrace first. If they want the lessons saved and the system can safely output the full updated file, append the distilled knowledge back into the Memory sections and regenerate the complete file. Otherwise return an append-only markdown block to paste into the file manually.
 - **Clarification**: if needed and possible, the LLM should ask **2-3 clarification questions** before saving when the session scope, key decision, or intended takeaway is ambiguous. If the session is already clear, save without asking.
 - **Privacy**: never persist secrets, API keys, passwords, or PII in entries. Omit or redact.
 
@@ -45,15 +46,31 @@ Hard boundaries. No exceptions.
 
 Three layers in one file: **Cheat sheet** (operating rules), **Reference** (stable protocol, schemas, examples -- never append history here), and **History** (append-only memory: Memory Index, Context, Episodes, Decisions, Insights, Changelog).
 
-**Context rule**: any files pasted alongside this one are additional context. In workspace mode, consult the neighboring project files, docs, diffs, logs, prior entries, and, if possible, relevant git history that are relevant to the session before writing. Record what you actually consulted in `context_read` (source files, docs, tickets, specs, prior entries, logs, diffs, commits). Do **not** treat agent transcripts or chat history as project history. Works in two modes:
+**Context rule**: any files pasted alongside this one are additional context. A raw pasted copy of `syntrace.md` is also valid source material when local workspace access is unavailable. In workspace mode, consult the neighboring project files, docs, diffs, logs, prior entries, and, if possible, relevant git history that are relevant to the session before writing. Record what you actually consulted in `context_read` (source files, docs, tickets, specs, prior entries, logs, diffs, commits). Do **not** treat agent transcripts or chat history as project history. Works in two modes:
+
 - **Paste mode** (plain LLM chat): user pastes this file + the relevant project files. Read the relevant source material, work, append.
 - **Workspace mode** (IDE agent): read the relevant neighboring project files directly before saving.
+
+## LLM behavior on load
+
+If you are the LLM reading this file, do not treat it as passive documentation only. Treat it as an instruction-bearing memory system plus a source of durable project knowledge.
+
+When this file is pasted into chat, your default behavior is:
+
+1. Read the cheat sheet and reference before writing anything back.
+2. Infer the user's likely intent from the latest request.
+3. If the user is working normally and later says `/syntrace`, update the Memory sections and return the **COMPLETE file**.
+4. If the user asks for lessons, patterns, anti-patterns, reusable rules, guidance, or "what have we learned?", extract the highest-signal reusable knowledge from Syntrace plus the current session context.
+5. If the user wants those lessons saved and you can safely return the full updated file, append the distilled knowledge into the appropriate Memory sections and output the **COMPLETE file**.
+6. If full-file rewriting is not safe or not possible in the current system, return an append-only markdown block for manual insertion.
+7. If the user's intent is ambiguous, ask 2-3 brief clarification questions before writing.
 
 ## Save protocol
 
 One trigger. One procedure. Always full depth.
 
 **`/syntrace` step by step**:
+
 1. Review what happened this session
 2. If needed and possible, ask **2-3 clarification questions** when the session scope, a key decision, or the intended takeaway is ambiguous. If the session is already clear, do not ask unnecessary questions.
 3. Scan the existing Memory sections and the session-relevant source material -- read before you write. If possible, also check relevant git history for the files or decisions involved.
@@ -240,7 +257,7 @@ The tag canon is project-specific. On the first `/syntrace` run for a new projec
 
 ### Lessons extraction
 
-When a user asks for lessons, guidance, reusable rules, or "what have we learned?", treat Syntrace as a **read-only memory source** unless they explicitly ask for `/syntrace` or to update the file. The extraction should synthesize from the current project chat, the actual changes made, and the durable memory already stored in Syntrace.
+When a user asks for lessons, guidance, reusable rules, or "what have we learned?", use Syntrace as the durable memory source for extraction. Default to analysis first, then, if the user wants the result saved and the system can safely return the full updated file, append the distilled knowledge back into Syntrace. If the system cannot safely rewrite the full file, return an append-only markdown block for manual insertion.
 
 **Goal**:
 
@@ -271,8 +288,10 @@ Extract the highest-signal reusable knowledge from the current project chat and 
 - Organize the output into six sections: **Goal**, **Context**, **Decisions**, **Evidence**, **Lessons**, **Next Changes**.
 - In **Lessons**, include the distilled reusable knowledge: patterns, anti-patterns, stable lessons, tentative insights, and open questions.
 - In **Next Changes**, include action items, experiments, reusable rules, and revisit triggers.
-- Output a concise markdown summary or reusable rules as an **append-only markdown block** for the end of the destination file.
-- Treat Syntrace as a read-only source during lessons extraction. **Do not rewrite the full Syntrace file** unless the user explicitly triggered `/syntrace`.
+- Output either:
+  1. the **COMPLETE updated Syntrace file** when the system can safely return full-file output and the user wants the lessons saved, or
+  2. a concise **append-only markdown block** for manual insertion when full-file rewriting is not reliable.
+- During lessons extraction, do not silently rewrite history. Only append distilled knowledge when the user asked for a save, an update, or a reusable memory artifact.
 
 **Output contract**:
 
