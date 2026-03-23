@@ -4,20 +4,31 @@
 
 ---
 
-## Minimal cheat sheet
+## Cheat sheet
 
 - **Output rule**: when triggered, output the **COMPLETE file** as a single markdown code block. Never output only the new entry.
-- **Where to write**: append new entries **only** under the five MEMORY sections below (Context → Changelog). Do **not** append to **EXAMPLES** at the bottom unless the user asks to merge or replace samples.
-- **Read before you write**: scan existing Memory sections; update Insights instead of duplicating; link `replaces` on decisions when superseding.
-- **Triggers**: `/syntrace` → Context (+ Insight if a pattern emerged). `/syntrace full` → Episode + Decision if needed + Changelog. `/distill` → promote Context → Insights, mark `[distilled]`.
+- **Where to write**: append new entries **only** under the six MEMORY sections below (Memory Index → Changelog). Do **not** modify **REFERENCE** or **EXAMPLES**.
+- **Read before you write**: scan existing Memory sections; update Insights instead of duplicating; link `supersedes` on decisions when superseding; back-link `superseded_by` on the old entry.
+- **Trigger**: `/syntrace` — always-full save. Append Episode + Decision (if applicable) + Insight (if a pattern emerged) + Context (if a standalone observation) + Changelog line. Refresh Memory Index.
+- **Clarification**: the LLM may ask 1-2 questions before saving if the session scope or a key decision is ambiguous. Otherwise, save without asking.
+- **Privacy**: never persist secrets, API keys, passwords, or PII in entries. Omit or redact.
 
-**Full protocol, formats, writing rules, and architecture** → see **REFERENCE** at the end of this file.
+**Full protocol, formats, lineage rules, and architecture** → see **REFERENCE** at the end of this file.
 
 ---
 
 <!-- ============================================================ -->
 <!-- MEMORY — entries below grow over time                         -->
 <!-- ============================================================ -->
+
+## Memory Index
+
+Auto-refreshed snapshot. Do not edit manually — `/syntrace` regenerates this.
+
+**Active decisions**: _(none yet)_
+**High-confidence insights**: _(none yet)_
+**Open questions**: _(none yet)_
+**Last updated**: _(none yet)_
 
 ## Context
 
@@ -50,77 +61,72 @@ _Add one-line session summaries below._
 ---
 
 <!-- ============================================================ -->
-<!-- REFERENCE — full specification (do not delete; LLM reads)      -->
+<!-- REFERENCE — full specification (do not delete; LLM reads)    -->
 <!-- ============================================================ -->
 
 ## How this file works
 
-This is a self-contained memory system. Two halves, like a DNA strand:
+This is a self-contained memory system. Three layers in one file, like a genome:
 
-1. **Spec** — the replication instructions. Constant. Split for ergonomics: a **minimal cheat sheet** sits above MEMORY; the **REFERENCE** block below contains the full rules, formats, and architecture. Never delete REFERENCE; never append session output there. Optionally delete **EXAMPLES** in a fresh project.
-2. **Memory** (the MEMORY block near the top) — the accumulated data. Grows every session. Append new `###` entries only here: Context, Episodes, Decisions, Insights, Changelog. Five sections.
+1. **Spec** — the replication machinery. Constant. A **cheat sheet** sits above MEMORY for quick reference; the **REFERENCE** block below contains the full rules, formats, and architecture. Never delete REFERENCE; never append session output there. Optionally delete **EXAMPLES** in a fresh project.
+2. **Memory** — the accumulated knowledge. Grows every session. Six sections: Memory Index, Context, Episodes, Decisions, Insights, Changelog. Append new `###` entries only here.
+3. **Operational views** — derived snapshots generated from Memory. The **Memory Index** is the primary view: a machine-maintained summary of active decisions, high-confidence insights, and open questions. It is regenerated on every `/syntrace`.
 
-**Output rule**: when triggered, output the **COMPLETE file** as a single markdown code block with the new entry appended to the correct section. The user saves it, replacing the old version. Never output just the new entry — always the full file, so nothing is lost.
+**Output rule**: when triggered, output the **COMPLETE file** as a single markdown code block with new entries appended to the correct sections. The user saves it, replacing the old version. Never output just the new entry — always the full file, so nothing is lost.
 
 **Context rule**: any other files pasted alongside this one, or present in the same workspace, are additional context. Read them before writing entries. Reference what you consulted in `context_read`. This means the file works in two modes:
 - **Paste mode** (plain LLM chat): user pastes this file + any relevant project files. You read everything, work, append entries.
 - **Workspace mode** (IDE agent like Cursor, Claude Code): you can read neighboring files directly. Scan them before saving.
 
-**Read before you write**: before creating any entry, scan the existing Memory sections. Check if an insight already covers this topic (update it instead of duplicating). Check if a prior decision is being superseded (add `replaces`). The value of this system comes from connections between entries, not isolated notes.
+**Read before you write**: before creating any entry, scan the existing Memory sections. Check if an insight already covers this topic (update it instead of duplicating). Check if a prior decision is being superseded (add `supersedes` on the new entry and back-link `superseded_by` on the old one). The value of this system comes from connections between entries, not isolated notes.
+
+**Privacy rule**: never persist secrets, API keys, passwords, tokens, or PII in any entry. Omit or redact sensitive values. If the session involved sensitive material, capture the pattern and lesson without the sensitive data.
 
 ## Save protocol
 
-Three tiers. Use the lightest one that fits the session.
+One trigger. One procedure. Always full depth.
 
 | Trigger | What it creates | When to use |
 |---------|----------------|-------------|
-| `/syntrace` | Context entry (+ Insight if a pattern emerged) | Most sessions. Quick bugfix, research, routine work. Default choice. |
-| `/syntrace full` | Episode + Decision (if a design choice was made) + Changelog line | Significant work: shipped a feature, hit a hard bug, made an architecture call. |
-| `/distill` | Insights from Context + Episodes. Updates existing insights. | Periodic cleanup. Run weekly or when Context has 5+ unprocessed entries. |
+| `/syntrace` | Episode + Decision (if applicable) + Insight (if a pattern emerged) + Context (if a standalone observation) + Changelog line + Memory Index refresh | Every session. The only command. |
+
+The LLM may ask up to 2 brief clarification questions before saving when the session scope or a key decision is ambiguous. Otherwise, save without asking.
 
 **How `/syntrace` works step by step**:
 1. Review what happened this session
-2. Append a `###` entry to the Context section — a few sentences, not a transcript
-3. Reflect: did a reusable pattern, surprising finding, or recurring theme emerge?
-4. If yes, also append an Insight entry (or update an existing one by incrementing `episode_count`)
-5. Scan the reflection checklist
-
-**How `/syntrace full` works step by step**:
-1. Review what happened this session
-2. Append a `###` entry to the Episodes section with outcome, takeaways, and concrete details
-3. If a design or architecture choice was made, also append to Decisions with rationale and alternatives
-4. Add a one-liner to Changelog
-5. Reflect: check existing Insights — do any need confidence or episode_count updated? Should a new one be created?
-6. Scan the reflection checklist
-
-**How `/distill` works step by step**:
-1. Read all Context entries not marked `[distilled]`
-2. Read recent Episodes (last 5-10)
-3. For each reusable pattern found: create a new Insight or update an existing one (increment `episode_count`, adjust `confidence` if warranted)
-4. Flag any Insight with `episode_count >= 3` — note it as high-confidence, stable knowledge
-5. Mark processed Context entries with `[distilled]` (don't delete them — they're still useful for tracing lineage)
+2. If the session scope or a key decision is ambiguous, ask up to 2 clarification questions
+3. Scan existing Memory sections — read before you write
+4. Append an Episode entry (outcome, takeaways, concrete details)
+5. If a design or architecture choice was made, append a Decision entry (rationale, alternatives, consequences)
+6. Check existing Insights — update `confidence`, `episode_count`, and `evidence` on reinforced ones; create new ones if a reusable pattern emerged
+7. If there is a lightweight observation that does not fit the episode, append a Context entry
+8. Add a one-liner to Changelog
+9. Internal distillation: if 5+ Context entries have `status: active`, promote reusable patterns to Insights and mark promoted entries `status: distilled`
+10. Refresh Memory Index: list active decisions, high-confidence insights, open questions, and the date of the most recent entry
+11. Scan the reflection checklist
+12. Output the **COMPLETE file** as a single markdown code block
 
 When done for the session: **commit code**, then **save memory**.
 
 ## Writing quality
 
-The goal is entries your future self (or a future agent) can act on without re-reading the original conversation. Apply these rules:
+The goal is entries your future self (or a future agent) can act on without re-reading the original conversation.
 
 **What to capture**:
 - The *why*, not just the *what*. "Changed timeout to 3s" is useless. "Changed timeout to 3s because upstream SLA is 2s and we need headroom for retries" is actionable.
 - Surprises and failures — not just successes. The unexpected carries the most signal.
-- Connections to prior entries. If this session reinforces or contradicts an existing insight, say so explicitly.
+- Connections to prior entries. If this session reinforces or contradicts an existing insight, say so explicitly and link via `derived_from` or `evidence`.
 - Concrete numbers, thresholds, and examples. "Performance improved" means nothing. "p95 latency dropped from 800ms to 120ms after adding the index" means everything.
 
 **What to skip**:
-- Play-by-play narration of routine steps. Nobody needs to re-read "then I ran npm install."
+- Play-by-play narration of routine steps.
 - Obvious observations that any competent person would already know.
 - Hedging and filler. Be direct.
 
 **How to write insights**:
 - An insight must be **retrievable** — someone searching for a keyword should find it via tags or title.
 - An insight must be **actionable** — the "When to apply" section should describe a concrete trigger, not "when it seems relevant."
-- An insight must be **falsifiable** — state it precisely enough that future evidence could upgrade or kill it. Update confidence accordingly.
+- An insight must be **falsifiable** — state it precisely enough that future evidence could upgrade or kill it.
 - Prefer one sharp insight over three vague ones.
 
 **Reflection checklist** (scan after every save):
@@ -134,7 +140,7 @@ The goal is entries your future self (or a future agent) can act on without re-r
 
 ## Entry formats
 
-Each entry is a `###` heading under its section. Use bullet-point metadata (not YAML fences — they break when there are many entries in one file). The slug in the heading should be descriptive enough to identify the entry without reading it.
+Each entry is a `###` heading under its section. The heading slug is the entry's **stable identifier** — use it for all cross-references. Use bullet-point metadata (not YAML fences — they break when there are many entries in one file).
 
 ### Context entry format
 
@@ -142,8 +148,10 @@ The lightest entry type. An inbox item. The bar is: "would I want to find this i
 
 ```
 ### YYYY-MM-DD-slug
+- **status**: active
 - **tags**: tag1, tag2
 - **context_read**: files consulted
+- **derived_from**: (related entry slug, if any)
 
 Body: a few sentences or bullets. Focus on what surprised you or what
 you'd want to remember in 30 days. Skip anything obvious.
@@ -152,20 +160,23 @@ you'd want to remember in 30 days. Skip anything obvious.
 **Good slug**: `2026-03-23-redis-eviction-policy-mismatch`
 **Bad slug**: `2026-03-23-bug` or `2026-03-23-notes`
 
+`status` values: `active` (default), `distilled` (promoted to an Insight during internal distillation).
+
 Tips:
-- If you're unsure whether to capture something, capture it. Context is cheap. `/distill` will sort it out later.
+- If you're unsure whether to capture something, capture it. Context is cheap. Distillation sorts it out.
 - If the capture is longer than a paragraph, it's probably an Episode. Promote it.
-- Cross-reference other entries when relevant: "see also: insights/exponential-backoff-with-jitter."
+- Cross-reference other entries by slug: "see also: 2026-01-15-exponential-backoff-with-jitter."
 
 ### Episode entry format
 
-A structured work log. Write one when the session had a clear outcome — something was built, fixed, broken, or discovered. Not for routine work.
+A structured work log. Write one every `/syntrace`. Focus on outcome and takeaway.
 
 ```
 ### YYYY-MM-DD-slug
 - **outcome**: SUCCESS | FAIL | SURPRISE | PARTIAL
 - **tags**: tag1, tag2
 - **context_read**: files consulted
+- **derived_from**: (related entry slug, if any)
 
 #### What happened
 What you did and WHY — not a transcript. Include concrete numbers
@@ -180,24 +191,25 @@ and thresholds when they exist. One to three paragraphs max.
 **Outcome guide**:
 - **SUCCESS**: the goal was met as intended
 - **FAIL**: the goal was not met. Capture WHY — failures are the highest-signal entries
-- **SURPRISE**: the outcome was unexpected (positive or negative). Something was learned that changes a prior assumption
+- **SURPRISE**: the outcome was unexpected. Something was learned that changes a prior assumption
 - **PARTIAL**: the goal was partially met, or met with caveats
 
 Tips:
-- The "What happened" section should pass the "dropped into this project cold" test: could someone unfamiliar with the codebase understand what was done and why?
-- The "Takeaways" section is the most important part. Be specific: "retry logic should use jitter" is better than "error handling could be improved."
-- Always check: does this episode reinforce or contradict an existing Insight? If yes, say so and update the Insight's `episode_count`.
+- The "What happened" section should pass the "dropped into this project cold" test.
+- The "Takeaways" section is the most important part. Be specific: "retry logic should use jitter" beats "error handling could be improved."
+- Always check: does this episode reinforce or contradict an existing Insight? If yes, say so and update the Insight.
 
 ### Decision entry format
 
-An architecture decision record (ADR). Write one when you chose X over Y and the reasoning matters. The test: would your future self (or a new teammate) ask "why did we do it this way?"
+An architecture decision record. Write one when you chose X over Y and the reasoning matters. Decisions are **immutable** — when reversed, add a new decision with `supersedes` pointing to the old one.
 
 ```
 ### YYYY-MM-DD-HHMM-slug
 - **status**: accepted
 - **tags**: tag1, tag2
 - **context_read**: files consulted
-- **replaces**: (prior decision slug, if any)
+- **supersedes**: (prior decision slug, if any)
+- **superseded_by**: (filled automatically when a newer decision supersedes this one)
 
 #### Context
 The situation or problem that forced a choice. Include constraints.
@@ -218,12 +230,12 @@ What was decided. Be direct — one to two sentences.
 **Status values**:
 - **accepted**: currently in effect
 - **deprecated**: no longer the right choice, but hasn't been replaced yet
-- **superseded**: replaced by another decision (set `replaces` on the new one)
+- **superseded**: replaced by another decision (the new one sets `supersedes`; this one gets `superseded_by` back-linked)
 
 Tips:
 - Always list at least two alternatives — if there was only one option, it wasn't really a decision.
 - Be honest about negatives and risks. Decisions without downsides weren't analyzed deeply enough.
-- When a decision is later reversed, don't delete the old entry. Add a new decision with `replaces` pointing to it. The trail matters.
+- Never delete an old decision. Add a new one with `supersedes` pointing to it. The trail matters.
 
 ### Insight entry format
 
@@ -235,7 +247,9 @@ Distilled, reusable knowledge. The highest-value entry type. Each insight should
 - **confidence**: low | medium | high
 - **episode_count**: 1
 - **tags**: tag1, tag2
-- **source**: slug of the episode or context entry this came from
+- **derived_from**: slug of the episode or context entry this originated from
+- **evidence**: slug1, slug2
+- **updated**: YYYY-MM-DD
 
 #### Summary
 One paragraph. State the pattern precisely enough that future evidence
@@ -251,15 +265,27 @@ X happening in context Y, do Z." Include counter-examples if known.
 - **howto**: a specific technique with steps ("use exponential backoff with jitter on outbound HTTP retries")
 
 **Confidence guide**:
-- **low**: observed once. Plausible but unvalidated. Treat as a hypothesis.
-- **medium**: observed 2-3 times or validated in one real scenario. Reliable enough to act on with caution.
-- **high**: observed 3+ times across different contexts, or validated by benchmarking/formal testing. Default to this approach.
+- **low**: observed once. Treat as a hypothesis.
+- **medium**: observed 2-3 times or validated in one real scenario.
+- **high**: observed 3+ times across different contexts, or validated by benchmarking.
 
 Tips:
-- `episode_count` tracks how many episodes support this insight. Increment it every time a new episode reinforces the pattern. This is how insights mature: low confidence + 1 episode → medium confidence + 3 episodes → high confidence.
-- The `source` field creates a lineage trail. Always fill it — even if the insight came from a conversation, cite "conversation" or the context entry slug.
-- When to apply should include **counter-examples**: "Use X when you see A. Do NOT use X when you see B." This prevents overgeneralization.
-- Review existing insights during every `/syntrace full` — an insight that hasn't been updated in months may be stale or wrong.
+- `episode_count` tracks supporting episodes. Increment every time a new episode reinforces the pattern: low + 1 → medium + 3 → high.
+- `derived_from` traces where the insight originated. `evidence` lists all entries that support it — this is the lineage trail.
+- "When to apply" must include **counter-examples**: "Use X when A. Do NOT use X when B."
+
+## Lineage rules
+
+Entries are append-only. These rules ensure traceable knowledge evolution:
+
+1. **Immutability**: once written, an entry's heading slug and body text are permanent. Only these fields may be updated in place:
+   - `status` (on Decisions: accepted → deprecated → superseded; on Context: active → distilled)
+   - `superseded_by` (back-link added when a new decision supersedes this one)
+   - `confidence`, `episode_count`, `evidence`, `updated` (on Insights, as new episodes validate them)
+2. **Supersession**: to reverse a Decision, write a new Decision with `supersedes` pointing to the old slug. Set the old Decision's `status` to `superseded` and add `superseded_by` pointing to the new slug. Never delete the old entry.
+3. **Derivation**: use `derived_from` to trace where an entry originated. An Insight derived from an Episode cites the episode slug. An Episode that builds on a prior Context entry cites the context slug.
+4. **Evidence accumulation**: Insights list their supporting entries in `evidence`. Each time a new episode reinforces an insight, add the episode slug to `evidence` and increment `episode_count`.
+5. **Distillation**: when Context entries accumulate (5+ with `status: active`), promote reusable patterns to Insights and mark the source Context entries `status: distilled`. Do not delete them — they remain for tracing lineage.
 
 ## Auto-fill rules
 
@@ -268,27 +294,51 @@ Fill these automatically — never ask the user for them:
 | Field | Value | Example |
 |-------|-------|---------|
 | date in heading | Today's date | `### 2026-03-23-fix-auth-flow` |
-| **context_read** | Files, sections, or entries you read before writing | `src/auth.ts, insights/dev-defaults-leak` |
-| **tags** | 2-5 lowercase keywords relevant to retrieval | `api, retry, reliability` |
+| **context_read** | Files, sections, or entries you read before writing | `src/auth.ts, 2026-01-20-dev-defaults-leak` |
+| **tags** | 2-5 lowercase keywords from the Tag Canon | `api, error-handling, config` |
 | **outcome** | Best match from SUCCESS / FAIL / SURPRISE / PARTIAL | `SURPRISE` |
 | **slug** | Descriptive, lowercase, hyphenated, no filler words | `fix-payment-timeout` not `todays-work` |
+| **status** | Default for entry type | Context: `active`, Decision: `accepted` |
+| **episode_count** | Start at 1 for new Insights | `1` |
+| **updated** | Today's date when modifying an existing Insight | `2026-03-23` |
+| **derived_from** | Source entry slug when applicable | `2026-01-15-fix-payment-timeout` |
+| **superseded_by** | Auto-filled on old decision when a new one supersedes it | `2026-03-23-1400-switch-to-redis` |
 
-**Tagging strategy**: tags exist for retrieval. Ask yourself: "what would someone search for to find this entry?" Use domain terms (`auth`, `payments`, `caching`), not generic ones (`important`, `misc`, `todo`).
+## Tag canon
+
+Canonical tags prevent drift. Use these when they fit; add new canonical tags only when no existing tag covers the concept.
+
+| Canonical | Aliases | Domain |
+|-----------|---------|--------|
+| `api` | `rest`, `http`, `endpoint`, `graphql` | Integration |
+| `auth` | `authentication`, `authorization`, `login`, `oauth` | Security |
+| `config` | `configuration`, `settings`, `env`, `feature-flags` | Operations |
+| `db` | `database`, `sql`, `postgres`, `mysql`, `mongo` | Storage |
+| `cache` | `caching`, `redis`, `memcached` | Performance |
+| `deploy` | `deployment`, `ci-cd`, `pipeline`, `docker` | Operations |
+| `error-handling` | `errors`, `exceptions`, `retry`, `fallback` | Reliability |
+| `performance` | `perf`, `latency`, `throughput`, `optimization` | Performance |
+| `architecture` | `arch`, `design`, `system-design`, `patterns` | Architecture |
+| `testing` | `tests`, `test`, `qa`, `e2e`, `unit-test` | Quality |
+| `tooling` | `dx`, `developer-experience`, `ide`, `cursor` | Tooling |
+| `security` | `sec`, `vulnerability`, `encryption`, `secrets` | Security |
+| `monitoring` | `observability`, `logging`, `alerting`, `tracing` | Operations |
+
+To add a new canonical tag: use a lowercase single word or hyphenated compound. Add at least one alias. Place it in the table above during the next `/syntrace`.
+
+**Tagging strategy**: tags exist for retrieval. Ask: "what would someone search for to find this entry?" Use domain terms, not generic ones (`important`, `misc`, `todo`).
 
 ## Architecture
 
-This section applies when using Syntrace with multi-agent workflows or IDE agents. If you're pasting into a plain LLM chat, the save protocol and entry formats above are all you need — skip to Memory.
+This section applies when using Syntrace with multi-agent workflows or IDE agents. If you're pasting into a plain LLM chat, the save protocol and entry formats above are all you need.
 
 ### Agent roles
 
-Four roles, two concerns. Most setups only need the first three. The Librarian handles `/distill`.
-
-| Role | What it does | Invariants (never violate) |
-|------|-------------|---------------------------|
-| **Planner** | Decomposes goals into subtasks, picks which agent handles each, synthesizes final output | No irreversible actions without human OK. Log all decisions with rationale. Always check existing Insights before planning. |
-| **Worker** | Executes one well-defined subtask using tools. Narrow focus. | Never exceed assigned scope. On failure: return error + context, never silently retry. Always return output in the expected format. |
-| **Critic** | Reviews Worker output against quality checks. Returns PASS, REVISE, or REJECT with specific feedback. | Never approve output that violates invariants. Critique must be specific and actionable — never "looks wrong." Never escalate to human for routine issues. |
-| **Librarian** | Runs `/distill`. Scans Context + Episodes, creates/updates Insights, flags mature patterns. | Never modify the Spec section. Always tag insights with date, source, and confidence. Increment `episode_count` on existing insights rather than creating duplicates. |
+| Role | What it does | Invariants |
+|------|-------------|------------|
+| **Planner** | Decomposes goals into subtasks, picks which agent handles each, synthesizes final output | No irreversible actions without human OK. Log all decisions with rationale. Check existing Insights before planning. |
+| **Worker** | Executes one well-defined subtask using tools. Narrow focus. | Never exceed assigned scope. On failure: return error + context, never silently retry. |
+| **Critic** | Reviews Worker output against quality checks. Returns PASS, REVISE, or REJECT with specific feedback. | Critique must be specific and actionable. Never approve output that violates invariants. |
 
 New roles are added as specialized Workers (e.g., Researcher, Tester), not new top-level roles.
 
@@ -301,77 +351,60 @@ The Critic applies these on every review. In single-agent mode, self-apply befor
 - [ ] No hallucinated tool outputs (if a tool was supposedly called, verify it actually was)
 - [ ] Rationale is present for non-obvious decisions — not just "what" but "why"
 - [ ] Connections to existing entries are noted (reinforces, contradicts, or supersedes)
+- [ ] Lineage fields are populated (`derived_from`, `evidence`, `supersedes` where applicable)
 
 **Verdicts**:
-- **PASS**: all checks pass, output is complete and coherent
-- **REVISE**: minor issues, specific actionable feedback provided (max 2 revision rounds)
+- **PASS**: all checks pass
+- **REVISE**: minor issues, specific feedback provided (max 2 rounds)
 - **REJECT**: critical failure — invariant breach, missing rationale, wrong entry type
-
-### Planner-Worker-Critic cycle
-
-```
-Goal → Planner → subtask → Worker → result → Critic
-         ↑                                      |
-         +——— REVISE (max 2 rounds) ————————————+
-                                      |
-                                    PASS → Output
-```
-
-**When to use**: any task requiring quality assurance, when output errors are costly, when multiple subtasks produce results to be ranked or merged.
-
-**When to skip**: simple single-step tasks, real-time interactive loops where the critique cycle is too slow.
-
-**Failure modes to watch for**:
-- Critic too strict → infinite revision loops (the max 2 rounds cap prevents this)
-- Critic too lenient → garbage passes (calibrate with the quality checks above)
-- Planner over-decomposes → too many subtasks → coordination overhead exceeds the work itself
 
 ### Scaling memory
 
-As the Memory section grows, reading everything before acting becomes impractical. Use these strategies:
+As Memory grows, reading everything before acting becomes impractical:
 
 | Strategy | When to use | How |
 |----------|------------|-----|
+| **Memory Index scan** | Always | Read the Memory Index first — it surfaces active decisions and high-confidence insights. |
 | **Tag scan** | 30-100 entries | Search for tags matching your current task's keywords. Read only matching entries. |
-| **Recency + confidence** | 100+ entries | Focus on the 15-20 most recent entries plus any Insight with `confidence: high`. |
-| **Source walk** | Tracing a specific topic | Start from one entry, follow its `source` and cross-references 1-2 hops. |
-| **Full scan** | `/distill` only | Read everything. Never do this as a prerequisite to routine work. |
+| **Recency + confidence** | 100+ entries | Focus on the 15-20 most recent entries plus `confidence: high` Insights. |
+| **Lineage walk** | Tracing a specific topic | Start from one entry, follow `derived_from` and `evidence` 1-2 hops. |
 
 When the file exceeds ~500 entries, consider splitting into multiple Syntrace files by domain (e.g., `syntrace-frontend.md`, `syntrace-infra.md`). Each file is self-contained — copy the Spec section into each one.
 
 ---
 
 <!-- ============================================================ -->
-<!-- EXAMPLES — illustrative memory (optional; delete for clean)    -->
+<!-- EXAMPLES — illustrative (optional; delete for clean slate)   -->
 <!-- ============================================================ -->
 
 ## Context (examples)
 
-Low-friction captures. The inbox. Write here when something is worth remembering but doesn't need structure yet. During `/distill`, promote the good ones to Insights and mark the rest `[distilled]`.
-
 ### 2026-01-10-auth-token-expiry-gotcha
 
-- **tags**: auth, tokens, debugging
+- **status**: distilled
+- **tags**: auth, config
 - **context_read**: src/auth/middleware.ts
+- **derived_from**: —
 
 Spent 40 minutes debugging 401s before realizing refresh tokens expire after 7 days of inactivity, not 7 days from issue. The docs say "7-day expiry" without clarifying. Need to add a buffer that refreshes proactively at day 5.
 
 ### 2026-01-18-cursor-loses-context-on-large-files
 
-- **tags**: tooling, cursor, context-window
+- **status**: active
+- **tags**: tooling, architecture
 - **context_read**: (conversation history)
+- **derived_from**: —
 
 When a file exceeds ~800 lines, Cursor agents start ignoring instructions from the top of the file. Splitting the config into 3 smaller files fixed it immediately. Rule of thumb: keep any file an agent reads under 500 lines.
 
 ## Episodes (examples)
 
-Structured work logs. Write here after significant sessions -- not routine ones. Focus on the **why** and the **takeaway**, not a transcript of what you typed.
-
 ### 2026-01-15-fix-payment-timeout
 
 - **outcome**: SUCCESS
-- **tags**: api, retry, payments
-- **context_read**: src/payments/client.ts, memory context/auth-token-expiry-gotcha
+- **tags**: api, error-handling, config
+- **context_read**: src/payments/client.ts, 2026-01-10-auth-token-expiry-gotcha
+- **derived_from**: —
 
 #### What happened
 
@@ -380,19 +413,18 @@ Payment endpoint timing out ~5% of requests during peak hours. Root cause: upstr
 #### Takeaways
 
 - Failure rate dropped from 5.2% to 0.1% — exponential backoff with jitter works
-- Dev-environment defaults silently persisting into production is a recurring theme (see also: context/auth-token-expiry-gotcha)
+- Dev-environment defaults silently persisting into production is a recurring theme (see also: 2026-01-10-auth-token-expiry-gotcha)
 - Would add a startup check that flags any timeout config under 2s in production
 
 ## Decisions (examples)
 
-Architecture and design choices with rationale. Write here when you chose X over Y and it matters enough that your future self would ask "why did we do it this way?"
-
 ### 2026-01-20-1400-use-queue-for-webhooks
 
 - **status**: accepted
-- **tags**: architecture, webhooks, reliability
-- **context_read**: episodes/fix-payment-timeout, src/webhooks/handler.ts
-- **replaces**: (none)
+- **tags**: architecture, error-handling
+- **context_read**: 2026-01-15-fix-payment-timeout, src/webhooks/handler.ts
+- **supersedes**: —
+- **superseded_by**: —
 
 #### Context
 
@@ -411,18 +443,19 @@ Move to async processing: webhook handler writes to a queue (SQS), a separate wo
 
 - Positive: handler never backs up, events survive worker crashes, can scale workers independently
 - Negative: adds SQS dependency, eventual consistency (events processed seconds later, not instantly), need dead-letter queue monitoring
+- Risks: SQS message loss (mitigated by dead-letter queue), delayed processing during spikes
 
 ## Insights (examples)
-
-Distilled patterns — reusable knowledge extracted from episodes and context. Each insight should be **findable** by tags, **actionable** with a concrete trigger, and **precise** enough to be proven wrong.
 
 ### 2026-01-15-exponential-backoff-with-jitter
 
 - **type**: howto
 - **confidence**: medium
 - **episode_count**: 2
-- **tags**: api, retry, reliability, error-handling
-- **source**: episodes/fix-payment-timeout
+- **tags**: api, error-handling, performance
+- **derived_from**: 2026-01-15-fix-payment-timeout
+- **evidence**: 2026-01-15-fix-payment-timeout, 2026-01-10-auth-token-expiry-gotcha
+- **updated**: 2026-01-20
 
 #### Summary
 
@@ -437,8 +470,10 @@ When you see timeout or rate-limit errors on outbound HTTP calls, especially dur
 - **type**: concept
 - **confidence**: low
 - **episode_count**: 2
-- **tags**: config, debugging, production
-- **source**: context/auth-token-expiry-gotcha, episodes/fix-payment-timeout
+- **tags**: config, monitoring
+- **derived_from**: 2026-01-10-auth-token-expiry-gotcha
+- **evidence**: 2026-01-10-auth-token-expiry-gotcha, 2026-01-15-fix-payment-timeout
+- **updated**: 2026-01-20
 
 #### Summary
 
