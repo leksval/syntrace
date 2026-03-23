@@ -37,6 +37,7 @@ Fill these automatically — never prompt for them:
 | `agent` | Current agent or `"human"` |
 | `project` | Workspace/project name |
 | `source` | `"session"` unless more specific context exists |
+| `context_read` | List of file paths the agent read before writing this entry |
 
 ---
 

@@ -2,6 +2,7 @@
 id:                      # auto — YYYY-MM-DD-HHMM-slug
 status: accepted
 tags: []
+context_read: []         # auto — files consulted before writing this entry
 changelog:               # optional — type: description
 replaces:                # optional — path to old decision
 links: []                # optional — external URLs (cloud docs, Figma, Notion, etc.)

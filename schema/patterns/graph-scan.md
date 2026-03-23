@@ -1,7 +1,7 @@
 ---
 pattern: graph-scan
-version: 0.1.0
-tags: [graph, query, retrieval, meta]
+version: 0.2.0
+tags: [graph, query, retrieval, meta, scaling]
 ---
 
 # Graph Scan Pattern
@@ -104,6 +104,18 @@ Scan for structural problems:
 | Orphaned episode | Episode with no outgoing `related` edges and not referenced as `source` by any insight |
 | Stale insight | Insight with `confidence: low` and `episode_count` < 2 and `updated` older than 90 days |
 
+### Validate
+
+Run structural validation across all nodes:
+
+1. For each node type in `graph-schema.json`, glob files and parse frontmatter
+2. Check every field listed in `required` is present and non-empty
+3. Check enum fields (`outcome`, `confidence`, `type`, `status`) against `validation.enums`
+4. Check `episode_count` is an integer >= 1
+5. Check every path in `related` and `context_read` resolves to an existing file
+6. Check every schema file (agents, patterns, policies) is referenced by at least one decision's `related` field
+7. Report errors (missing required fields, invalid enums) and warnings (broken links, missing coverage)
+
 ### Cross-project query
 
 To query across multiple Syntrace instances:
@@ -113,6 +125,52 @@ To query across multiple Syntrace instances:
 3. Merge the graphs
 4. Use the `project:` frontmatter field to filter or group results
 5. Find shared tags across instances to discover cross-project patterns
+
+## Retrieval at scale
+
+When `memory/` grows beyond ~30 files, reading everything before acting becomes impractical. Use these strategies in order of increasing cost:
+
+### 1. Tag-first filtering (default for 30-100 files)
+
+Before reading full files, grep only `tags:` lines across the target folder. Select files whose tags overlap with your current task's keywords. This reduces a 100-file folder to the 5-10 files that actually matter.
+
+```
+1. Identify 2-3 keywords for your current task
+2. grep "tags:" memory/insights/*.md
+3. Read only files whose tags overlap with your keywords
+4. Record what you read in context_read
+```
+
+### 2. Recency window (default for 100+ files)
+
+Combine tag filtering with a recency cutoff. For most tasks, insights updated in the last 90 days plus high-confidence older insights cover the useful space.
+
+```
+1. Sort files by modification date (or parse updated: frontmatter)
+2. Read the 20 most recent files' frontmatter
+3. Also include any file with confidence: high regardless of age
+4. Apply tag filtering within this set
+```
+
+### 3. Graph-guided retrieval (for relationship queries)
+
+When you need to find knowledge related to a specific file or decision, don't scan everything. Start from the known node and walk edges:
+
+```
+1. Read the starting node's related and source fields
+2. Follow those links (1 hop)
+3. Optionally follow the linked nodes' related fields (2 hops)
+4. Stop — diminishing returns beyond 2 hops
+```
+
+### 4. When to build the full graph
+
+Only build the complete graph (Steps 1-5 above) for:
+- Gap detection (`/distill` runs)
+- Cross-project queries
+- Periodic audits (monthly or at milestones)
+
+Never build the full graph as a prerequisite to routine work.
 
 ## Efficiency tips
 

@@ -7,24 +7,27 @@ alwaysApply: true
 
 This project uses Syntrace as its knowledge base. Folders and markdown only.
 
+**Path note**: paths below use a `{root}/` prefix. When Syntrace is embedded in a host project (e.g. `your-project/syntrace/`), `{root}` = `syntrace`. When working inside the Syntrace repo itself, `{root}` = the repo root (paths have no prefix). Detect which case applies by checking whether an `AGENTS.md` exists at the workspace root or under a `syntrace/` subfolder.
+
 ## Before You Act
 
-1. Check `syntrace/schema/policies/` for rules.
-2. Check `syntrace/memory/insights/` for prior knowledge.
-3. Check `syntrace/schema/patterns/` for workflows.
+1. Check `schema/policies/` for rules.
+2. Check `memory/insights/` for prior knowledge.
+3. Check `schema/patterns/` for workflows.
 
 ## Triggers
 
 | Command | What it does |
 |---------|-------------|
-| `/syntrace` or `update memory` | Quick save to `syntrace/memory/context/` |
+| `/syntrace` or `update memory` | Quick save to `memory/context/` |
 | `/syntrace full` | Full save: episode + decision if needed + CHANGELOG |
 | `/distill` | Librarian run: context/episodes → insights → schema proposals |
 
-When triggered, read `syntrace/MEMORY.md` for the save protocol.
+When triggered, read `MEMORY.md` for the save protocol.
 
 ## Rules
 
-- Never modify `syntrace/schema/` without a decision record.
+- Never modify `schema/` without a decision record.
 - Filenames: `YYYY-MM-DD` prefix, lowercase, hyphens.
-- Full reference: `syntrace/AGENTS.md`.
+- When writing any memory file, populate `context_read` with the files you consulted.
+- Full reference: `AGENTS.md`.

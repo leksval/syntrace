@@ -4,6 +4,7 @@ type: concept | howto
 confidence: low | medium | high
 episode_count: 1
 tags: []
+context_read: []         # auto — files consulted before writing this entry
 links: []                # optional — external URLs (cloud docs, Figma, Notion, etc.)
 related: []
 ---

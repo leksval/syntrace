@@ -2,6 +2,7 @@
 date:                    # auto
 outcome: SUCCESS | FAIL | SURPRISE | PARTIAL
 tags: []
+context_read: []         # auto — files consulted before writing this entry
 changelog:               # optional — type: description
 links: []                # optional — external URLs (cloud docs, Figma, Notion, etc.)
 related: []

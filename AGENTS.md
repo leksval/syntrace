@@ -11,6 +11,7 @@ You are working inside a Syntrace workspace: a filesystem-native, dual-inheritan
 | `schema/agents/` | One `.md` per agent role -- responsibilities, inputs, outputs, invariants |
 | `schema/patterns/` | Architectural patterns and playbooks for multi-agent workflows |
 | `schema/policies/` | Standing rules and quality standards (Critic agent uses these) |
+| `schema/architecture.md` | Foundational constraints: dual-layer split, agent model, save protocol, graph scan |
 | `schema/tools.md` | Tool definitions, contracts, and agent assignments |
 | `memory/decisions/` | ADR-style records explaining why something changed |
 | `memory/episodes/` | Work logs, experiment results, retrospectives |
@@ -100,6 +101,7 @@ Fill these automatically — never prompt for them:
 | `agent` | Current agent or `"human"` |
 | `project` | Workspace/project name |
 | `source` | `"session"` unless more specific context exists |
+| `context_read` | List of file paths the agent read before writing this entry |
 
 ### CHANGELOG integration
 
@@ -126,6 +128,7 @@ Fields marked `# auto` are filled by the agent. Fields marked `# optional` can b
 date:                    # auto
 outcome: SUCCESS | FAIL | SURPRISE | PARTIAL
 tags: []
+context_read: []         # auto — files consulted before writing this entry
 changelog:               # optional — type: description
 links: []                # optional — external URLs (cloud docs, Figma, Notion, etc.)
 related: []
@@ -142,6 +145,7 @@ Retrospectives add: `type: retrospective`, `subtype: weekly | milestone | post-m
 id:                      # auto — YYYY-MM-DD-HHMM-slug
 status: accepted
 tags: []
+context_read: []         # auto — files consulted before writing this entry
 changelog:               # optional — type: description
 replaces:                # optional — path to old decision
 links: []                # optional — external URLs (cloud docs, Figma, Notion, etc.)
@@ -158,6 +162,7 @@ type: concept | howto
 confidence: low | medium | high
 episode_count: 1
 tags: []
+context_read: []         # auto — files consulted before writing this entry
 links: []                # optional — external URLs (cloud docs, Figma, Notion, etc.)
 related: []
 ---
