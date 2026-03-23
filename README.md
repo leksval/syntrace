@@ -18,7 +18,6 @@
 <p align="center">
   <strong>Start here:</strong><br/>
   <a href="https://raw.githubusercontent.com/leksval/syntrace/main/syntrace.md"><img src="https://img.shields.io/badge/USE_THIS_RAW_PROMPT-%7E7.5k_tokens-ff1744?style=for-the-badge" alt="Use this raw prompt, approximately 7.5k tokens" /></a><br/>
-  <sub>Approximate prompt size: ~7.5k tokens</sub>
 </p>
 
 <p align="center">
