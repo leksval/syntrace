@@ -12,8 +12,12 @@
   <a href="https://github.com/leksval/syntrace"><img src="https://img.shields.io/badge/%E2%AD%90_Star_this_repo-black?style=for-the-badge" alt="Star this repo" /></a>&nbsp;
   <a href="#license"><img src="https://img.shields.io/badge/license-CC--BY%204.0-blue.svg?style=for-the-badge" alt="CC-BY 4.0 License" /></a>&nbsp;
   <img src="https://img.shields.io/badge/local--first-2f855a?style=for-the-badge" alt="Local first" />&nbsp;
-  <img src="https://img.shields.io/badge/just_markdown-brightgreen?style=for-the-badge" alt="Just Markdown" />&nbsp;
-  <a href="https://raw.githubusercontent.com/leksval/syntrace/main/syntrace.md"><img src="https://img.shields.io/badge/Copy_Raw_Prompt-syntrace.md-ff6b6b?style=for-the-badge" alt="Copy raw prompt" /></a>
+  <img src="https://img.shields.io/badge/just_markdown-brightgreen?style=for-the-badge" alt="Just Markdown" />
+</p>
+
+<p align="center">
+  <strong>Start here:</strong><br/>
+  <a href="https://raw.githubusercontent.com/leksval/syntrace/main/syntrace.md"><img src="https://img.shields.io/badge/USE_THIS_RAW_PROMPT-syntrace.md-ff1744?style=for-the-badge" alt="Use this raw prompt" /></a>
 </p>
 
 <p align="center">
