@@ -45,7 +45,7 @@ Hard boundaries. No exceptions.
 
 Three layers in one file: **Cheat sheet** (operating rules), **Reference** (stable protocol, schemas, examples -- never append history here), and **History** (append-only memory: Memory Index, Context, Episodes, Decisions, Insights, Changelog).
 
-**Context rule**: any files pasted alongside this one are additional context. In workspace mode, consult the neighboring project files, docs, diffs, logs, and prior entries that are relevant to the session before writing. Record what you actually consulted in `context_read` (source files, docs, tickets, specs, prior entries, logs, diffs). Do **not** treat agent transcripts or chat history as project history. Works in two modes:
+**Context rule**: any files pasted alongside this one are additional context. In workspace mode, consult the neighboring project files, docs, diffs, logs, prior entries, and, if possible, relevant git history that are relevant to the session before writing. Record what you actually consulted in `context_read` (source files, docs, tickets, specs, prior entries, logs, diffs, commits). Do **not** treat agent transcripts or chat history as project history. Works in two modes:
 - **Paste mode** (plain LLM chat): user pastes this file + the relevant project files. Read the relevant source material, work, append.
 - **Workspace mode** (IDE agent): read the relevant neighboring project files directly before saving.
 
@@ -56,7 +56,7 @@ One trigger. One procedure. Always full depth.
 **`/syntrace` step by step**:
 1. Review what happened this session
 2. If needed and possible, ask **2-3 clarification questions** when the session scope, a key decision, or the intended takeaway is ambiguous. If the session is already clear, do not ask unnecessary questions.
-3. Scan the existing Memory sections and the session-relevant source material -- read before you write
+3. Scan the existing Memory sections and the session-relevant source material -- read before you write. If possible, also check relevant git history for the files or decisions involved.
 4. Append an Episode entry (outcome, takeaways, concrete details)
 5. If a design/architecture choice was made, append a Decision entry
 6. Check existing Insights -- update `confidence`, `evidence_count`, `evidence` on reinforced ones; create new if a reusable pattern emerged
@@ -256,7 +256,7 @@ Extract the highest-signal reusable knowledge from the current project chat and 
 
 - For long-context prompts, place the source material before the final extraction request so the task sits near the end of the prompt.
 - Separate source material from instructions clearly. Use short labeled sections such as `Goal`, `Context`, `Constraints`, `Source`, and `Output`.
-- When available, include the current chat summary, changed files, diffs, logs, and related artifacts alongside Syntrace so the extraction reflects what actually happened.
+- When available, include the current chat summary, changed files, diffs, logs, related artifacts, and relevant git history alongside Syntrace so the extraction reflects what actually happened.
 - Include a formatting example only if the model keeps drifting from the required structure.
 
 **Constraints**:

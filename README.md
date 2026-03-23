@@ -70,6 +70,8 @@ If you use any LLM for coding -- in a chat window or in an IDE -- Syntrace works
 
 You do **not** need to read the whole file to start. Paste the file, work, say `/syntrace`.
 
+As you get comfortable with it, customize the reference and tag canon for your project's actual domains, constraints, and workflows. Syntrace works best when the spec sounds like your team.
+
 ---
 
 ## How to use
@@ -83,13 +85,14 @@ You do **not** need to read the whole file to start. Paste the file, work, say `
 5. Save it, replacing the old version
 6. Next session, paste it again. The LLM picks up where you left off.
 
-The LLM may ask 1-2 brief clarification questions before saving if the session scope or a key decision is ambiguous.
+If needed and possible, the LLM should ask 2-3 brief clarification questions before saving when the session scope, a key decision, or the intended takeaway is ambiguous. Those questions usually improve the quality of the saved lesson output by making the resulting entries more precise, more reusable, and easier to retrieve later.
 
 ---
 
 ## Generate lessons from Syntrace
 
 You can also use `syntrace.md` as a **read-only memory source** to ask Cursor for reusable lessons from prior LLM-assisted work. The agent should synthesize from the current project chat, actual code or doc changes, and the durable memory already stored in Syntrace.
+If the scope is fuzzy, letting the agent ask a few clarification questions first usually improves lesson quality significantly: better framing, less vague evidence, and sharper next-step guidance.
 When you want to save the result, the agent should return an **append-only markdown block** to place at the end of your destination file rather than rewriting the whole file.
 
 Best markdown-only workflow:
@@ -97,6 +100,7 @@ Best markdown-only workflow:
 - Prefer the local `syntrace.md` in the current workspace
 - Fall back to a raw GitHub markdown URL when you want to reuse memory across repos
 - If neither is accessible, paste the markdown contents into chat
+- If possible, also check relevant git history for the files, decisions, or changes involved
 - Run this after each chat, or at most every couple of sessions, so the source stays distilled and does not bloat the next prompt's context window
 
 Use this prompt in Cursor:
@@ -112,6 +116,7 @@ Source priority:
 Instructions:
 - Use the current project chat and the actual changes made in this session as the primary source of new learning.
 - Read the full Syntrace file, but focus especially on `Insights`, `Decisions`, `Episodes`, `Context`, and `Memory Index`.
+- If possible, check relevant git history for the files or decisions involved so the lessons reflect what actually changed over time.
 - Extract reusable lessons learned from prior LLM-assisted work and development sessions.
 - Connect what changed in this session with relevant prior patterns already stored in Syntrace.
 - Deduplicate overlapping ideas.
@@ -149,7 +154,9 @@ The distilled reusable knowledge: patterns, anti-patterns, stable lessons, tenta
 Action items, experiments, reusable rules, and revisit triggers.
 ```
 
-This works well because Syntrace already separates durable patterns from raw session history: `Insights` hold distilled lessons, `Decisions` capture durable rationale, and `Episodes` / `Context` supply evidence. The agent should combine that durable memory with the current project chat and actual session changes, then return only the block to append. Ideally run this after each chat, or every few chats at most, so the memory stays compact and future prompts do not get bloated by long unresolved session history.
+This works well because Syntrace already separates durable patterns from raw session history: `Insights` hold distilled lessons, `Decisions` capture durable rationale, and `Episodes` / `Context` supply evidence. The agent should combine that durable memory with the current project chat, actual session changes, and, when available, relevant git history, then return only the block to append. Ideally run this after each chat, or every few chats at most, so the memory stays compact and future prompts do not get bloated by long unresolved session history.
+
+Do not be afraid to customize the wording, tags, and examples to fit your codebase. The better Syntrace reflects your real project language, the better the extracted lessons tend to be.
 
 ---
 
@@ -205,7 +212,7 @@ After three sessions, the memory half of your file might look like:
 ### 2026-01-15-exponential-backoff-with-jitter
 - **type**: howto
 - **confidence**: medium
-- **episode_count**: 2
+- **evidence_count**: 2
 - **tags**: api, error-handling, performance
 - **derived_from**: 2026-01-15-fix-payment-timeout
 - **evidence**: 2026-01-15-fix-payment-timeout, 2026-01-10-auth-token-expiry-gotcha
