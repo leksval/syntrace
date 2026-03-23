@@ -90,6 +90,7 @@ The LLM may ask 1-2 brief clarification questions before saving if the session s
 ## Generate lessons from Syntrace
 
 You can also use `syntrace.md` as a **read-only memory source** to ask Cursor for reusable lessons from prior LLM-assisted work.
+When you want to save the result, the agent should return an **append-only markdown block** to place at the end of your destination file rather than rewriting the whole file.
 
 Best markdown-only workflow:
 
@@ -119,7 +120,9 @@ Instructions:
   - tentative lessons
   - anti-patterns / things to avoid
 - Ignore filler, one-off narration, and anything not useful for future work.
-- Do not rewrite the whole Syntrace file.
+- Treat Syntrace as a read-only source file.
+- Do not rewrite the source file or regenerate the entire destination file.
+- Return only an append-only markdown block intended to be added at the end.
 - Output only markdown.
 
 Return format:
@@ -152,7 +155,7 @@ List unresolved questions or gaps that appear repeatedly.
 Turn the strongest lessons into short agent rules I could reuse in future chats.
 ```
 
-This works well because Syntrace already separates durable patterns from raw session history: `Insights` hold distilled lessons, `Decisions` capture durable rationale, and `Episodes` / `Context` supply evidence. Asking for lessons is therefore different from asking the LLM to append new memory with `/syntrace`.
+This works well because Syntrace already separates durable patterns from raw session history: `Insights` hold distilled lessons, `Decisions` capture durable rationale, and `Episodes` / `Context` supply evidence. Asking for lessons is therefore different from asking the LLM to append new memory with `/syntrace`: the agent reads Syntrace, distills lessons, and returns only the block to append.
 
 ---
 

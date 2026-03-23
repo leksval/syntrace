@@ -256,7 +256,8 @@ When a user asks for lessons, guidance, reusable rules, or "what have we learned
 - Deduplicate overlapping ideas; merge repeated evidence into one stronger lesson.
 - Separate stable lessons from tentative hypotheses and anti-patterns.
 - Surface repeated open questions or unresolved tensions if they appear across entries.
-- Output a concise markdown summary or reusable rules. **Do not rewrite the full Syntrace file** unless the user explicitly triggered `/syntrace`.
+- Output a concise markdown summary or reusable rules as an **append-only markdown block** for the end of the destination file.
+- Treat Syntrace as a read-only source during lessons extraction. **Do not rewrite the full Syntrace file** unless the user explicitly triggered `/syntrace`.
 
 ### Adapter mappings
 
