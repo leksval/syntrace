@@ -5,7 +5,7 @@
 <h1 align="center">Syntrace</h1>
 
 <p align="center">
-  <strong>One memory file for every AI dev tool.<br/>Portable. Local-first. No database. No API keys. Works with Cursor, Claude Code, ChatGPT, and anything that reads text.</strong>
+  <strong>One markdown file for project history, decisions, and reusable lessons.<br/>Portable. Local-first. No database. No API keys. Works with any LLM that can read text.</strong>
 </p>
 
 <p align="center">
@@ -27,14 +27,9 @@
 
 ## The problem
 
-Your AI coding tools forget everything between sessions. Worse, each tool stores context differently:
+Project history gets lost more easily than it should. Decisions, debugging lessons, and hard-won patterns end up scattered across chats, commits, docs, and half-remembered conversations.
 
-- Cursor uses `.cursor/rules/*.mdc`
-- Claude Code uses `CLAUDE.md`
-- ChatGPT needs you to paste context every time
-- Every other tool invents its own format
-
-You end up repeating yourself, maintaining parallel files, and losing knowledge when you switch tools.
+Syntrace fixes that by giving the project one durable, portable history file that can be read by humans and LLMs alike.
 
 ---
 
@@ -42,9 +37,9 @@ You end up repeating yourself, maintaining parallel files, and losing knowledge 
 
 `syntrace.md` is a single portable format that works like a **genome**:
 
-- **Replication machinery** -- the spec at the bottom of the file. Constant. Tells the LLM how to read, write, and evolve the memory. Copy the file to a new project and this machinery bootstraps itself.
-- **Accumulated knowledge** -- the memory sections at the top. Grows every session. Episodes, decisions, insights, context -- each entry linked to its ancestors through lineage fields, like genes carrying their evolutionary history.
-- **Phenotype snapshot** -- the Memory Index near the top. Auto-generated each save. Shows what's active, what's high-confidence, and what's unresolved right now.
+- **Replication machinery** -- the cheat sheet and reference sections at the top and middle of the file. Constant. They tell the LLM how to read, write, and evolve the memory.
+- **Accumulated knowledge** -- the history sections at the end of the file. They grow every session. Episodes, decisions, insights, context -- each entry linked to its ancestors through lineage fields, like genes carrying their evolutionary history.
+- **Phenotype snapshot** -- the Memory Index inside the history block. Auto-generated each save. Shows what's active, what's high-confidence, and what's unresolved right now.
 
 One file. One command. Copy it anywhere and it carries everything forward.
 
@@ -55,7 +50,7 @@ One file. One command. Copy it anywhere and it carries everything forward.
 Developers who use AI coding assistants and want:
 
 - **Memory that survives across sessions** without re-explaining your project every time
-- **One source of truth** instead of parallel `CLAUDE.md`, `.cursorrules`, and chat preambles
+- **One source of truth** for project history instead of scattered notes and chat preambles
 - **Portable knowledge** that moves with your repo, not locked to one vendor
 - **Traceable decisions** with lineage and evidence, not scattered notes
 
@@ -69,9 +64,9 @@ If you use any LLM for coding -- in a chat window or in an IDE -- Syntrace works
 
 | Layer | What it is | Who reads it |
 |-------|------------|--------------|
-| **Top -- cheat sheet + memory** | Compact rules + Memory Index + Context / Episodes / Decisions / Insights / Changelog. | You, every session. The LLM appends here. |
-| **Bottom -- reference** | Full specification: save protocol, entry formats, lineage rules, tag canon, architecture, scaling. | The LLM when saving; you when learning or customizing. |
-| **Bottom -- examples** | Sample entries with lineage fields populated. Delete in a fresh project or keep as a style guide. | You and the LLM as a pattern to imitate. |
+| **Top -- cheat sheet** | Compact operating rules for saving and updating the file. | You and the LLM before each save. |
+| **Middle -- reference + examples** | Full specification: save protocol, entry formats, lineage rules, tag canon, architecture, scaling, plus examples. | The LLM when saving; you when learning or customizing. |
+| **Bottom -- history** | Memory Index + Context / Episodes / Decisions / Insights / Changelog. This is the append-only project history. | You, every session. The LLM appends here. |
 
 You do **not** need to read the whole file to start. Paste the file, work, say `/syntrace`.
 

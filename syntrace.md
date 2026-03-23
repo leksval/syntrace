@@ -7,58 +7,13 @@
 ## Cheat sheet
 
 - **Output rule**: when triggered, output the **COMPLETE file** as a single markdown code block. Never output only the new entry.
-- **Where to write**: append new entries **only** under the six MEMORY sections below (Memory Index → Changelog). Do **not** modify **REFERENCE** or **EXAMPLES**.
+- **Where to write**: append new entries **only** under the six MEMORY sections at the **end of this file** (Memory Index → Changelog). Do **not** modify **REFERENCE** or **EXAMPLES**.
 - **Read before you write**: scan existing Memory sections; update Insights instead of duplicating; link `supersedes` on decisions when superseding; back-link `superseded_by` on the old entry.
 - **Trigger**: `/syntrace` — always-full save. Append Episode + Decision (if applicable) + Insight (if a pattern emerged) + Context (if a standalone observation) + Changelog line. Refresh Memory Index.
 - **Clarification**: the LLM may ask 1-2 questions before saving if the session scope or a key decision is ambiguous. Otherwise, save without asking.
 - **Privacy**: never persist secrets, API keys, passwords, or PII in entries. Omit or redact.
 
-**Full protocol, formats, lineage rules, and architecture** → see **REFERENCE** at the end of this file.
-
----
-
-<!-- ============================================================ -->
-<!-- MEMORY — entries below grow over time                         -->
-<!-- ============================================================ -->
-
-## Memory Index
-
-Auto-refreshed snapshot. Do not edit manually — `/syntrace` regenerates this.
-
-**Active decisions**: _(none yet)_
-**High-confidence insights**: _(none yet)_
-**Open questions**: _(none yet)_
-**Last updated**: _(none yet)_
-
-## Context
-
-Low-friction captures. The inbox.
-
-_Add entries below._
-
-## Episodes
-
-Structured work logs after significant sessions.
-
-_Add entries below._
-
-## Decisions
-
-Architecture and design choices with rationale.
-
-_Add entries below._
-
-## Insights
-
-Distilled, reusable patterns.
-
-_Add entries below._
-
-## Changelog
-
-_Add one-line session summaries below._
-
----
+**Full protocol, formats, lineage rules, and architecture** → see **REFERENCE** below. The append-only history lives at the end of the file.
 
 <!-- ============================================================ -->
 <!-- REFERENCE — full specification (do not delete; LLM reads)    -->
@@ -68,15 +23,15 @@ _Add one-line session summaries below._
 
 This is a self-contained memory system. Three layers in one file, like a genome:
 
-1. **Spec** — the replication machinery. Constant. A **cheat sheet** sits above MEMORY for quick reference; the **REFERENCE** block below contains the full rules, formats, and architecture. Never delete REFERENCE; never append session output there. Optionally delete **EXAMPLES** in a fresh project.
-2. **Memory** — the accumulated knowledge. Grows every session. Six sections: Memory Index, Context, Episodes, Decisions, Insights, Changelog. Append new `###` entries only here.
-3. **Operational views** — derived snapshots generated from Memory. The **Memory Index** is the primary view: a machine-maintained summary of active decisions, high-confidence insights, and open questions. It is regenerated on every `/syntrace`.
+1. **Cheat sheet** — the short operating rules at the top. Quick reference before saving.
+2. **Reference** — the stable instructions and formats. The protocol, schemas, lineage rules, architecture, and examples live here. Never append session history here.
+3. **History** — the append-only project memory at the end of the file. Six sections: Memory Index, Context, Episodes, Decisions, Insights, Changelog. Append new `###` entries only there.
 
 **Output rule**: when triggered, output the **COMPLETE file** as a single markdown code block with new entries appended to the correct sections. The user saves it, replacing the old version. Never output just the new entry — always the full file, so nothing is lost.
 
-**Context rule**: any other files pasted alongside this one, or present in the same workspace, are additional context. Read them before writing entries. Reference what you consulted in `context_read`. This includes IDE chat history when it is available as a local transcript file. This means the file works in two modes:
+**Context rule**: any other files pasted alongside this one, or present in the same workspace, are additional context. Read them before writing entries. Reference what you consulted in `context_read`. `context_read` should point to project artifacts that informed the entry: source files, docs, tickets, specs, prior entries, logs, or diffs. Do **not** treat agent transcripts or chat history as project history. This means the file works in two modes:
 - **Paste mode** (plain LLM chat): user pastes this file + any relevant project files. You read everything, work, append entries.
-- **Workspace mode** (IDE agent like Cursor, Claude Code): you can read neighboring files directly. Scan them before saving. In Cursor, agent chat histories commonly appear as JSONL files under paths like `C:\Users\<user>\.cursor\projects\<project>\agent-transcripts\<session-id>\<session-id>.jsonl`; if consulted, include that path in `context_read`.
+- **Workspace mode** (IDE agent like Cursor, Claude Code): you can read neighboring project files directly. Scan them before saving.
 
 **Read before you write**: before creating any entry, scan the existing Memory sections. Check if an insight already covers this topic (update it instead of duplicating). Check if a prior decision is being superseded (add `supersedes` on the new entry and back-link `superseded_by` on the old one). The value of this system comes from connections between entries, not isolated notes.
 
@@ -110,7 +65,7 @@ When done for the session: **commit code**, then **save memory**.
 
 ## Writing quality
 
-The goal is entries your future self (or a future agent) can act on without re-reading the original conversation.
+The goal is entries your future self or teammates can act on without re-reading the original conversation.
 
 **What to capture**:
 - The *why*, not just the *what*. "Changed timeout to 3s" is useless. "Changed timeout to 3s because upstream SLA is 2s and we need headroom for retries" is actionable.
@@ -294,7 +249,7 @@ Fill these automatically — never ask the user for them:
 | Field | Value | Example |
 |-------|-------|---------|
 | date in heading | Today's date | `### 2026-03-23-fix-auth-flow` |
-| **context_read** | Files, sections, entries, or local agent transcript files you read before writing | `src/auth.ts, C:\Users\<user>\.cursor\projects\<project>\agent-transcripts\<session-id>\<session-id>.jsonl, 2026-01-20-dev-defaults-leak` |
+| **context_read** | Files, sections, entries, tickets, logs, or specs you read before writing | `src/auth.ts, docs/auth.md, 2026-01-20-dev-defaults-leak` |
 | **tags** | 2-5 lowercase keywords from the Tag Canon | `api, error-handling, config` |
 | **outcome** | Best match from SUCCESS / FAIL / SURPRISE / PARTIAL | `SURPRISE` |
 | **slug** | Descriptive, lowercase, hyphenated, no filler words | `fix-payment-timeout` not `todays-work` |
@@ -599,14 +554,14 @@ When the file exceeds ~500 entries, consider splitting into multiple Syntrace fi
 
 Spent 40 minutes debugging 401s before realizing refresh tokens expire after 7 days of inactivity, not 7 days from issue. The docs say "7-day expiry" without clarifying. Need to add a buffer that refreshes proactively at day 5.
 
-### 2026-01-18-cursor-loses-context-on-large-files
+### 2026-01-18-large-config-file-hid-production-defaults
 
 - **status**: active
-- **tags**: tooling, architecture
-- **context_read**: C:\Users\<user>\.cursor\projects\<project>\agent-transcripts\<session-id>\<session-id>.jsonl
+- **tags**: config, architecture
+- **context_read**: src/config/index.ts, docs/deploy.md
 - **derived_from**: —
 
-When a file exceeds ~800 lines, Cursor agents start ignoring instructions from the top of the file. Splitting the config into 3 smaller files fixed it immediately. Rule of thumb: keep any file an agent reads under 500 lines.
+Keeping runtime and deployment settings in one large config file made it easy to miss production-only defaults during review. Splitting the config into smaller domain files made environment-specific settings easier to audit and reduced the chance of dev defaults leaking into production.
 
 ## Episodes (examples)
 
@@ -698,5 +653,48 @@ When debugging production issues that "should work," check whether any config va
 
 - 2026-01-10: captured auth token expiry gotcha
 - 2026-01-15: fixed payment timeout, created retry-backoff insight
-- 2026-01-18: noted Cursor context-window limit on large files
+- 2026-01-18: captured config-file split after production-defaults review issue
 - 2026-01-20: decided on async queue for webhooks, created dev-defaults-leak insight
+
+---
+
+<!-- ============================================================ -->
+<!-- HISTORY — append-only project memory lives below              -->
+<!-- ============================================================ -->
+
+## Memory Index
+
+Auto-refreshed snapshot. Do not edit manually — `/syntrace` regenerates this.
+
+**Active decisions**: _(none yet)_
+**High-confidence insights**: _(none yet)_
+**Open questions**: _(none yet)_
+**Last updated**: _(none yet)_
+
+## Context
+
+Low-friction captures. The inbox.
+
+_Add entries below._
+
+## Episodes
+
+Structured work logs after significant sessions.
+
+_Add entries below._
+
+## Decisions
+
+Architecture and design choices with rationale.
+
+_Add entries below._
+
+## Insights
+
+Distilled, reusable patterns.
+
+_Add entries below._
+
+## Changelog
+
+_Add one-line session summaries below._
