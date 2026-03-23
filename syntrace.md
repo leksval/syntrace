@@ -11,7 +11,7 @@
 - **Separator rule**: separate each session save in the **Changelog only** with a horizontal rule: `---`. Do not add session separators inside Context, Episodes, Decisions, or Insights.
 - **Read before you write**: scan existing Memory sections; update Insights instead of duplicating; link `supersedes` on decisions when superseding; back-link `superseded_by` on the old entry.
 - **Trigger**: `/syntrace` -- always-full save. Append Episode + Decision (if applicable) + Insight (if a pattern emerged) + Context (if a standalone observation) + Changelog line. Refresh Memory Index.
-- **Clarification**: the LLM may ask 1-2 questions before saving if the session scope or a key decision is ambiguous. Otherwise, save without asking.
+- **Clarification**: if needed and possible, the LLM should ask **2-3 clarification questions** before saving when the session scope, key decision, or intended takeaway is ambiguous. If the session is already clear, save without asking.
 - **Privacy**: never persist secrets, API keys, passwords, or PII in entries. Omit or redact.
 
 **Full protocol, formats, lineage rules, and architecture** → see **REFERENCE** below. The append-only history lives at the end of the file.
@@ -55,7 +55,7 @@ One trigger. One procedure. Always full depth.
 
 **`/syntrace` step by step**:
 1. Review what happened this session
-2. If scope or a key decision is ambiguous, ask up to 2 clarification questions
+2. If needed and possible, ask **2-3 clarification questions** when the session scope, a key decision, or the intended takeaway is ambiguous. If the session is already clear, do not ask unnecessary questions.
 3. Scan the existing Memory sections and the session-relevant source material -- read before you write
 4. Append an Episode entry (outcome, takeaways, concrete details)
 5. If a design/architecture choice was made, append a Decision entry
