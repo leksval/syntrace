@@ -328,9 +328,264 @@ To add a new canonical tag: use a lowercase single word or hyphenated compound. 
 
 **Tagging strategy**: tags exist for retrieval. Ask: "what would someone search for to find this entry?" Use domain terms, not generic ones (`important`, `misc`, `todo`).
 
+## Interoperability
+
+Syntrace is the canonical memory format. Other tools may have their own project-memory files, but Syntrace is designed to be the lowest-common-denominator representation that can import from and export to them without losing the core ideas:
+
+- project context
+- reusable instructions
+- decisions with rationale
+- patterns worth reusing
+
+The portability rule is: **Syntrace stays the source of truth; tool-native files are views or import sources.**
+
+### Adapter principles
+
+Adapters should follow these rules:
+
+1. **Prefer lossless import**: when a source file contains information that does not map perfectly, preserve it in the body of a Context or Decision entry instead of discarding it.
+2. **Prefer distilled export**: export only active, high-signal material that a target tool can use directly. Do not dump the full Syntrace file into every target format.
+3. **Keep lineage in Syntrace**: external formats usually cannot represent `derived_from`, `evidence`, or `supersedes` fully. Preserve lineage in `syntrace.md`; export human-readable summaries when needed.
+4. **Do not round-trip generated files manually**: exported files are derived artifacts. If the user edits them by hand, a later import should treat that as new source material, not guaranteed canonical truth.
+5. **Preserve privacy rules**: imports and exports must still omit secrets, tokens, passwords, API keys, and PII.
+
+### Adapter mappings
+
+#### Claude Code (`CLAUDE.md`)
+
+Import:
+
+- Treat the file as project-scoped instruction memory.
+- Map each top-level `##` section to a Syntrace entry.
+- If the section describes stable conventions or reusable guidance, import it as an **Insight**.
+- If the section describes an explicit architectural choice or trade-off, import it as a **Decision**.
+- If the section is a loose project note, import it as **Context**.
+- Set `context_read` to `CLAUDE.md`.
+- Use `derived_from: —` unless the source references an existing Syntrace slug.
+
+Export:
+
+- Build `CLAUDE.md` from accepted Decisions and medium/high-confidence Insights.
+- Prefer concise sections such as `## Key Commands`, `## Architecture`, `## Coding Conventions`, and `## Important Patterns`.
+- Do not export Changelog noise, low-signal Context entries, or superseded Decisions.
+- When lineage matters, summarize it in prose instead of exposing raw Syntrace fields.
+
+#### Cursor rules (`.cursor/rules/*.mdc` or legacy `.cursorrules`)
+
+Import:
+
+- Treat each rule file as one source unit.
+- Use the rule title or filename as the basis for the Syntrace slug.
+- Import broadly applicable coding guidance as **Insight** entries.
+- Import path-specific or workflow-specific notes as **Context** unless they encode a meaningful architectural choice.
+- If frontmatter or metadata indicates scope, mention that scope in the body and include `cursor` or `tooling` in tags when relevant.
+- Set `context_read` to the specific rule file path.
+
+Export:
+
+- Group exported content by concern, not by original Syntrace section.
+- Convert active Insights and accepted Decisions into small topic-focused rule files.
+- Prefer multiple short rules over one large file; large files degrade agent performance.
+- Path-specific exports should be generated only when a Syntrace entry clearly implies file or directory scope.
+
+#### Generic markdown instructions (`AGENTS.md`, `MEMORY.md`, `RULES.md`, similar files)
+
+Import:
+
+- Treat each heading block as a candidate Context, Insight, or Decision.
+- Preserve unfamiliar structure in the body instead of forcing brittle field inference.
+- Tag imported entries with `tooling` by default unless a better canonical tag fits.
+
+Export:
+
+- Generate concise project instructions from accepted Decisions and reusable Insights.
+- Keep generated files short enough that agents can load them reliably.
+
+## Validation
+
+Validation exists so Syntrace behavior is not fully dependent on model obedience. A validator should report **errors** for broken invariants and **warnings** for quality issues that do not make the file unusable.
+
+### File-level invariants
+
+Errors:
+
+- The file must contain the six MEMORY sections in this order: Memory Index, Context, Episodes, Decisions, Insights, Changelog.
+- The file must retain the REFERENCE block.
+- Entry headings must be unique across the file.
+- New entries must appear only under the MEMORY sections.
+
+Warnings:
+
+- The EXAMPLES block is optional but recommended for first-time users.
+- If the file grows beyond practical reading size, suggest splitting by domain.
+
+### Entry schema
+
+#### Context entries
+
+Required:
+
+- slug in `YYYY-MM-DD-descriptive-slug` form
+- `status`
+- `tags`
+- `context_read`
+- `derived_from`
+- non-empty body
+
+Allowed `status` values:
+
+- `active`
+- `distilled`
+
+#### Episode entries
+
+Required:
+
+- slug in `YYYY-MM-DD-descriptive-slug` form
+- `outcome`
+- `tags`
+- `context_read`
+- `derived_from`
+- `#### What happened`
+- `#### Takeaways`
+
+Allowed `outcome` values:
+
+- `SUCCESS`
+- `FAIL`
+- `SURPRISE`
+- `PARTIAL`
+
+#### Decision entries
+
+Required:
+
+- slug in `YYYY-MM-DD-HHMM-descriptive-slug` form
+- `status`
+- `tags`
+- `context_read`
+- `supersedes`
+- `superseded_by`
+- `#### Context`
+- `#### Decision`
+- `#### Alternatives considered`
+- `#### Consequences`
+
+Allowed `status` values:
+
+- `accepted`
+- `deprecated`
+- `superseded`
+
+#### Insight entries
+
+Required:
+
+- slug in `YYYY-MM-DD-descriptive-slug` form
+- `type`
+- `confidence`
+- `episode_count`
+- `tags`
+- `derived_from`
+- `evidence`
+- `updated`
+- `#### Summary`
+- `#### When to apply`
+
+Allowed `type` values:
+
+- `concept`
+- `howto`
+
+Allowed `confidence` values:
+
+- `low`
+- `medium`
+- `high`
+
+### Lineage validation
+
+Errors:
+
+- `derived_from`, `supersedes`, and `superseded_by` must point to an existing slug or `—`.
+- Every slug listed in `evidence` must exist.
+- A Decision with `status: superseded` must have a non-empty `superseded_by`.
+- A new Decision that sets `supersedes` should point to a Decision entry, not another type.
+
+Warnings:
+
+- An Insight with `episode_count` that does not match the number of items in `evidence`.
+- An Episode that appears to reinforce an existing Insight but does not mention it.
+- A Context entry longer than a short paragraph; it may want to be an Episode instead.
+
+### Memory Index refresh rules
+
+The Memory Index is derived, not hand-authored. A refresh process should rebuild it from current MEMORY entries using these rules:
+
+- **Active decisions**: list Decisions with `status: accepted`
+- **High-confidence insights**: list Insights with `confidence: high`
+- **Open questions**: list unresolved questions explicitly mentioned in active Context or recent Episode/Decision content
+- **Last updated**: use the most recent entry date visible in any Memory section
+
+Refresh behavior:
+
+- Replace the entire Memory Index snapshot each time
+- Prefer links by slug, not by paraphrased title alone
+- If a category has no items, render `_(none yet)_`
+
+## Planned CLI
+
+Syntrace does not require a CLI to work, but a small CLI would reduce setup friction and make cross-tool workflows practical without changing the core one-file model.
+
+### Command surface
+
+`syntrace init`
+
+- Create a new `syntrace.md` from the canonical template
+- Optionally strip EXAMPLES for a clean project start
+
+`syntrace validate`
+
+- Run the validation rules above
+- Print errors and warnings separately
+- Exit non-zero on errors
+
+`syntrace search <query>`
+
+- Search slugs, tags, Memory Index, and entry bodies
+- Prefer exact and tag matches first; semantic search can remain optional later
+
+`syntrace import --from <source>`
+
+- Import from `claude`, `cursor`, or generic markdown instruction files
+- Convert imported material into draft Syntrace entries in the correct MEMORY sections
+- Never overwrite existing entries silently
+
+`syntrace export --to <target>`
+
+- Generate tool-native files for `claude`, `cursor`, or generic markdown views
+- Export only accepted Decisions and reusable Insights unless the user requests a fuller export
+
+`syntrace refresh-index`
+
+- Rebuild the Memory Index without changing any other entry bodies
+
+### Scope boundaries
+
+The first CLI should stay intentionally small:
+
+- no database
+- no mandatory background service
+- no proprietary sync layer
+- no requirement to stop using plain paste mode
+
+The CLI exists to support the file, not replace it.
+
 ## Architecture
 
 This section applies when using Syntrace with multi-agent workflows or IDE agents. If you're pasting into a plain LLM chat, the save protocol and entry formats above are all you need.
+
+Planning is optional, not mandatory. If a task is small, concrete, low-risk, and can be handled by one agent without meaningful ambiguity, skip the planning layer and let a Worker execute directly. Use a Planner when the task is multi-step, touches multiple systems, has real trade-offs, or could create irreversible mistakes if the agent guesses wrong. Rule of thumb: if the agent can clearly say "I know exactly what to do next" and the blast radius is small, execution is fine; if not, plan first.
 
 ### Agent roles
 

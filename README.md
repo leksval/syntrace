@@ -4,17 +4,39 @@
 
 # Syntrace
 
-**Persistent AI memory in a single file.** No database. No API keys. No dependencies. Just one markdown file that works with any LLM.
+**One memory file for every AI dev tool.** Portable. Local-first. No database. No API keys. Works with Cursor, Claude Code, ChatGPT, and anything that reads text.
+
+## The problem
+
+Your AI coding tools forget everything between sessions. Worse, each tool stores context differently:
+
+- Cursor uses `.cursor/rules/*.mdc`
+- Claude Code uses `CLAUDE.md`
+- ChatGPT needs you to paste context every time
+- Every other tool invents its own format
+
+You end up repeating yourself, maintaining parallel files, and losing knowledge when you switch tools.
 
 ## The idea
 
-`syntrace.md` works like a **genome**:
+`syntrace.md` is a single portable format that works like a **genome**:
 
-- **Replication machinery** — the spec at the bottom of the file. Constant. Tells the LLM how to read, write, and evolve the memory. Copy the file to a new project and this machinery bootstraps itself.
-- **Accumulated knowledge** — the memory sections at the top. Grows every session. Episodes, decisions, insights, context — each entry linked to its ancestors through lineage fields, like genes carrying their evolutionary history.
-- **Phenotype snapshot** — the Memory Index near the top. Auto-generated each save. Shows what's active, what's high-confidence, and what's unresolved right now.
+- **Replication machinery** -- the spec at the bottom of the file. Constant. Tells the LLM how to read, write, and evolve the memory. Copy the file to a new project and this machinery bootstraps itself.
+- **Accumulated knowledge** -- the memory sections at the top. Grows every session. Episodes, decisions, insights, context -- each entry linked to its ancestors through lineage fields, like genes carrying their evolutionary history.
+- **Phenotype snapshot** -- the Memory Index near the top. Auto-generated each save. Shows what's active, what's high-confidence, and what's unresolved right now.
 
 One file. One command. Copy it anywhere and it carries everything forward.
+
+## Who it's for
+
+Developers who use AI coding assistants and want:
+
+- **Memory that survives across sessions** without re-explaining your project every time
+- **One source of truth** instead of parallel `CLAUDE.md`, `.cursorrules`, and chat preambles
+- **Portable knowledge** that moves with your repo, not locked to one vendor
+- **Traceable decisions** with lineage and evidence, not scattered notes
+
+If you use any LLM for coding -- in a chat window, in an IDE, or through a CLI agent -- Syntrace works.
 
 ## How the file is laid out
 
@@ -22,13 +44,15 @@ One file. One command. Copy it anywhere and it carries everything forward.
 
 | Layer | What it is | Who reads it |
 |-------|------------|--------------|
-| **Top — cheat sheet + memory** | Compact rules + Memory Index + Context / Episodes / Decisions / Insights / Changelog. | You, every session. The LLM appends here. |
-| **Bottom — reference** | Full specification: save protocol, entry formats, lineage rules, tag canon, architecture, scaling. | The LLM when saving; you when learning or customizing. |
-| **Bottom — examples** | Sample entries with lineage fields populated. Delete in a fresh project or keep as a style guide. | You and the LLM as a pattern to imitate. |
+| **Top -- cheat sheet + memory** | Compact rules + Memory Index + Context / Episodes / Decisions / Insights / Changelog. | You, every session. The LLM appends here. |
+| **Bottom -- reference** | Full specification: save protocol, entry formats, lineage rules, tag canon, architecture, scaling. | The LLM when saving; you when learning or customizing. |
+| **Bottom -- examples** | Sample entries with lineage fields populated. Delete in a fresh project or keep as a style guide. | You and the LLM as a pattern to imitate. |
 
 You do **not** need to read the whole file to start. Paste the file, work, say `/syntrace`.
 
 ## How to use
+
+### No install (paste and go)
 
 1. Copy [`syntrace.md`](syntrace.md) into your project
 2. Paste its contents into any LLM -- ChatGPT, Claude, Cursor, Claude Code, Windsurf, anything that reads text
@@ -38,6 +62,18 @@ You do **not** need to read the whole file to start. Paste the file, work, say `
 6. Next session, paste it again. The LLM picks up where you left off.
 
 The LLM may ask 1-2 brief clarification questions before saving if the session scope or a key decision is ambiguous.
+
+### With the CLI (planned)
+
+```bash
+syntrace init                       # Create syntrace.md in current directory
+syntrace validate                   # Check entries for errors
+syntrace search "auth timeout"      # Find relevant entries
+syntrace import --from claude       # Import knowledge from CLAUDE.md
+syntrace export --to cursor         # Generate .cursor/rules/ files
+```
+
+The planned CLI, adapter mappings, and validation rules live in the `REFERENCE` block inside [`syntrace.md`](syntrace.md).
 
 ## What it captures
 
@@ -53,6 +89,19 @@ Every `/syntrace` evaluates the full session and writes what's appropriate:
 | **Changelog** | One-line session summaries |
 
 Entries carry **lineage metadata** -- `derived_from`, `evidence`, `supersedes`, `superseded_by` -- so knowledge evolution is traceable. Each entry's heading slug is its stable identifier, used for all cross-references.
+
+## Works with
+
+Syntrace is the canonical format. Import from and export to tool-native formats:
+
+| Tool | Import | Export | Notes |
+|------|--------|--------|-------|
+| **Claude Code** (`CLAUDE.md`) | yes | yes | Each `##` section maps to a Syntrace entry |
+| **Cursor** (`.cursor/rules/`) | yes | yes | Each `.mdc` file maps to a Syntrace entry |
+| **Plain LLM chat** | -- | -- | Paste the file directly, no adapter needed |
+| **Any markdown tool** | yes | yes | The file is standard markdown |
+
+See the interoperability section in [`syntrace.md`](syntrace.md) for the field-by-field translation rules.
 
 ## Two modes
 
