@@ -12,7 +12,8 @@
   <a href="https://github.com/leksval/syntrace"><img src="https://img.shields.io/badge/%E2%AD%90_Star_this_repo-black?style=for-the-badge" alt="Star this repo" /></a>&nbsp;
   <a href="#license"><img src="https://img.shields.io/badge/license-CC--BY%204.0-blue.svg?style=for-the-badge" alt="CC-BY 4.0 License" /></a>&nbsp;
   <img src="https://img.shields.io/badge/local--first-2f855a?style=for-the-badge" alt="Local first" />&nbsp;
-  <img src="https://img.shields.io/badge/just_markdown-brightgreen?style=for-the-badge" alt="Just Markdown" />
+  <img src="https://img.shields.io/badge/just_markdown-brightgreen?style=for-the-badge" alt="Just Markdown" />&nbsp;
+  <a href="https://raw.githubusercontent.com/leksval/syntrace/main/syntrace.md"><img src="https://img.shields.io/badge/Copy_Raw_Prompt-syntrace.md-ff6b6b?style=for-the-badge" alt="Copy raw prompt" /></a>
 </p>
 
 <p align="center">
@@ -29,21 +30,21 @@
 
 Syntrace is one markdown file that helps an LLM remember your project.
 
-- Put `syntrace.md` in your repo
-- Paste it into your LLM or let your IDE agent read it
-- Work normally
-- Say `/syntrace`
-- Save the updated file
-- Next session, use it again
+`Put it in the repo` -> `paste or let the agent read it` -> `work normally` -> `say /syntrace` -> `save the file` -> `reuse next session`
 
 What you get:
 
-- durable project memory
-- traceable decisions
-- reusable lessons
-- no database
-- no vendor lock-in
-- no API keys
+> **Durable memory**  
+> The project keeps context across sessions.
+>
+> **Traceable decisions**  
+> Choices stay linked to evidence and history.
+>
+> **Reusable lessons**  
+> Patterns and anti-patterns become easier to extract.
+>
+> **Low overhead**  
+> No database, no vendor lock-in, no API keys.
 
 If your team uses AI coding tools and keeps re-explaining the same project context, this is for you.
 
@@ -68,14 +69,21 @@ Syntrace gives the project one durable file that both humans and LLMs can reuse.
 5. Save the full updated file.
 6. Reuse it next session.
 
+Raw prompt: [open `syntrace.md` as raw markdown](https://raw.githubusercontent.com/leksval/syntrace/main/syntrace.md)
+
 What `/syntrace` saves:
 
-- an `Episode` for the session
-- a `Decision` if a real choice was made
-- an `Insight` if a reusable pattern emerged
-- a `Context` entry if a standalone observation matters
-- a `Changelog` line
-- a refreshed `Memory Index`
+> **Episode** if the session matters
+>
+> **Decision** if a real choice was made
+>
+> **Insight** if a reusable pattern emerged
+>
+> **Context** if a standalone observation matters
+>
+> **Changelog** line
+>
+> **Memory Index** refresh
 
 If needed and possible, the LLM should ask 2-3 brief clarification questions before saving. That usually improves the final lesson quality because the saved entries become more precise and more reusable.
 
@@ -85,9 +93,14 @@ If needed and possible, the LLM should ask 2-3 brief clarification questions bef
 
 [`syntrace.md`](syntrace.md) has three layers:
 
-- **Cheat sheet**: short rules for the LLM before each save
-- **Reference + examples**: the full spec
-- **History**: the append-only memory your project keeps growing
+> **Cheat sheet**  
+> Short rules for the LLM before each save.
+>
+> **Reference + examples**  
+> The full spec.
+>
+> **History**  
+> The append-only memory your project keeps growing.
 
 You do **not** need to read the whole file to start. Paste the file, work, say `/syntrace`.
 
@@ -101,21 +114,13 @@ You can also use `syntrace.md` as a read-only memory source to generate reusable
 
 Use this when you want:
 
-- patterns
-- anti-patterns
-- durable decisions
-- evidence-backed lessons
-- next changes without rereading every old chat
+`patterns` · `anti-patterns` · `durable decisions` · `evidence-backed lessons` · `next changes without rereading old chats`
 
 If the scope is fuzzy, let the agent ask a few clarification questions first. That usually improves lesson quality a lot.
 
 ### Best inputs
 
-- prefer the local `syntrace.md`
-- otherwise use a raw GitHub markdown URL
-- if neither is available, paste the file into chat
-- if possible, also check relevant git history
-- run this after each chat, or every couple of chats at most
+Best order: local `syntrace.md` first, raw GitHub markdown URL second, pasted markdown if needed. If possible, also check relevant git history. Run this after each chat, or every couple of chats at most.
 
 ### Cursor prompt
 
@@ -170,10 +175,13 @@ Action items, experiments, reusable rules, and revisit triggers.
 
 Why this works:
 
-- `Insights` hold distilled lessons
-- `Decisions` hold durable rationale
-- `Episodes` and `Context` hold evidence
-- git history can confirm what changed over time
+> **`Insights`** hold distilled lessons.
+>
+> **`Decisions`** hold durable rationale.
+>
+> **`Episodes` + `Context`** hold evidence.
+>
+> **Git history** can confirm what actually changed over time.
 
 Do not be afraid to customize the wording, tags, and examples to fit your codebase. Fork it, rename sections if needed, change the tag canon, trim parts you do not use, and adapt the prompts to your workflow. The better Syntrace matches your real project language, the better the extracted lessons tend to be.
 
@@ -183,12 +191,23 @@ Do not be afraid to customize the wording, tags, and examples to fit your codeba
 
 Every `/syntrace` evaluates the full session and writes what's appropriate:
 
-- **Memory Index**: snapshot of active decisions, high-confidence insights, and open questions
-- **Context**: quick observations and gotchas
-- **Episodes**: structured work logs with outcomes and takeaways
-- **Decisions**: architecture choices with rationale and tradeoffs
-- **Insights**: reusable patterns with confidence and evidence
-- **Changelog**: one-line session summaries
+> **Memory Index**  
+> Snapshot of active decisions, high-confidence insights, and open questions.
+>
+> **Context**  
+> Quick observations and gotchas.
+>
+> **Episodes**  
+> Structured work logs with outcomes and takeaways.
+>
+> **Decisions**  
+> Architecture choices with rationale and tradeoffs.
+>
+> **Insights**  
+> Reusable patterns with confidence and evidence.
+>
+> **Changelog**  
+> One-line session summaries.
 
 Entries carry **lineage metadata** -- `derived_from`, `evidence`, `supersedes`, `superseded_by` -- so knowledge evolution is traceable. Each entry's heading slug is its stable identifier, used for all cross-references.
 
@@ -198,10 +217,17 @@ Entries carry **lineage metadata** -- `derived_from`, `evidence`, `supersedes`, 
 
 Syntrace is the canonical format. It can import from and export to tool-native formats:
 
-- **Claude Code** (`CLAUDE.md`): import + export
-- **Cursor** (`.cursor/rules/`): import + export
-- **Plain LLM chat**: paste the file directly
-- **Any markdown tool**: standard markdown in, standard markdown out
+> **Claude Code** (`CLAUDE.md`)  
+> Import + export.
+>
+> **Cursor** (`.cursor/rules/`)  
+> Import + export.
+>
+> **Plain LLM chat**  
+> Paste the file directly.
+>
+> **Any markdown tool**  
+> Standard markdown in, standard markdown out.
 
 See the interoperability section in [`syntrace.md`](syntrace.md) for the field-by-field translation rules.
 
@@ -209,8 +235,11 @@ See the interoperability section in [`syntrace.md`](syntrace.md) for the field-b
 
 ## Two modes
 
-- **Paste mode**: copy the file into a plain LLM chat. Paste relevant project files alongside it.
-- **Workspace mode**: use it inside an IDE agent. The agent can read neighboring files and write richer entries.
+> **Paste mode**  
+> Copy the file into a plain LLM chat. Paste relevant project files alongside it.
+>
+> **Workspace mode**  
+> Use it inside an IDE agent. The agent can read neighboring files and write richer entries.
 
 Same file, same spec. Works both ways.
 
@@ -257,9 +286,11 @@ cp syntrace.md your-project/syntrace.md
 
 Optional:
 
-- delete the **EXAMPLES** block for a clean slate
-- keep the **REFERENCE** block
-- fork and customize the wording whenever the default spec feels too generic
+> Delete the **EXAMPLES** block for a clean slate.
+>
+> Keep the **REFERENCE** block.
+>
+> Fork and customize the wording whenever the default spec feels too generic.
 
 One file. One command. Paste and go.
 
