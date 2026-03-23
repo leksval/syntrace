@@ -31,6 +31,7 @@ Hard boundaries. No exceptions.
 - **Do not skip required metadata**: every entry must include the required fields for its type, and required lineage fields must be filled with a real slug or `--` where allowed.
 - **Do not invent slugs**: `derived_from`, `supersedes`, and `evidence` must point to real existing slugs or `--`.
 - **Do not hallucinate file reads**: only list files in `context_read` that were actually consulted.
+- **Do not record Syntrace itself as a lesson**: never create entries about the act of using, saving, or editing Syntrace. The protocol is the tool, not the subject. Only record the substantive work and knowledge from the session.
 - **Scope boundary**: Syntrace records what happened and what was learned. It is not a task manager, backlog, or to-do list.
 
 ---
@@ -279,6 +280,9 @@ Events become meaningful only retrospectively. Syntrace extraction is an act of 
 
 **8. Falsifiability as quality filter** (Karl Popper, 1959)
 An Insight that cannot be contradicted by future evidence is unfalsifiable — and therefore useless for learning. "Always use best practices" teaches nothing. "Exponential backoff with jitter reduces timeout failures by ~50-70% on intermittent upstream errors" can be confirmed, refined, or killed. Frame Insights so that future episodes can change your confidence.
+
+**Meta-insight: extraction value is proportional to friction applied.**
+Every principle above adds a form of productive resistance: forcing causal articulation instead of summary (Roediger, Bjork), questioning the system instead of the symptom (Argyris), demanding falsifiable precision instead of vague truisms (Popper), admitting uncertainty instead of rationalizing (Weick), interrogating experience instead of narrating it (Schön). This is not a coincidence — it is Bjork's "desirable difficulties" operating at the knowledge-management level. Easy extraction ("we did X, it worked") produces entries nobody will ever act on. The friction of proper interrogation — *why did it work? what assumption held? when would it fail?* — is the mechanism that converts raw experience into transferable knowledge. If writing an entry feels effortless, it is almost certainly too shallow.
 
 #### Extraction checklist
 
@@ -537,37 +541,17 @@ When debugging production issues that "should work," check whether any config va
 
 Auto-refreshed snapshot. Do not edit manually -- `/syntrace` regenerates this.
 
-**Active decisions**: _(none yet)_
-**High-confidence insights**: _(none yet)_
-**Open questions**: _(none yet)_
-**Last updated**: _(none yet)_
+**Active decisions**:
+**High-confidence insights**: 
+**Open questions**: 
+**Last updated**: 
 
 ## Context
 
-Low-friction captures. The inbox.
-
-_Add entries below._
-
 ## Episodes
-
-Structured work logs after significant sessions.
-
-_Add entries below._
 
 ## Decisions
 
-Architecture and design choices with rationale.
-
-_Add entries below._
-
 ## Insights
 
-Distilled, reusable patterns.
-
-_Add entries below._
-
 ## Changelog
-
-_Add one-line session summaries below._
-
-_Session saves are separated with `---` here in Changelog only._
