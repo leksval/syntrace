@@ -7,8 +7,8 @@
 ## Cheat sheet
 
 - **Output rule**: when triggered, output the **COMPLETE file** as a single markdown code block. Never output only the new entry.
-- **Where to write**: append new entries **only** under the six MEMORY sections at the **end of this file** (Memory Index → Changelog). Do **not** modify **REFERENCE** or **EXAMPLES**.
-- **Separator rule**: separate each session save in the history block with a horizontal rule: `---`
+- **Where to write**: append new entries **only** under the six MEMORY sections at the **end of this file** (Memory Index → Changelog). Do **not** modify **REFERENCE** or **EXAMPLES**, except for in-place updates to the Tag Canon table.
+- **Separator rule**: separate each session save in the **Changelog only** with a horizontal rule: `---`. Do not add session separators inside Context, Episodes, Decisions, or Insights.
 - **Read before you write**: scan existing Memory sections; update Insights instead of duplicating; link `supersedes` on decisions when superseding; back-link `superseded_by` on the old entry.
 - **Trigger**: `/syntrace` -- always-full save. Append Episode + Decision (if applicable) + Insight (if a pattern emerged) + Context (if a standalone observation) + Changelog line. Refresh Memory Index.
 - **Clarification**: the LLM may ask 1-2 questions before saving if the session scope or a key decision is ambiguous. Otherwise, save without asking.
@@ -21,11 +21,11 @@
 Hard boundaries. No exceptions.
 
 - **Do not fabricate entries**: never invent episodes, decisions, or context that didn't happen in the session.
-- **Do not modify REFERENCE**: the spec is immutable between explicit version bumps.
+- **Do not modify REFERENCE**: the spec is immutable between explicit version bumps, except for the Tag Canon table, which is project state and may be updated in place.
 - **Do not merge or delete history entries**: entries are append-only. Use supersession and distillation, not editing or removal.
 - **Do not output partial files**: always output the **COMPLETE file**. Partial outputs cause data loss.
 - **Do not persist secrets**: omit API keys, tokens, passwords, PII -- no exceptions.
-- **Do not skip lineage**: every entry must have `derived_from` and `context_read` filled, even if the value is `--`.
+- **Do not skip required metadata**: every entry must include the required fields for its type, and required lineage fields must be filled with a real slug or `--` where allowed.
 - **Do not invent slugs**: `derived_from`, `supersedes`, and `evidence` must point to real existing slugs or `--`.
 - **Do not hallucinate file reads**: only list files in `context_read` that were actually consulted.
 - **Scope boundary**: Syntrace records what happened and what was learned. It is not a task manager, backlog, or to-do list.
@@ -45,9 +45,9 @@ Hard boundaries. No exceptions.
 
 Three layers in one file: **Cheat sheet** (operating rules), **Reference** (stable protocol, schemas, examples -- never append history here), and **History** (append-only memory: Memory Index, Context, Episodes, Decisions, Insights, Changelog).
 
-**Context rule**: any files pasted alongside this one or present in the workspace are additional context. Read them before writing entries. Record what you consulted in `context_read` (source files, docs, tickets, specs, prior entries, logs, diffs). Do **not** treat agent transcripts or chat history as project history. Works in two modes:
-- **Paste mode** (plain LLM chat): user pastes this file + project files. Read everything, work, append.
-- **Workspace mode** (IDE agent): read neighboring project files directly. Scan before saving.
+**Context rule**: any files pasted alongside this one are additional context. In workspace mode, consult the neighboring project files, docs, diffs, logs, and prior entries that are relevant to the session before writing. Record what you actually consulted in `context_read` (source files, docs, tickets, specs, prior entries, logs, diffs). Do **not** treat agent transcripts or chat history as project history. Works in two modes:
+- **Paste mode** (plain LLM chat): user pastes this file + the relevant project files. Read the relevant source material, work, append.
+- **Workspace mode** (IDE agent): read the relevant neighboring project files directly before saving.
 
 ## Save protocol
 
@@ -56,10 +56,10 @@ One trigger. One procedure. Always full depth.
 **`/syntrace` step by step**:
 1. Review what happened this session
 2. If scope or a key decision is ambiguous, ask up to 2 clarification questions
-3. Scan existing Memory sections -- read before you write
+3. Scan the existing Memory sections and the session-relevant source material -- read before you write
 4. Append an Episode entry (outcome, takeaways, concrete details)
 5. If a design/architecture choice was made, append a Decision entry
-6. Check existing Insights -- update `confidence`, `episode_count`, `evidence` on reinforced ones; create new if a reusable pattern emerged
+6. Check existing Insights -- update `confidence`, `evidence_count`, `evidence` on reinforced ones; create new if a reusable pattern emerged
 7. If there is a standalone observation, append a Context entry
 8. Add a one-liner to Changelog
 9. Distillation: if 5+ Context entries have `status: active`, promote reusable patterns to Insights and mark promoted entries `status: distilled`
@@ -67,7 +67,7 @@ One trigger. One procedure. Always full depth.
 11. Scan the reflection checklist
 12. Output the **COMPLETE file** as a single markdown code block
 
-When done for the session: **commit code**, then **save memory**.
+When done for the session: if code changed and the user wants a commit, prefer **commit code**, then **save memory**. If there was no code change or no commit request, just save memory.
 
 ## Writing quality
 
@@ -83,7 +83,7 @@ Write entries your future self can act on without re-reading the conversation.
 - Did a structural pattern prove useful or fragile?
 - Is there a spec-vs-implementation gap or a missing config causing silent degradation?
 - Is there unnecessary complexity? What would you reuse tomorrow?
-- Does an existing insight need its confidence or episode_count updated?
+- Does an existing insight need its confidence or evidence_count updated?
 - Was a decision made implicitly but never recorded?
 
 ## Entry formats
@@ -174,7 +174,7 @@ Distilled, reusable knowledge. The highest-value entry type. Each insight must b
 ### YYYY-MM-DD-slug
 - **type**: concept | howto
 - **confidence**: low | medium | high
-- **episode_count**: 1
+- **evidence_count**: 1
 - **tags**: tag1, tag2
 - **derived_from**: slug of the episode or context entry this originated from
 - **evidence**: slug1, slug2
@@ -189,16 +189,16 @@ Concrete trigger conditions -- not "when relevant" but "when you see
 X happening in context Y, do Z." Include counter-examples.
 ```
 
-**Type**: `concept` (mental model/principle) or `howto` (specific technique with steps). **Confidence**: `low` (observed once, hypothesis), `medium` (2-3 times or validated once), `high` (3+ times across contexts or benchmarked). `episode_count` tracks supporting episodes -- increment as confidence grows. "When to apply" must include counter-examples.
+**Type**: `concept` (mental model/principle) or `howto` (specific technique with steps). **Confidence**: `low` (observed once, hypothesis), `medium` (2-3 evidence points or validated once), `high` (3+ evidence points across contexts or benchmarked). `evidence_count` tracks the number of supporting slugs listed in `evidence`, regardless of entry type -- increment it whenever you add supporting evidence. "When to apply" must include counter-examples.
 
 ## Lineage rules
 
 Entries are append-only. These rules ensure traceable knowledge evolution:
 
-1. **Immutability**: slug and body are permanent once written. Only these fields may be updated in place: `status`, `superseded_by`, `confidence`, `episode_count`, `evidence`, `updated`.
+1. **Immutability**: slug and body are permanent once written. Only these fields may be updated in place: `status`, `superseded_by`, `confidence`, `evidence_count`, `evidence`, `updated`.
 2. **Supersession**: to reverse a Decision, write a new one with `supersedes` → old slug. Set the old one's `status` to `superseded` and add `superseded_by` → new slug. Never delete.
 3. **Derivation**: use `derived_from` to trace origin. An Insight from an Episode cites the episode slug; an Episode building on Context cites the context slug.
-4. **Evidence accumulation**: Insights list supporting entries in `evidence`. On reinforcement, add the episode slug and increment `episode_count`.
+4. **Evidence accumulation**: Insights list supporting entries in `evidence`. On reinforcement, add the supporting slug and increment `evidence_count`.
 5. **Distillation**: when 5+ Context entries have `status: active`, promote reusable patterns to Insights and mark sources `status: distilled`. Do not delete -- they remain for lineage.
 
 ## Auto-fill rules
@@ -213,7 +213,7 @@ Fill these automatically -- never ask the user for them:
 | **outcome** | Best match from SUCCESS / FAIL / SURPRISE / PARTIAL | `SURPRISE` |
 | **slug** | Descriptive, lowercase, hyphenated, no filler words | `fix-payment-timeout` not `todays-work` |
 | **status** | Default for entry type | Context: `active`, Decision: `accepted` |
-| **episode_count** | Start at 1 for new Insights | `1` |
+| **evidence_count** | Start at 1 for new Insights | `1` |
 | **updated** | Today's date when modifying an existing Insight | `2026-03-23` |
 | **derived_from** | Source entry slug when applicable | `2026-01-15-fix-payment-timeout` |
 | **superseded_by** | Auto-filled on old decision when a new one supersedes it | `2026-03-23-1400-switch-to-redis` |
@@ -309,10 +309,10 @@ A validator reports **errors** for broken invariants and **warnings** for qualit
 ### File-level invariants
 
 Errors:
-- The file must contain the six MEMORY sections in order: Memory Index, Context, Episodes, Decisions, Insights, Changelog
+- The HISTORY section must contain the six MEMORY sections in order: Memory Index, Context, Episodes, Decisions, Insights, Changelog
 - The file must retain the REFERENCE block
 - Entry headings must be unique across the file
-- New entries must appear only under MEMORY sections
+- New entries must appear only under MEMORY sections below the HISTORY marker
 
 Warnings: EXAMPLES block is optional but recommended. If the file grows beyond practical reading size, suggest splitting by domain.
 
@@ -323,7 +323,7 @@ Warnings: EXAMPLES block is optional but recommended. If the file grows beyond p
 | Context | `YYYY-MM-DD-slug` | `status`, `tags`, `context_read`, `derived_from`, non-empty body | -- | status: `active` / `distilled` |
 | Episode | `YYYY-MM-DD-slug` | `outcome`, `tags`, `context_read`, `derived_from` | What happened, Takeaways | outcome: `SUCCESS` / `FAIL` / `SURPRISE` / `PARTIAL` |
 | Decision | `YYYY-MM-DD-HHMM-slug` | `status`, `tags`, `context_read`, `supersedes`, `superseded_by` | Context, Decision, Alternatives considered, Consequences | status: `accepted` / `deprecated` / `superseded` |
-| Insight | `YYYY-MM-DD-slug` | `type`, `confidence`, `episode_count`, `tags`, `derived_from`, `evidence`, `updated` | Summary, When to apply | type: `concept` / `howto`; confidence: `low` / `medium` / `high` |
+| Insight | `YYYY-MM-DD-slug` | `type`, `confidence`, `evidence_count`, `tags`, `derived_from`, `evidence`, `updated` | Summary, When to apply | type: `concept` / `howto`; confidence: `low` / `medium` / `high` |
 
 ### Lineage validation
 
@@ -334,7 +334,7 @@ Errors:
 - `supersedes` must point to a Decision entry, not another type
 
 Warnings:
-- Insight `episode_count` does not match the length of `evidence`
+- Insight `evidence_count` does not match the length of `evidence`
 - An Episode reinforces an existing Insight but does not mention it
 - A Context entry longer than a short paragraph (may belong as an Episode)
 
@@ -378,7 +378,7 @@ The Critic applies these on every review. In single-agent mode, self-apply befor
 - [ ] No hallucinated tool outputs
 - [ ] Rationale present for non-obvious decisions
 - [ ] Connections to existing entries noted (reinforces, contradicts, supersedes)
-- [ ] Lineage fields populated (`derived_from`, `evidence`, `supersedes`)
+- [ ] Required lineage fields populated for the entry type (`derived_from`, `evidence`, `supersedes`, `superseded_by`)
 
 **Verdicts**: PASS (all checks pass), REVISE (minor issues, max 2 rounds), REJECT (invariant breach, missing rationale, wrong entry type).
 
@@ -473,7 +473,7 @@ Move to async processing: webhook handler writes to a queue (SQS), a separate wo
 
 - **type**: howto
 - **confidence**: medium
-- **episode_count**: 2
+- **evidence_count**: 2
 - **tags**: api, error-handling, performance
 - **derived_from**: 2026-01-15-fix-payment-timeout
 - **evidence**: 2026-01-15-fix-payment-timeout, 2026-01-10-auth-token-expiry-gotcha
@@ -490,8 +490,8 @@ When you see timeout or rate-limit errors on outbound HTTP calls, especially dur
 ### 2026-01-20-dev-defaults-leak-to-production
 
 - **type**: concept
-- **confidence**: low
-- **episode_count**: 2
+- **confidence**: medium
+- **evidence_count**: 2
 - **tags**: config, monitoring
 - **derived_from**: 2026-01-10-auth-token-expiry-gotcha
 - **evidence**: 2026-01-10-auth-token-expiry-gotcha, 2026-01-15-fix-payment-timeout
@@ -560,4 +560,4 @@ _Add entries below._
 
 _Add one-line session summaries below._
 
-_Session saves are separated with `---`._
+_Session saves are separated with `---` here in Changelog only._
