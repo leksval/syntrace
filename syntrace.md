@@ -253,6 +253,46 @@ The tag canon is project-specific. On the first `/syntrace` run for a new projec
 
 Lessons extraction uses the same default behavior as `/syntrace`. The live chat is the session evidence. Extract reusable knowledge, append it into the Memory sections, and output the complete file. Follow the save protocol above.
 
+#### Extraction reasoning model
+
+Surface-level extraction ("we did X, it worked") produces entries that decay into noise. Deep extraction converts raw experience into transferable knowledge. The following principles, grounded in cognitive science, guide what to extract and how:
+
+**1. Episodic → semantic crystallization** (Endel Tulving, 1972)
+Human memory transitions from episodic (event-bound: "what happened Tuesday") to semantic (general: "this pattern recurs"). Syntrace mirrors this: Context and Episodes capture episodic detail; Insights distill semantic knowledge. During extraction, actively ask: *what generalizes beyond this specific incident?* If nothing generalizes yet, a Context entry is honest. Premature generalization produces weak Insights.
+
+**2. Effortful retrieval over passive review** (Henry Roediger & Jeffrey Karpicke, 2006; Robert & Elizabeth Bjork, 1992)
+Actively generating takeaways — rather than summarizing what happened — strengthens durable knowledge. This is why the protocol demands *why* not *what*. When extracting, force yourself to articulate the causal mechanism ("the timeout was too low *because* dev defaults leaked") rather than the surface event ("we changed the timeout"). The effort of causal articulation is the point.
+
+**3. Double-loop over single-loop learning** (Chris Argyris, 1977)
+Single-loop: "the config was wrong, we fixed it." Double-loop: "our process doesn't catch dev defaults leaking to production — why?" Extract the systemic pattern, not just the fix. Every FAIL or SURPRISE episode should prompt: *what assumption was wrong, and is that assumption embedded elsewhere?*
+
+**4. Recognition-primed decision patterns** (Gary Klein, 1998)
+Experts don't analyze from scratch — they recognize situations from prior experience and apply learned patterns. Syntrace's Insight library is an explicit version of this. When extracting, frame Insights as recognition cues: "when you see X in context Y" maps directly to how pattern recognition fires in practice.
+
+**5. Pre-mortem and prospective hindsight** (Gary Klein, 2007; Deborah Mitchell et al., 1989)
+Imagining future failure surfaces risks that optimism obscures. For Decision entries, always populate "Risks" by asking: *assume this decision failed in six months — what went wrong?* This is not pessimism; prospective hindsight reliably uncovers threats that forward-looking analysis misses.
+
+**6. Reflective practice** (Donald Schön, 1983)
+Reflection-on-action (after the work) is what Syntrace captures. The key distinction: reflection is not narration. Narration replays events; reflection interrogates them. When writing "What happened," describe; when writing "Takeaways," interrogate. Ask: *what surprised me? What would I do differently? What did I assume that turned out wrong?*
+
+**7. Sensemaking under ambiguity** (Karl Weick, 1995)
+Events become meaningful only retrospectively. Syntrace extraction is an act of sensemaking — constructing a coherent narrative from messy experience. But beware post-hoc rationalization: if the real cause was unclear, say so. An honest "root cause uncertain, two hypotheses" is higher-signal than a fabricated clean narrative.
+
+**8. Falsifiability as quality filter** (Karl Popper, 1959)
+An Insight that cannot be contradicted by future evidence is unfalsifiable — and therefore useless for learning. "Always use best practices" teaches nothing. "Exponential backoff with jitter reduces timeout failures by ~50-70% on intermittent upstream errors" can be confirmed, refined, or killed. Frame Insights so that future episodes can change your confidence.
+
+#### Extraction checklist
+
+Apply after drafting entries, before final output:
+
+- [ ] **Causal depth**: did I capture *why*, not just *what*? (Roediger & Karpicke; Bjork)
+- [ ] **Assumption audit**: what belief was tested or broken? (Argyris)
+- [ ] **Generalization check**: does this generalize, or is it one-off? If one-off, Context is the right type. (Tulving)
+- [ ] **Recognition framing**: is the Insight framed as a recognizable trigger + action? (Klein)
+- [ ] **Falsifiability**: could future evidence change this Insight's confidence? (Popper)
+- [ ] **Honest ambiguity**: if the cause is uncertain, did I say so rather than fabricate a clean narrative? (Weick)
+- [ ] **Prospective failure**: for Decisions, did I imagine how this could fail in six months? (Klein)
+
 ### Adapter mappings
 
 #### Claude Code (`CLAUDE.md`)
