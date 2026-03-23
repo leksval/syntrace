@@ -16,94 +16,108 @@
 </p>
 
 <p align="center">
-  <a href="#the-problem">The Problem</a> ·
-  <a href="#the-idea">The Idea</a> ·
-  <a href="#how-to-use">How To Use</a> ·
+  <a href="#tldr">TL;DR</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#extract-lessons">Extract Lessons</a> ·
   <a href="#works-with">Works With</a> ·
   <a href="#get-started">Get Started</a>
 </p>
 
 ---
 
-## The problem
+## TL;DR
 
-Project history gets lost more easily than it should. Decisions, debugging lessons, and hard-won patterns end up scattered across chats, commits, docs, and half-remembered conversations.
+Syntrace is one markdown file that helps an LLM remember your project.
 
-Syntrace fixes that by giving the project one durable, portable history file that can be read by humans and LLMs alike.
+- Put `syntrace.md` in your repo
+- Paste it into your LLM or let your IDE agent read it
+- Work normally
+- Say `/syntrace`
+- Save the updated file
+- Next session, use it again
 
----
+What you get:
 
-## The idea
+- durable project memory
+- traceable decisions
+- reusable lessons
+- no database
+- no vendor lock-in
+- no API keys
 
-Syntrace — **syn**aptic **trace** — is a single portable format that works like a **genome**:
+If your team uses AI coding tools and keeps re-explaining the same project context, this is for you.
 
-- **Replication machinery** -- the cheat sheet and reference sections at the top and middle of the file. Constant. They tell the LLM how to read, write, and evolve the memory.
-- **Accumulated knowledge** -- the history sections at the end of the file. They grow every session. Episodes, decisions, insights, context -- each entry linked to its ancestors through lineage fields, like genes carrying their evolutionary history.
-- **Phenotype snapshot** -- the Memory Index inside the history block. Auto-generated each save. Shows what's active, what's high-confidence, and what's unresolved right now.
-
-One file. One command. Copy it anywhere and it carries everything forward.
-
----
-
-## Who it's for
-
-Developers who use AI coding assistants and want:
-
-- **Memory that survives across sessions** without re-explaining your project every time
-- **One source of truth** for project history instead of scattered notes and chat preambles
-- **Portable knowledge** that moves with your repo, not locked to one vendor
-- **Traceable decisions** with lineage and evidence, not scattered notes
-
-If you use any LLM for coding -- in a chat window or in an IDE -- Syntrace works.
+You are encouraged to fork this repo and adjust the format for your own team, stack, and workflow.
 
 ---
 
-## How the file is laid out
+## Why people use it
 
-[`syntrace.md`](syntrace.md) is three layers in one file:
+Project history gets lost fast. Decisions, debugging lessons, and hard-won patterns end up scattered across chats, commits, docs, and memory.
 
-| Layer | What it is | Who reads it |
-|-------|------------|--------------|
-| **Top -- cheat sheet** | Compact operating rules for saving and updating the file. | You and the LLM before each save. |
-| **Middle -- reference + examples** | Full specification: save protocol, entry formats, lineage rules, tag canon, architecture, scaling, plus examples. | The LLM when saving; you when learning or customizing. |
-| **Bottom -- history** | Memory Index + Context / Episodes / Decisions / Insights / Changelog. This is the append-only project history. | You, every session. The LLM appends here. |
+Syntrace gives the project one durable file that both humans and LLMs can reuse.
+
+---
+
+## Quick start
+
+1. Copy [`syntrace.md`](syntrace.md) into your project.
+2. Paste it into any LLM, or let your IDE agent read it.
+3. Work normally.
+4. Say `/syntrace` when done.
+5. Save the full updated file.
+6. Reuse it next session.
+
+What `/syntrace` saves:
+
+- an `Episode` for the session
+- a `Decision` if a real choice was made
+- an `Insight` if a reusable pattern emerged
+- a `Context` entry if a standalone observation matters
+- a `Changelog` line
+- a refreshed `Memory Index`
+
+If needed and possible, the LLM should ask 2-3 brief clarification questions before saving. That usually improves the final lesson quality because the saved entries become more precise and more reusable.
+
+---
+
+## What the file contains
+
+[`syntrace.md`](syntrace.md) has three layers:
+
+- **Cheat sheet**: short rules for the LLM before each save
+- **Reference + examples**: the full spec
+- **History**: the append-only memory your project keeps growing
 
 You do **not** need to read the whole file to start. Paste the file, work, say `/syntrace`.
 
-As you get comfortable with it, customize the reference and tag canon for your project's actual domains, constraints, and workflows. Syntrace works best when the spec sounds like your team.
+As you get comfortable with it, customize the reference, tags, and examples so they match your team's actual language and workflows. Forking and tailoring Syntrace is a feature, not misuse.
 
 ---
 
-## How to use
+## Extract lessons
 
-### No install (paste and go)
+You can also use `syntrace.md` as a read-only memory source to generate reusable lessons from previous AI-assisted work.
 
-1. Copy [`syntrace.md`](syntrace.md) into your project
-2. Paste its contents into any LLM -- ChatGPT, Claude, Cursor, Claude Code, Windsurf, anything that reads text
-3. Work normally
-4. Say `/syntrace` when done -- the LLM outputs the **complete** file with your session appended (Episode + Decision if applicable + Insight if a pattern emerged + Context if a standalone observation + Changelog line + refreshed Memory Index)
-5. Save it, replacing the old version
-6. Next session, paste it again. The LLM picks up where you left off.
+Use this when you want:
 
-If needed and possible, the LLM should ask 2-3 brief clarification questions before saving when the session scope, a key decision, or the intended takeaway is ambiguous. Those questions usually improve the quality of the saved lesson output by making the resulting entries more precise, more reusable, and easier to retrieve later.
+- patterns
+- anti-patterns
+- durable decisions
+- evidence-backed lessons
+- next changes without rereading every old chat
 
----
+If the scope is fuzzy, let the agent ask a few clarification questions first. That usually improves lesson quality a lot.
 
-## Generate lessons from Syntrace
+### Best inputs
 
-You can also use `syntrace.md` as a **read-only memory source** to ask Cursor for reusable lessons from prior LLM-assisted work. The agent should synthesize from the current project chat, actual code or doc changes, and the durable memory already stored in Syntrace.
-If the scope is fuzzy, letting the agent ask a few clarification questions first usually improves lesson quality significantly: better framing, less vague evidence, and sharper next-step guidance.
-When you want to save the result, the agent should return an **append-only markdown block** to place at the end of your destination file rather than rewriting the whole file.
+- prefer the local `syntrace.md`
+- otherwise use a raw GitHub markdown URL
+- if neither is available, paste the file into chat
+- if possible, also check relevant git history
+- run this after each chat, or every couple of chats at most
 
-Best markdown-only workflow:
-
-- Prefer the local `syntrace.md` in the current workspace
-- Fall back to a raw GitHub markdown URL when you want to reuse memory across repos
-- If neither is accessible, paste the markdown contents into chat
-- If possible, also check relevant git history for the files, decisions, or changes involved
-- Run this after each chat, or at most every couple of sessions, so the source stays distilled and does not bloat the next prompt's context window
-
-Use this prompt in Cursor:
+### Cursor prompt
 
 ```md
 Extract the highest-signal reusable knowledge from this project's chat history and actual changes, using Syntrace as the durable memory source.
@@ -154,9 +168,14 @@ The distilled reusable knowledge: patterns, anti-patterns, stable lessons, tenta
 Action items, experiments, reusable rules, and revisit triggers.
 ```
 
-This works well because Syntrace already separates durable patterns from raw session history: `Insights` hold distilled lessons, `Decisions` capture durable rationale, and `Episodes` / `Context` supply evidence. The agent should combine that durable memory with the current project chat, actual session changes, and, when available, relevant git history, then return only the block to append. Ideally run this after each chat, or every few chats at most, so the memory stays compact and future prompts do not get bloated by long unresolved session history.
+Why this works:
 
-Do not be afraid to customize the wording, tags, and examples to fit your codebase. The better Syntrace reflects your real project language, the better the extracted lessons tend to be.
+- `Insights` hold distilled lessons
+- `Decisions` hold durable rationale
+- `Episodes` and `Context` hold evidence
+- git history can confirm what changed over time
+
+Do not be afraid to customize the wording, tags, and examples to fit your codebase. Fork it, rename sections if needed, change the tag canon, trim parts you do not use, and adapt the prompts to your workflow. The better Syntrace matches your real project language, the better the extracted lessons tend to be.
 
 ---
 
@@ -164,14 +183,12 @@ Do not be afraid to customize the wording, tags, and examples to fit your codeba
 
 Every `/syntrace` evaluates the full session and writes what's appropriate:
 
-| Section | What goes here |
-|---------|---------------|
-| **Memory Index** | Auto-generated snapshot: active decisions, high-confidence insights, open questions |
-| **Context** | Quick observations, gotchas, things worth remembering |
-| **Episodes** | Structured work logs with outcomes and takeaways |
-| **Decisions** | Architecture choices with rationale, alternatives, and consequences |
-| **Insights** | Distilled reusable patterns with confidence levels and evidence trails |
-| **Changelog** | One-line session summaries |
+- **Memory Index**: snapshot of active decisions, high-confidence insights, and open questions
+- **Context**: quick observations and gotchas
+- **Episodes**: structured work logs with outcomes and takeaways
+- **Decisions**: architecture choices with rationale and tradeoffs
+- **Insights**: reusable patterns with confidence and evidence
+- **Changelog**: one-line session summaries
 
 Entries carry **lineage metadata** -- `derived_from`, `evidence`, `supersedes`, `superseded_by` -- so knowledge evolution is traceable. Each entry's heading slug is its stable identifier, used for all cross-references.
 
@@ -179,14 +196,12 @@ Entries carry **lineage metadata** -- `derived_from`, `evidence`, `supersedes`, 
 
 ## Works with
 
-Syntrace is the canonical format. Import from and export to tool-native formats:
+Syntrace is the canonical format. It can import from and export to tool-native formats:
 
-| Tool | Import | Export | Notes |
-|------|--------|--------|-------|
-| **Claude Code** (`CLAUDE.md`) | yes | yes | Each `##` section maps to a Syntrace entry |
-| **Cursor** (`.cursor/rules/`) | yes | yes | Each `.mdc` file maps to a Syntrace entry |
-| **Plain LLM chat** | -- | -- | Paste the file directly, no adapter needed |
-| **Any markdown tool** | yes | yes | The file is standard markdown |
+- **Claude Code** (`CLAUDE.md`): import + export
+- **Cursor** (`.cursor/rules/`): import + export
+- **Plain LLM chat**: paste the file directly
+- **Any markdown tool**: standard markdown in, standard markdown out
 
 See the interoperability section in [`syntrace.md`](syntrace.md) for the field-by-field translation rules.
 
@@ -194,9 +209,8 @@ See the interoperability section in [`syntrace.md`](syntrace.md) for the field-b
 
 ## Two modes
 
-**Paste mode** -- copy the file into a plain LLM chat (ChatGPT, Claude). Paste any relevant project files alongside it. Work. Save the output.
-
-**Workspace mode** -- use inside an IDE agent (Cursor, Claude Code, Windsurf). The agent reads neighboring files automatically and writes richer, more connected entries.
+- **Paste mode**: copy the file into a plain LLM chat. Paste relevant project files alongside it.
+- **Workspace mode**: use it inside an IDE agent. The agent can read neighboring files and write richer entries.
 
 Same file, same spec. Works both ways.
 
@@ -206,7 +220,7 @@ Same file, same spec. Works both ways.
 
 After three sessions, the memory half of your file might look like:
 
-```
+```md
 ## Insights
 
 ### 2026-01-15-exponential-backoff-with-jitter
@@ -241,7 +255,11 @@ Copy the file:
 cp syntrace.md your-project/syntrace.md
 ```
 
-Optional: delete the **EXAMPLES** block at the bottom of `syntrace.md` for a clean slate -- the **REFERENCE** block stays; it is the replication machinery.
+Optional:
+
+- delete the **EXAMPLES** block for a clean slate
+- keep the **REFERENCE** block
+- fork and customize the wording whenever the default spec feels too generic
 
 One file. One command. Paste and go.
 
@@ -249,4 +267,4 @@ One file. One command. Paste and go.
 
 ## License
 
-[CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) -- use it, remix it, share it. Just give credit.
+[CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) -- use it, fork it, remix it, share it. Just give credit.
