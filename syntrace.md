@@ -1,6 +1,6 @@
 # Syntrace
 
-> Paste this file into any LLM. Work. Say `/syntrace` when done. The LLM outputs the updated file with your session appended. It can also extract reusable lessons from the memory already stored here and, if the system can safely return the full updated file, append those lessons back into Syntrace. Save it. Paste it next time. Your memory grows.
+> Paste this file into any LLM. `/syntrace` is only the explicit shorthand: the default behavior should be the same after paste. Infer intent, update Syntrace when safe, and extract reusable lessons when relevant. If the system can safely return the full updated file, save the result back into Syntrace. If not, return the lessons in chat only. Save it. Paste it next time. Your memory grows.
 
 ---
 
@@ -10,8 +10,8 @@
 - **Where to write**: append new entries **only** under the six MEMORY sections at the **end of this file** (Memory Index → Changelog). Do **not** modify **REFERENCE** or **EXAMPLES**, except for in-place updates to the Tag Canon table.
 - **Separator rule**: separate each session save in the **Changelog only** with a horizontal rule: `---`. Do not add session separators inside Context, Episodes, Decisions, or Insights.
 - **Read before you write**: scan existing Memory sections; update Insights instead of duplicating; link `supersedes` on decisions when superseding; back-link `superseded_by` on the old entry.
-- **Trigger**: `/syntrace` -- always-full save. Append Episode + Decision (if applicable) + Insight (if a pattern emerged) + Context (if a standalone observation) + Changelog line. Refresh Memory Index.
-- **Default intent handling**: if the user asks for lessons, reusable rules, guidance, patterns, anti-patterns, or "what have we learned?", extract knowledge from Syntrace first. If they want the lessons saved and the system can safely output the full updated file, append the distilled knowledge back into the Memory sections and regenerate the complete file. Otherwise return an append-only markdown block to paste into the file manually.
+- **Trigger**: `/syntrace` is the explicit shorthand, but not a separate mode. After this file is pasted, use the same save protocol whenever the user is clearly asking to update memory, capture what was learned, or extract reusable lessons.
+- **Default intent handling**: infer whether the user wants a session save, lesson extraction, or both. When safe, prefer returning the **COMPLETE updated file** with the distilled knowledge saved into Syntrace. If full-file rewriting is not safe in the current system, return only the in-chat lessons or guidance instead of a partial file.
 - **Clarification**: if needed and possible, the LLM should ask **2-3 clarification questions** before saving when the session scope, key decision, or intended takeaway is ambiguous. If the session is already clear, save without asking.
 - **Privacy**: never persist secrets, API keys, passwords, or PII in entries. Omit or redact.
 
@@ -59,17 +59,19 @@ When this file is pasted into chat, your default behavior is:
 
 1. Read the cheat sheet and reference before writing anything back.
 2. Infer the user's likely intent from the latest request.
-3. If the user is working normally and later says `/syntrace`, update the Memory sections and return the **COMPLETE file**.
-4. If the user asks for lessons, patterns, anti-patterns, reusable rules, guidance, or "what have we learned?", extract the highest-signal reusable knowledge from Syntrace plus the current session context.
-5. If the user wants those lessons saved and you can safely return the full updated file, append the distilled knowledge into the appropriate Memory sections and output the **COMPLETE file**.
-6. If full-file rewriting is not safe or not possible in the current system, return an append-only markdown block for manual insertion.
-7. If the user's intent is ambiguous, ask 2-3 brief clarification questions before writing.
+3. Treat `/syntrace` as an explicit shortcut for the same default behavior, not as a separate workflow.
+4. If the user is asking to save memory, capture what happened this session and update the Memory sections.
+5. If the user is asking for lessons, patterns, anti-patterns, reusable rules, guidance, or "what have we learned?", extract the highest-signal reusable knowledge from Syntrace plus the current session context.
+6. If both apply, do both in one pass: distill the lessons and save them into the appropriate Memory sections.
+7. When you can safely return the full updated file, output the **COMPLETE file**.
+8. If full-file rewriting is not safe or not possible in the current system, return only the in-chat lessons or guidance. Do not output a partial file.
+9. If the user's intent is ambiguous, ask 2-3 brief clarification questions before writing.
 
 ## Save protocol
 
 One trigger. One procedure. Always full depth.
 
-**`/syntrace` step by step**:
+**Unified save step by step** (`/syntrace` or equivalent clear intent after paste):
 
 1. Review what happened this session
 2. If needed and possible, ask **2-3 clarification questions** when the session scope, a key decision, or the intended takeaway is ambiguous. If the session is already clear, do not ask unnecessary questions.
@@ -82,7 +84,8 @@ One trigger. One procedure. Always full depth.
 9. Distillation: if 5+ Context entries have `status: active`, promote reusable patterns to Insights and mark promoted entries `status: distilled`
 10. Refresh Memory Index: active decisions, high-confidence insights, open questions, most recent entry date
 11. Scan the reflection checklist
-12. Output the **COMPLETE file** as a single markdown code block
+12. If full-file output is safe, output the **COMPLETE file** as a single markdown code block
+13. If full-file output is not safe, return only the in-chat lessons, guidance, or summary requested
 
 When done for the session: if code changed and the user wants a commit, prefer **commit code**, then **save memory**. If there was no code change or no commit request, just save memory.
 
@@ -97,6 +100,7 @@ Write entries your future self can act on without re-reading the conversation.
 **Insight quality**: each insight must be **retrievable** (good tags + title), **actionable** (concrete trigger, not "when relevant"), and **falsifiable** (future evidence could upgrade or kill it). Prefer one sharp insight over three vague ones.
 
 **Reflection checklist** (scan after every save):
+
 - Did a structural pattern prove useful or fragile?
 - Is there a spec-vs-implementation gap or a missing config causing silent degradation?
 - Is there unnecessary complexity? What would you reuse tomorrow?
@@ -257,7 +261,7 @@ The tag canon is project-specific. On the first `/syntrace` run for a new projec
 
 ### Lessons extraction
 
-When a user asks for lessons, guidance, reusable rules, or "what have we learned?", use Syntrace as the durable memory source for extraction. Default to analysis first, then, if the user wants the result saved and the system can safely return the full updated file, append the distilled knowledge back into Syntrace. If the system cannot safely rewrite the full file, return an append-only markdown block for manual insertion.
+When a user asks for lessons, guidance, reusable rules, or "what have we learned?", use Syntrace as the durable memory source for extraction as part of the same default behavior used by `/syntrace`. Do not split this into a separate mode. If the system can safely return the full updated file, append the distilled knowledge back into Syntrace. If it cannot safely rewrite the full file, return only the in-chat lessons or guidance.
 
 **Goal**:
 
@@ -289,9 +293,9 @@ Extract the highest-signal reusable knowledge from the current project chat and 
 - In **Lessons**, include the distilled reusable knowledge: patterns, anti-patterns, stable lessons, tentative insights, and open questions.
 - In **Next Changes**, include action items, experiments, reusable rules, and revisit triggers.
 - Output either:
-  1. the **COMPLETE updated Syntrace file** when the system can safely return full-file output and the user wants the lessons saved, or
-  2. a concise **append-only markdown block** for manual insertion when full-file rewriting is not reliable.
-- During lessons extraction, do not silently rewrite history. Only append distilled knowledge when the user asked for a save, an update, or a reusable memory artifact.
+  1. the **COMPLETE updated Syntrace file** when the system can safely return full-file output, or
+  2. only the in-chat lessons, guidance, or reusable rules when full-file rewriting is not reliable.
+- During lessons extraction, do not silently rewrite history. Append distilled knowledge only when a full-file save is possible and clearly intended.
 
 **Output contract**:
 
