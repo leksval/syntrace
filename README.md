@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="schema/syntrace.svg" alt="Syntrace" width="300" />
+  <img src="syntrace.svg" alt="Syntrace" width="300" />
 </p>
 
 <h1 align="center">Syntrace</h1>
@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="#why">Why</a> · <a href="#how-it-works">How It Works</a> · <a href="#get-started">Get Started</a> · <a href="#whats-inside">What's Inside</a> · <a href="#architecture">Architecture</a>
+  <a href="#why">Why</a> · <a href="#how-it-works">How It Works</a> · <a href="#get-started">Get Started</a> · <a href="#architecture">Architecture</a> · <a href="#agent-reference">Agent Reference</a>
 </p>
 
 ---
@@ -77,14 +77,14 @@ Agents read both layers before they act. They write back when they're done. The 
 cp -r syntrace/ your-project/
 ```
 
-**2. Tell your AI about it** (Cursor example - one time)
+**2. Tell your AI about it** (pick your platform)
 
-```bash
-mkdir -p .cursor/rules
-cp syntrace/cursor-rule.mdc .cursor/rules/syntrace.mdc
-```
+- **Cursor** -- `cp syntrace/cursor-rule.mdc .cursor/rules/syntrace.mdc`
+- **Claude Code** -- point it at `README.md`
+- **Windsurf** -- add `README.md` as workspace context
+- **Custom agents** -- have them read this file before acting, write to `memory/` after
 
-That's it. Your agent now has persistent memory. Three commands become available:
+Three commands become available:
 
 | Command | What happens |
 |---------|-------------|
@@ -92,66 +92,26 @@ That's it. Your agent now has persistent memory. Three commands become available
 | `/syntrace full` | Full save - structured episode, decision record, changelog |
 | `/distill` | Extract patterns - turns raw notes into reusable insights |
 
-<details>
-<summary><strong>What to customize first</strong></summary>
-
-1. **Define your agents** - edit files in `schema/agents/` to match your workflow.
-2. **Set your patterns** - add architectural patterns to `schema/patterns/`.
-3. **Log a decision** - write your first design decision in `memory/decisions/`.
-
-Each folder has a `_template.md` to get you started.
-
-</details>
-
-<details>
-<summary><strong>Works with other platforms too</strong></summary>
-
-Syntrace is just folders and markdown. Any AI that can read files can use it:
-
-- **Claude Code** - point it at `AGENTS.md`
-- **Windsurf** - add `AGENTS.md` as workspace context
-- **Custom agents** - have them read `schema/` before acting, write to `memory/` after
-- **Mobile tools** - edit markdown files from any device, sync via cloud storage
-
-No platform-specific setup required beyond telling the agent where to look.
-
-</details>
-
 ---
 
 ## What's Inside
 
 ```
 syntrace/
-│
-├── AGENTS.md               Entry point for AI agents - reads this first
-├── CHANGELOG.md             Project history, auto-appended by save protocol
-├── llms.txt                 Machine-readable project summary
-│
-├── schema/                  🔒 STABLE - your project's structure
-│   ├── agents/              Who does what (planner, worker, critic, librarian)
-│   ├── patterns/            How things are built (playbooks, workflows, scaling)
-│   ├── policies/            Quality standards and rules
-│   ├── tools.md             Tool definitions and contracts
-│   └── graph-schema.json    Node/edge types, validation rules, query recipes
-│
-└── memory/                  🔄 EVOLVING - your project's experience
-    ├── context/             Quick captures - default landing zone
+├── README.md               Single source of truth (this file)
+├── CHANGELOG.md             Project history, auto-appended
+└── memory/
+    ├── context/             Quick captures (default landing zone)
     ├── decisions/           Why you chose X over Y (ADR-style)
-    ├── episodes/            What happened - work logs, experiments, retros
+    ├── episodes/            What happened (work logs, experiments)
     └── insights/            Reusable lessons extracted from episodes
 ```
 
-**Schema** rarely changes - treat edits like architecture decisions (pair with a decision record).
-**Memory** changes every session - agents write here freely.
-
-Every subfolder includes a `_template.md` so you never start from a blank page.
+Templates are inline in the Frontmatter Schemas section below. Schema is guarded (changes need a decision record). Memory is open (agents write freely).
 
 ---
 
 ## Knowledge Flow
-
-Raw notes become insights. Stable insights become patterns. Nothing is lost.
 
 ```mermaid
 flowchart TD
@@ -171,15 +131,14 @@ flowchart TD
 <tr>
 <td width="50%" valign="top">
 
-### Agent model
+### Agent roles
 
-**Task execution** (planner-worker-critic cycle):
-- **Planner** -- decomposes goals, delegates, synthesizes
-- **Worker** -- executes one subtask using tools
-- **Critic** -- reviews output; PASS / REVISE / REJECT
-
-**Knowledge maintenance** (separate cadence):
-- **Librarian** -- distills notes into insights, proposes schema promotions
+| Role | Does | Invariants |
+|------|------|------------|
+| **Planner** | Decomposes goals, delegates, synthesizes | No irreversible actions without human OK. Log all decisions with rationale. |
+| **Worker** | Executes one subtask using tools | Never exceed assigned scope. On failure: return error + context, no silent retry. |
+| **Critic** | Reviews output; PASS / REVISE / REJECT | Never approve invariant violations. Critique must be specific. |
+| **Librarian** | Distills notes into insights, proposes schema promotions | Never modify schema/ directly. Tag insights with date, source, confidence. |
 
 New roles are added as specialized workers, not new top-level roles.
 
@@ -188,40 +147,210 @@ New roles are added as specialized workers, not new top-level roles.
 
 ### Design principles
 
-- **Zero dependencies** -- no database, no embeddings, no API keys. Copy and go.
-- **Platform-portable** -- works in Cursor, Claude Code, Windsurf, custom agents, mobile. Anything that reads files.
-- **Git-native** -- diff decisions, branch experiments, merge insights alongside code.
-- **Cloud-connected** -- link Figma, Notion, Drive, or any URL from frontmatter. Agents with web access follow them.
-- **Convention-enforced** -- the system trusts agents to follow specs. No runtime enforcement.
+- **Zero dependencies** -- no database, no embeddings, no API keys.
+- **Platform-portable** -- Cursor, Claude Code, Windsurf, custom agents, mobile.
+- **Git-native** -- diff decisions, branch experiments, merge insights.
+- **Cloud-connected** -- link Figma, Notion, Drive from frontmatter.
+- **Convention-enforced** -- trusts agents to follow specs.
 
 </td>
 </tr>
 </table>
 
-> [!NOTE]
-> **For AI agents**: read [`AGENTS.md`](AGENTS.md) for full orientation -- save protocol, frontmatter schemas, end-of-session checklist, and workspace conventions.
+### Planner-Worker-Critic cycle
+
+```
+[User/Goal] → [Planner] → subtask → [Worker] → result → [Critic]
+                  ↑                                         |
+                  +──── revised task ──── REVISE ───────────+
+                                            |
+                                          PASS → [Planner] → [Output]
+```
+
+- `max_revisions`: 2 (default). Critic too strict = infinite loops. Too lenient = garbage passes.
+- Use for any task requiring QA. Skip for simple, single-step, low-stakes tasks.
+
+### Distillation (`/distill`)
+
+1. Scan `memory/context/` and recent `memory/episodes/` for patterns
+2. Create or update `memory/insights/` (increment `episode_count` on existing)
+3. Flag insights with `episode_count >= 3` for schema promotion (human review)
+4. Log the run as `memory/episodes/YYYY-MM-DD-distillation.md`
+5. Delete or archive processed context items
+
+### Quality standards
+
+Critic uses these checks on every review:
+
+- [ ] Output matches expected format
+- [ ] No invariants from agent specs are violated
+- [ ] No hallucinated tool outputs (verify actual tool was called)
+- [ ] Rationale is present for non-obvious decisions
+
+Verdicts: **PASS** (all checks pass) · **REVISE** (minor issues, specific critique) · **REJECT** (critical failure)
+
+### Architectural reflection
+
+Checklist for the reflect step of `/syntrace` and `/syntrace full`:
+
+- [ ] Did a structural pattern prove useful or fragile?
+- [ ] Is there a spec-vs-implementation gap?
+- [ ] Did a missing file or config cause silent degradation?
+- [ ] Is there unnecessary complexity?
+- [ ] What from this project would you copy into a new project tomorrow?
+
+### Graph queries
+
+Agents query relationships between files using standard file tools (glob, read, grep). No database.
+
+| Step | Action |
+|------|--------|
+| 1 | Glob `memory/` subfolders to discover nodes (each `.md` file = a node) |
+| 2 | Parse frontmatter to identify node type from the folder it lives in |
+| 3 | Parse frontmatter to extract edges (`related`, `source`, `replaces`, `tags`) |
+| 4 | Scan `## Related` sections for markdown link edges |
+| 5 | Assemble and query the graph |
+
+**Scaling** (when `memory/` grows beyond ~30 files):
+
+| Strategy | When | Method |
+|----------|------|--------|
+| Tag-first | 30-100 files | Grep `tags:` lines, read only matching files |
+| Recency + confidence | 100+ files | 20 most recent + all `confidence: high` |
+| Graph-guided | Relationship queries | Walk `related`/`source` edges 1-2 hops from a known node |
+| Full build | `/distill` and audits only | Never as prerequisite to routine work |
+
+### Tool registry
+
+Define project tools using this format (create a `tools.md` or add inline):
+
+```markdown
+### <tool-name>
+- **Description**: What it does
+- **Input**: schema / types
+- **Output**: schema / types
+- **Side effects**: (e.g., external API call)
+- **Failure modes**: known failures and handling
+- **Assigned to**: which agents may use this tool
+```
+
+---
+
+## Agent Reference
+
+> If you are an AI agent, this is your canonical reference. Read this section before acting.
+
+### Before You Act
+
+1. Read the Architecture section above for agent roles, patterns, and policies.
+2. Check `memory/insights/` for prior knowledge on the topic.
+3. Read the Architecture section above for patterns and policies.
+4. For deeper retrieval, see the Graph queries section above.
+
+### Save Protocol
+
+Three tiers. Use the lightest one that fits.
+
+| Tier | Trigger | Create | Then |
+|------|---------|--------|------|
+| Quick | `/syntrace` | `memory/context/YYYY-MM-DD-slug.md` | Reflect: did a reusable pattern emerge? If yes, also create an insight. |
+| Full | `/syntrace full` | `memory/episodes/YYYY-MM-DD-slug.md` + `memory/decisions/YYYY-MM-DD-HHMM-slug.md` if a design choice was made | Append `changelog:` to `CHANGELOG.md`. Reflect: update or create insights. |
+| Distill | `/distill` | Insights from context + episodes | Flag `episode_count >= 3` for schema promotion. |
+
+After every save, run through the architectural reflection checklist above.
+
+When done for the session: **commit code**, then **save memory**.
+
+### Frontmatter Schemas
+
+Fields marked `# auto` are filled by the agent. Fields marked `# optional` can be omitted.
+
+**Context** (`memory/context/YYYY-MM-DD-slug.md`)
+```yaml
+---
+date:                    # auto
+tags: []
+context_read: []         # auto
+links: []                # optional
+---
+```
+Body: a few sentences or bullet points. No structure required.
+
+**Episode** (`memory/episodes/YYYY-MM-DD-slug.md`)
+```yaml
+---
+date:                    # auto
+outcome: SUCCESS | FAIL | SURPRISE | PARTIAL
+tags: []
+context_read: []         # auto
+changelog:               # optional — type: description
+links: []                # optional
+related: []
+---
+```
+Sections: `## What happened` · `## Takeaways` · `## Observations` (optional).
+Experiments add: `type: experiment`, `status: planned | running | done | abandoned`.
+Retrospectives add: `type: retrospective`, `subtype: weekly | milestone | post-mortem`.
+
+**Decision** (`memory/decisions/YYYY-MM-DD-HHMM-slug.md`)
+```yaml
+---
+id:                      # auto — YYYY-MM-DD-HHMM-slug
+status: accepted
+tags: []
+context_read: []         # auto
+changelog:               # optional
+replaces:                # optional — path to old decision
+links: []                # optional
+related: []
+---
+```
+Sections: `## Context` · `## Decision` · `## Alternatives considered` · `## Consequences`.
+
+**Insight** (`memory/insights/YYYY-MM-DD-slug.md`)
+```yaml
+---
+id:                      # auto — YYYY-MM-DD-slug
+type: concept | howto
+confidence: low | medium | high
+episode_count: 1
+tags: []
+context_read: []         # auto
+links: []                # optional
+related: []
+---
+```
+Sections: `## Summary` · `## Detail` · `## When to apply` · `## History`.
+
+### Auto-derived fields
+
+Fill automatically -- never prompt:
+
+| Field | Value |
+|-------|-------|
+| `date` / `created` / `updated` | Today's date |
+| `agent` | Current agent or `"human"` |
+| `project` | Workspace/project name |
+| `source` | `"session"` unless more specific |
+| `context_read` | Files consulted before writing |
+
+When notable, add `changelog: "type: description"` and auto-append `[YYYY-MM-DD] <value>` to `CHANGELOG.md`.
 
 ---
 
 ## Conventions
 
-<details>
-<summary>Naming, formatting, and file rules</summary>
-
-- **Filenames** - `YYYY-MM-DD-slug.md`, lowercase, hyphens, no spaces.
-- **File size** - keep `.md` files under ~300 lines. Split if longer.
-- **Links** - relative markdown links between files.
-- **Tags** - `tags: [...]` in YAML frontmatter for searchability.
-- **Secrets** - never commit; use `.env` (gitignored).
-- **Milestones** - `git tag v1.0.0`; no manual archiving.
-
-</details>
+- Filenames: `YYYY-MM-DD-slug.md`, lowercase, hyphens, no spaces.
+- Max ~300 lines per `.md` file; split if longer.
+- Relative markdown links between files.
+- `tags: [...]` in YAML frontmatter for searchability.
+- Any file can include `links: []` for external URLs.
+- Never commit secrets; use `.env` (gitignored).
+- Never modify `schema/` without a decision record.
 
 ---
 
 ## Contributing
-
-Contributions, ideas, and alternative approaches are welcome.
 
 1. Fork the repo
 2. Create a branch: `git checkout -b my-feature`
