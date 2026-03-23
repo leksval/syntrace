@@ -8,12 +8,20 @@
 
 - **Output rule**: when triggered, output the **COMPLETE file** as a single markdown code block. Never output only the new entry.
 - **Where to write**: append new entries **only** under the six MEMORY sections at the **end of this file** (Memory Index → Changelog). Do **not** modify **REFERENCE** or **EXAMPLES**.
+- **Separator rule**: separate each session save in the history block with a horizontal rule: `---`
 - **Read before you write**: scan existing Memory sections; update Insights instead of duplicating; link `supersedes` on decisions when superseding; back-link `superseded_by` on the old entry.
 - **Trigger**: `/syntrace` — always-full save. Append Episode + Decision (if applicable) + Insight (if a pattern emerged) + Context (if a standalone observation) + Changelog line. Refresh Memory Index.
 - **Clarification**: the LLM may ask 1-2 questions before saving if the session scope or a key decision is ambiguous. Otherwise, save without asking.
 - **Privacy**: never persist secrets, API keys, passwords, or PII in entries. Omit or redact.
 
 **Full protocol, formats, lineage rules, and architecture** → see **REFERENCE** below. The append-only history lives at the end of the file.
+
+---
+
+> INSTRUCTIONS SECTION
+>
+> Read and follow everything below this marker before saving.
+> Do not append session history in this section.
 
 <!-- ============================================================ -->
 <!-- REFERENCE — full specification (do not delete; LLM reads)    -->
@@ -25,7 +33,7 @@ This is a self-contained memory system. Three layers in one file, like a genome:
 
 1. **Cheat sheet** — the short operating rules at the top. Quick reference before saving.
 2. **Reference** — the stable instructions and formats. The protocol, schemas, lineage rules, architecture, and examples live here. Never append session history here.
-3. **History** — the append-only project memory at the end of the file. Six sections: Memory Index, Context, Episodes, Decisions, Insights, Changelog. Append new `###` entries only there.
+3. **History** — the append-only project memory at the end of the file. Six sections: Memory Index, Context, Episodes, Decisions, Insights, Changelog. Append new `###` entries only there, and separate each session save with `---`.
 
 **Output rule**: when triggered, output the **COMPLETE file** as a single markdown code block with new entries appended to the correct sections. The user saves it, replacing the old version. Never output just the new entry — always the full file, so nothing is lost.
 
@@ -97,11 +105,26 @@ The goal is entries your future self or teammates can act on without re-reading 
 
 Each entry is a `###` heading under its section. The heading slug is the entry's **stable identifier** — use it for all cross-references. Use bullet-point metadata (not YAML fences — they break when there are many entries in one file).
 
+Every session save appended to the history block should be visually separated from the previous session save with:
+
+```md
+---
+
+## Context
+### YYYY-MM-DD-slug
+...
+
+## Episodes
+### YYYY-MM-DD-slug
+...
+```
+
 ### Context entry format
 
 The lightest entry type. An inbox item. The bar is: "would I want to find this in 30 days?"
 
-```
+```md
+---
 ### YYYY-MM-DD-slug
 - **status**: active
 - **tags**: tag1, tag2
@@ -126,7 +149,8 @@ Tips:
 
 A structured work log. Write one every `/syntrace`. Focus on outcome and takeaway.
 
-```
+```md
+---
 ### YYYY-MM-DD-slug
 - **outcome**: SUCCESS | FAIL | SURPRISE | PARTIAL
 - **tags**: tag1, tag2
@@ -158,7 +182,8 @@ Tips:
 
 An architecture decision record. Write one when you chose X over Y and the reasoning matters. Decisions are **immutable** — when reversed, add a new decision with `supersedes` pointing to the old one.
 
-```
+```md
+---
 ### YYYY-MM-DD-HHMM-slug
 - **status**: accepted
 - **tags**: tag1, tag2
@@ -196,7 +221,8 @@ Tips:
 
 Distilled, reusable knowledge. The highest-value entry type. Each insight should be **findable** (good tags + clear title), **actionable** (concrete trigger in "When to apply"), and **falsifiable** (precise enough that evidence could upgrade or kill it).
 
-```
+```md
+---
 ### YYYY-MM-DD-slug
 - **type**: concept | howto
 - **confidence**: low | medium | high
@@ -662,6 +688,11 @@ When debugging production issues that "should work," check whether any config va
 <!-- HISTORY — append-only project memory lives below              -->
 <!-- ============================================================ -->
 
+> HISTORY SECTION
+>
+> Append new project history below this marker only.
+> Do not modify the instruction and reference sections above.
+
 ## Memory Index
 
 Auto-refreshed snapshot. Do not edit manually — `/syntrace` regenerates this.
@@ -698,3 +729,5 @@ _Add entries below._
 ## Changelog
 
 _Add one-line session summaries below._
+
+_Session saves are separated with `---`._
