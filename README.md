@@ -35,7 +35,7 @@ Syntrace fixes that by giving the project one durable, portable history file tha
 
 ## The idea
 
-`syntrace.md` is a single portable format that works like a **genome**:
+Syntrace — **syn**aptic **trace** — is a single portable format that works like a **genome**:
 
 - **Replication machinery** -- the cheat sheet and reference sections at the top and middle of the file. Constant. They tell the LLM how to read, write, and evolve the memory.
 - **Accumulated knowledge** -- the history sections at the end of the file. They grow every session. Episodes, decisions, insights, context -- each entry linked to its ancestors through lineage fields, like genes carrying their evolutionary history.
