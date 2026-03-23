@@ -128,66 +128,16 @@ To query across multiple Syntrace instances:
 
 ## Retrieval at scale
 
-When `memory/` grows beyond ~30 files, reading everything before acting becomes impractical. Use these strategies in order of increasing cost:
+When `memory/` grows beyond ~30 files, reading everything before acting becomes impractical. Use strategies in order of increasing cost -- and always record what you read in `context_read`.
 
-### 1. Tag-first filtering (default for 30-100 files)
+| Strategy | When | Method |
+|----------|------|--------|
+| **Tag-first filtering** | 30-100 files | Grep `tags:` lines across the folder. Read only files whose tags overlap your task's keywords. |
+| **Recency + confidence** | 100+ files | Read the 20 most recent files' frontmatter. Include any `confidence: high` file regardless of age. Apply tag filtering within this set. |
+| **Graph-guided** | Relationship queries | Start from a known node, follow `related` and `source` edges 1-2 hops. Don't scan everything. |
+| **Full graph build** | `/distill`, cross-project, audits only | Never as a prerequisite to routine work. |
 
-Before reading full files, grep only `tags:` lines across the target folder. Select files whose tags overlap with your current task's keywords. This reduces a 100-file folder to the 5-10 files that actually matter.
-
-```
-1. Identify 2-3 keywords for your current task
-2. grep "tags:" memory/insights/*.md
-3. Read only files whose tags overlap with your keywords
-4. Record what you read in context_read
-```
-
-### 2. Recency window (default for 100+ files)
-
-Combine tag filtering with a recency cutoff. For most tasks, insights updated in the last 90 days plus high-confidence older insights cover the useful space.
-
-```
-1. Sort files by modification date (or parse updated: frontmatter)
-2. Read the 20 most recent files' frontmatter
-3. Also include any file with confidence: high regardless of age
-4. Apply tag filtering within this set
-```
-
-### 3. Graph-guided retrieval (for relationship queries)
-
-When you need to find knowledge related to a specific file or decision, don't scan everything. Start from the known node and walk edges:
-
-```
-1. Read the starting node's related and source fields
-2. Follow those links (1 hop)
-3. Optionally follow the linked nodes' related fields (2 hops)
-4. Stop — diminishing returns beyond 2 hops
-```
-
-### 4. When to build the full graph
-
-Only build the complete graph (Steps 1-5 above) for:
-- Gap detection (`/distill` runs)
-- Cross-project queries
-- Periodic audits (monthly or at milestones)
-
-Never build the full graph as a prerequisite to routine work.
-
-## Efficiency tips
-
-- For quick lookups, grep `tags:` lines first to narrow the file set before full parsing
-- For lineage queries, start from the target and walk backward -- don't build the full graph
-- For gap detection, a full scan is needed but only frontmatter parsing (skip body content)
-
-## Multi-Project Queries
-
-Each project embeds its own Syntrace instance. Optionally, a global Syntrace holds cross-project knowledge.
-
-| Instance | Path | Contains |
-|---|---|---|
-| Per-project | `<project>/syntrace/` | Project-specific episodes, decisions, insights |
-| Global | shared path (configured per environment) | Cross-project insights and stable patterns |
-
-Insights stable across 2+ project instances get promoted to global.
+For lineage queries, start from the target and walk backward -- don't build the full graph. For gap detection, parse frontmatter only (skip body content).
 
 ## Related
 

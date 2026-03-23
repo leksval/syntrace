@@ -7,7 +7,7 @@ alwaysApply: true
 
 This project uses Syntrace as its knowledge base. Folders and markdown only.
 
-**Path note**: paths below use a `{root}/` prefix. When Syntrace is embedded in a host project (e.g. `your-project/syntrace/`), `{root}` = `syntrace`. When working inside the Syntrace repo itself, `{root}` = the repo root (paths have no prefix). Detect which case applies by checking whether an `AGENTS.md` exists at the workspace root or under a `syntrace/` subfolder.
+> Paths below are relative. If Syntrace lives under a `syntrace/` subfolder, prefix accordingly.
 
 ## Before You Act
 

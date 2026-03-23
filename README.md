@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="#why">Why</a> · <a href="#how-it-works">How It Works</a> · <a href="#get-started">Get Started</a> · <a href="#whats-inside">What's Inside</a> · <a href="#knowledge-flow">Knowledge Flow</a>
+  <a href="#why">Why</a> · <a href="#how-it-works">How It Works</a> · <a href="#get-started">Get Started</a> · <a href="#whats-inside">What's Inside</a> · <a href="#architecture">Architecture</a>
 </p>
 
 ---
@@ -167,15 +167,11 @@ flowchart TD
 
 ## Architecture
 
-Four constraints shape every design choice. Changing any requires a decision record.
-
 <table>
 <tr>
 <td width="50%" valign="top">
 
 ### Agent model
-
-Two concerns, four roles:
 
 **Task execution** (planner-worker-critic cycle):
 - **Planner** -- decomposes goals, delegates, synthesizes
@@ -190,46 +186,20 @@ New roles are added as specialized workers, not new top-level roles.
 </td>
 <td width="50%" valign="top">
 
-### Graph queries
+### Design principles
 
-Agents query relationships between files (which episode produced which insight?) using file tools -- no database.
-
-- `schema/graph-schema.json` maps node types to globs, edges to frontmatter fields
-- `schema/patterns/graph-scan.md` walks the procedure step by step
-- Scales via tag-first filtering, recency windows, and walk-backward queries
+- **Zero dependencies** -- no database, no embeddings, no API keys. Copy and go.
+- **Platform-portable** -- works in Cursor, Claude Code, Windsurf, custom agents, mobile. Anything that reads files.
+- **Git-native** -- diff decisions, branch experiments, merge insights alongside code.
+- **Cloud-connected** -- link Figma, Notion, Drive, or any URL from frontmatter. Agents with web access follow them.
+- **Convention-enforced** -- the system trusts agents to follow specs. No runtime enforcement.
 
 </td>
 </tr>
 </table>
 
-### Design invariants
-
-| Invariant | Implication |
-|-----------|-------------|
-| Zero external dependencies | Markdown and folders only. No database, no embeddings, no API keys. |
-| Platform-portable | Any agent that can read files can use the system. No IDE lock-in. |
-| Git-native | All knowledge is diffable, branchable, mergeable alongside code. |
-| Convention-enforced | The system trusts agents to follow specs. No runtime enforcement. |
-
----
-
-## Key Features
-
-| | Feature | Why it matters |
-|---|---|---|
-| **1** | **Platform-portable** | Folders and markdown. Works in Cursor, Claude Code, Windsurf, custom agents, mobile - anything that reads files. |
-| **2** | **Zero dependencies** | No API, no database, no embeddings, no install. Copy and go. |
-| **3** | **Knowledge extraction** | Raw session notes distill into insights, then promote into reusable patterns - automatically through the save protocol. |
-| **4** | **Cloud-connected** | Link Google Drive, Figma, Notion, or any URL from file frontmatter. Agents with web access follow these links for richer context. |
-| **5** | **Git-native** | Version your knowledge alongside your code. Diff decisions, branch experiments, merge insights. |
-| **6** | **Tiered saves** | Quick capture for most sessions. Full structured save when it matters. Distillation when you want to extract patterns. |
-
----
-
-## For AI Agents
-
 > [!NOTE]
-> If you are an AI agent, read [`AGENTS.md`](AGENTS.md) for full orientation: save protocol, frontmatter schemas, end-of-session checklist, and workspace conventions.
+> **For AI agents**: read [`AGENTS.md`](AGENTS.md) for full orientation -- save protocol, frontmatter schemas, end-of-session checklist, and workspace conventions.
 
 ---
 
