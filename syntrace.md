@@ -261,28 +261,28 @@ Surface-level extraction ("we did X, it worked") produces entries that decay int
 Human memory transitions from episodic (event-bound: "what happened Tuesday") to semantic (general: "this pattern recurs"). Syntrace mirrors this: Context and Episodes capture episodic detail; Insights distill semantic knowledge. During extraction, actively ask: *what generalizes beyond this specific incident?* If nothing generalizes yet, a Context entry is honest. Premature generalization produces weak Insights.
 
 **2. Effortful retrieval over passive review** (Henry Roediger & Jeffrey Karpicke, 2006; Robert & Elizabeth Bjork, 1992)
-Actively generating takeaways — rather than summarizing what happened — strengthens durable knowledge. This is why the protocol demands *why* not *what*. When extracting, force yourself to articulate the causal mechanism ("the timeout was too low *because* dev defaults leaked") rather than the surface event ("we changed the timeout"). The effort of causal articulation is the point.
+Actively generating takeaways: rather than summarizing what happened: strengthens durable knowledge. This is why the protocol demands *why* not *what*. When extracting, force yourself to articulate the causal mechanism ("the timeout was too low *because* dev defaults leaked") rather than the surface event ("we changed the timeout"). The effort of causal articulation is the point.
 
 **3. Double-loop over single-loop learning** (Chris Argyris, 1977)
-Single-loop: "the config was wrong, we fixed it." Double-loop: "our process doesn't catch dev defaults leaking to production — why?" Extract the systemic pattern, not just the fix. Every FAIL or SURPRISE episode should prompt: *what assumption was wrong, and is that assumption embedded elsewhere?*
+Single-loop: "the config was wrong, we fixed it." Double-loop: "our process doesn't catch dev defaults leaking to production: why?" Extract the systemic pattern, not just the fix. Every FAIL or SURPRISE episode should prompt: *what assumption was wrong, and is that assumption embedded elsewhere?*
 
 **4. Recognition-primed decision patterns** (Gary Klein, 1998)
-Experts don't analyze from scratch — they recognize situations from prior experience and apply learned patterns. Syntrace's Insight library is an explicit version of this. When extracting, frame Insights as recognition cues: "when you see X in context Y" maps directly to how pattern recognition fires in practice.
+Experts don't analyze from scratch: they recognize situations from prior experience and apply learned patterns. Syntrace's Insight library is an explicit version of this. When extracting, frame Insights as recognition cues: "when you see X in context Y" maps directly to how pattern recognition fires in practice.
 
 **5. Pre-mortem and prospective hindsight** (Gary Klein, 2007; Deborah Mitchell et al., 1989)
-Imagining future failure surfaces risks that optimism obscures. For Decision entries, always populate "Risks" by asking: *assume this decision failed in six months — what went wrong?* This is not pessimism; prospective hindsight reliably uncovers threats that forward-looking analysis misses.
+Imagining future failure surfaces risks that optimism obscures. For Decision entries, always populate "Risks" by asking: *assume this decision failed in six months: what went wrong?* This is not pessimism; prospective hindsight reliably uncovers threats that forward-looking analysis misses.
 
 **6. Reflective practice** (Donald Schön, 1983)
 Reflection-on-action (after the work) is what Syntrace captures. The key distinction: reflection is not narration. Narration replays events; reflection interrogates them. When writing "What happened," describe; when writing "Takeaways," interrogate. Ask: *what surprised me? What would I do differently? What did I assume that turned out wrong?*
 
 **7. Sensemaking under ambiguity** (Karl Weick, 1995)
-Events become meaningful only retrospectively. Syntrace extraction is an act of sensemaking — constructing a coherent narrative from messy experience. But beware post-hoc rationalization: if the real cause was unclear, say so. An honest "root cause uncertain, two hypotheses" is higher-signal than a fabricated clean narrative.
+Events become meaningful only retrospectively. Syntrace extraction is an act of sensemaking: constructing a coherent narrative from messy experience. But beware post-hoc rationalization: if the real cause was unclear, say so. An honest "root cause uncertain, two hypotheses" is higher-signal than a fabricated clean narrative.
 
 **8. Falsifiability as quality filter** (Karl Popper, 1959)
-An Insight that cannot be contradicted by future evidence is unfalsifiable — and therefore useless for learning. "Always use best practices" teaches nothing. "Exponential backoff with jitter reduces timeout failures by ~50-70% on intermittent upstream errors" can be confirmed, refined, or killed. Frame Insights so that future episodes can change your confidence.
+An Insight that cannot be contradicted by future evidence is unfalsifiable: and therefore useless for learning. "Always use best practices" teaches nothing. "Exponential backoff with jitter reduces timeout failures by ~50-70% on intermittent upstream errors" can be confirmed, refined, or killed. Frame Insights so that future episodes can change your confidence.
 
 **Meta-insight: extraction value is proportional to friction applied.**
-Every principle above adds a form of productive resistance: forcing causal articulation instead of summary (Roediger, Bjork), questioning the system instead of the symptom (Argyris), demanding falsifiable precision instead of vague truisms (Popper), admitting uncertainty instead of rationalizing (Weick), interrogating experience instead of narrating it (Schön). This is not a coincidence — it is Bjork's "desirable difficulties" operating at the knowledge-management level. Easy extraction ("we did X, it worked") produces entries nobody will ever act on. The friction of proper interrogation — *why did it work? what assumption held? when would it fail?* — is the mechanism that converts raw experience into transferable knowledge. If writing an entry feels effortless, it is almost certainly too shallow.
+Every principle above adds a form of productive resistance: forcing causal articulation instead of summary (Roediger, Bjork), questioning the system instead of the symptom (Argyris), demanding falsifiable precision instead of vague truisms (Popper), admitting uncertainty instead of rationalizing (Weick), interrogating experience instead of narrating it (Schön). This is not a coincidence: it is Bjork's "desirable difficulties" operating at the knowledge-management level. Easy extraction ("we did X, it worked") produces entries nobody will ever act on. The friction of proper interrogation: *why did it work? what assumption held? when would it fail?* -- is the mechanism that converts raw experience into transferable knowledge. If writing an entry feels effortless, it is almost certainly too shallow.
 
 #### Extraction checklist
 
