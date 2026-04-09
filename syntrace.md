@@ -67,15 +67,23 @@ One trigger. One procedure. Always full depth.
 1. Review what happened this session. In paste mode, the surrounding live chat IS the session. Do not require a repaste.
 2. On a fresh file, skip clarification and proceed directly to extraction. On subsequent saves with existing history, you may ask 2-3 brief clarification questions only if the scope is genuinely ambiguous.
 3. Scan the existing Memory sections and the session-relevant source material -- read before you write. If possible, also check relevant git history for the files or decisions involved.
-4. Append an Episode entry (outcome, takeaways, concrete details)
-5. If a design/architecture choice was made, append a Decision entry
-6. Check existing Insights -- update `confidence`, `evidence_count`, `evidence` on reinforced ones; create new if a reusable pattern emerged
-7. If there is a standalone observation, append a Context entry
-8. Add a one-liner to Changelog
-9. Distillation: if 5+ Context entries have `status: active`, promote reusable patterns to Insights and mark promoted entries `status: distilled`
-10. Refresh Memory Index: active decisions, high-confidence insights, open questions, most recent entry date
-11. Scan the reflection checklist
-12. **Output** -- follow the Output rule tiers: **(a)** if you have filesystem access, write the complete updated file to disk and return only the **Memory Index** in chat as confirmation; **(b)** if no filesystem access, output the **COMPLETE file** as a single markdown code block; **(c)** if output would be truncated, return only the **Memory Index** in chat
+4. Dedup before filing -- scan existing Insights for semantic overlap. If the lesson already exists, update the existing entry's `confidence`, `evidence_count`, `evidence`, or `updated` fields instead of creating a near-duplicate. If you still create a new entry, make the distinction explicit in the body.
+5. Append an Episode entry (outcome, takeaways, concrete details)
+6. If a design/architecture choice was made, append a Decision entry
+7. Check existing Insights -- update `confidence`, `evidence_count`, `evidence` on reinforced ones; create new if a reusable pattern emerged
+8. If there is a standalone observation, append a Context entry
+9. Add a one-liner to Changelog
+10. Distillation: if 5+ Context entries have `status: active`, promote reusable patterns to Insights and mark promoted entries `status: distilled`
+11. Refresh Memory Index: active decisions, high-confidence insights, open questions, most recent entry date
+12. Scan the reflection checklist
+13. **Output** -- follow the Output rule tiers: **(a)** if you have filesystem access, write the complete updated file to disk and return only the **Memory Index** in chat as confirmation; **(b)** if no filesystem access, output the **COMPLETE file** as a single markdown code block; **(c)** if output would be truncated, return only the **Memory Index** in chat
+
+**Entry type disambiguation heuristics**:
+
+- Use an **Insight** when the lesson generalizes beyond this session and can be phrased as a reusable trigger plus action, with a plausible counter-example.
+- Use a **Decision** when you chose X over Y and the alternatives, trade-offs, or rationale will matter later. If there was no real alternative or lasting consequence, it is probably not a Decision.
+- Use an **Episode** for resolved problems, shipped changes, investigations, or benchmarks that have a clear outcome and takeaway, even if they started as loose notes.
+- Use **Context** for short observations, facts, or inputs that may matter later but do not yet generalize. If the note grows past a short paragraph, promote it to an Episode.
 
 When done for the session: if code changed and the user wants a commit, prefer **commit code**, then **save memory**. If there was no code change or no commit request, just save memory.
 
@@ -112,12 +120,14 @@ The lightest entry type. An inbox item: "would I want to find this in 30 days?"
 - **tags**: tag1, tag2
 - **context_read**: files consulted
 - **derived_from**: (related entry slug, if any)
+- **valid_from**: YYYY-MM-DD or version-range (optional)
+- **valid_until**: YYYY-MM-DD or version-range (optional)
 
 Body: a few sentences or bullets. Focus on what surprised you or what
 you'd want to remember in 30 days. Skip anything obvious.
 ```
 
-Slugs must be descriptive: `2026-03-23-redis-eviction-policy-mismatch` not `2026-03-23-bug`. `status`: `active` (default) or `distilled` (promoted to Insight). When unsure, capture it -- distillation sorts it out. If longer than a paragraph, promote to Episode.
+Slugs must be descriptive: `2026-03-23-redis-eviction-policy-mismatch` not `2026-03-23-bug`. `status`: `active` (default) or `distilled` (promoted to Insight). Use `valid_from` / `valid_until` when the observation is tied to a known date window, release, migration, or dependency version; omit them when the note is still broadly current. When unsure, capture it -- distillation sorts it out. If longer than a paragraph, promote to Episode.
 
 ### Episode entry format
 
@@ -190,6 +200,8 @@ Distilled, reusable knowledge. The highest-value entry type. Each insight must b
 - **derived_from**: slug of the episode or context entry this originated from
 - **evidence**: slug1, slug2
 - **updated**: YYYY-MM-DD
+- **valid_from**: YYYY-MM-DD or version-range (optional)
+- **valid_until**: YYYY-MM-DD or version-range (optional)
 
 #### Summary
 One paragraph. State the pattern precisely enough that future evidence
@@ -200,13 +212,13 @@ Concrete trigger conditions -- not "when relevant" but "when you see
 X happening in context Y, do Z." Include counter-examples.
 ```
 
-**Type**: `concept` (mental model/principle) or `howto` (specific technique with steps). **Confidence**: `low` (observed once, hypothesis), `medium` (2-3 evidence points or validated once), `high` (3+ evidence points across contexts or benchmarked). `evidence_count` tracks the number of supporting slugs listed in `evidence`, regardless of entry type -- increment it whenever you add supporting evidence. "When to apply" must include counter-examples.
+**Type**: `concept` (mental model/principle) or `howto` (specific technique with steps). **Confidence**: `low` (observed once, hypothesis), `medium` (2-3 evidence points or validated once), `high` (3+ evidence points across contexts or benchmarked). `evidence_count` tracks the number of supporting slugs listed in `evidence`, regardless of entry type -- increment it whenever you add supporting evidence. Use `valid_from` / `valid_until` when an insight only applies within a known rollout window, API contract, or dependency version range. "When to apply" must include counter-examples.
 
 ## Lineage rules
 
 Entries are append-only. These rules ensure traceable knowledge evolution:
 
-1. **Immutability**: slug and body are permanent once written. Only these fields may be updated in place: `status`, `superseded_by`, `confidence`, `evidence_count`, `evidence`, `updated`.
+1. **Immutability**: slug and body are permanent once written. Only these fields may be updated in place: `status`, `superseded_by`, `confidence`, `evidence_count`, `evidence`, `updated`, `valid_from`, `valid_until`.
 2. **Supersession**: to reverse a Decision, write a new one with `supersedes` → old slug. Set the old one's `status` to `superseded` and add `superseded_by` → new slug. Never delete.
 3. **Derivation**: use `derived_from` to trace origin. An Insight from an Episode cites the episode slug; an Episode building on Context cites the context slug.
 4. **Evidence accumulation**: Insights list supporting entries in `evidence`. On reinforcement, add the supporting slug and increment `evidence_count`.
@@ -231,7 +243,7 @@ Fill these automatically -- never ask the user for them:
 
 ## Tag canon
 
-The tag canon is project-specific. On the first `/syntrace` run for a new project, scan the codebase and create an initial set of canonical tags that reflect the project's actual domains, technologies, and concerns. Use lowercase single words or hyphenated compounds. Each tag should have at least one alias. Tags exist for retrieval -- use domain terms, not generic ones (`important`, `misc`, `todo`). Add new canonical tags in subsequent saves when no existing tag covers the concept.
+The tag canon is project-specific. On the first `/syntrace` run for a new project, scan the codebase and create an initial set of canonical tags that reflect the project's actual domains, technologies, and concerns. Seed the first pass from dependency manifests (`package.json`, `pyproject.toml`, lockfiles), top-level directory names, README headings, and recurring domain terms in filenames. Use lowercase single words or hyphenated compounds. Each tag should have at least one alias. Tags exist for retrieval -- use domain terms, not generic ones (`important`, `misc`, `todo`). Add new canonical tags in subsequent saves when no existing tag covers the concept.
 
 | Canonical | Aliases | Domain |
 |-----------|---------|--------|
@@ -323,6 +335,7 @@ A validator reports **errors** for broken invariants and **warnings** for qualit
 ### File-level invariants
 
 Errors:
+
 - The HISTORY section must contain the six MEMORY sections in order: Memory Index, Context, Episodes, Decisions, Insights, Changelog
 - The file must retain the REFERENCE block
 - Entry headings must be unique across the file
@@ -339,15 +352,19 @@ Warnings: EXAMPLES block is optional but recommended. If the file grows beyond p
 | Decision | `YYYY-MM-DD-HHMM-slug` | `status`, `tags`, `context_read`, `supersedes`, `superseded_by` | Context, Decision, Alternatives considered, Consequences | status: `accepted` / `deprecated` / `superseded` |
 | Insight | `YYYY-MM-DD-slug` | `type`, `confidence`, `evidence_count`, `tags`, `derived_from`, `evidence`, `updated` | Summary, When to apply | type: `concept` / `howto`; confidence: `low` / `medium` / `high` |
 
+`valid_from` and `valid_until` are optional metadata for Context and Insight entries when the knowledge is time-bounded or version-bounded.
+
 ### Lineage validation
 
 Errors:
+
 - `derived_from`, `supersedes`, `superseded_by` must point to an existing slug or `--`
 - Every slug in `evidence` must exist
 - A Decision with `status: superseded` must have a non-empty `superseded_by`
 - `supersedes` must point to a Decision entry, not another type
 
 Warnings:
+
 - Insight `evidence_count` does not match the length of `evidence`
 - An Episode reinforces an existing Insight but does not mention it
 - A Context entry longer than a short paragraph (may belong as an Episode)
@@ -360,6 +377,8 @@ The Memory Index is derived, not hand-authored. Rebuild it each `/syntrace`:
 - **High-confidence insights**: Insights with `confidence: high`
 - **Open questions**: unresolved questions from active Context or recent Episodes/Decisions
 - **Last updated**: most recent entry date across all Memory sections
+
+Target roughly 200-400 tokens. Treat it as wake-up context: the first snapshot an agent reads before any deeper scans.
 
 Replace the entire snapshot each time. Link by slug. Render `_(none yet)_` for empty categories.
 
@@ -406,6 +425,17 @@ The Critic applies these on every review. In single-agent mode, self-apply befor
 | **Lineage walk** | Tracing a topic | Follow `derived_from` and `evidence` 1-2 hops |
 
 At ~500 entries, split by domain (e.g., `syntrace-frontend.md`, `syntrace-infra.md`). Each file is self-contained.
+
+### Hook triggers
+
+Recommended automatic save triggers for IDE agents, wrappers, or hooks:
+
+- After 10-15 messages or tool calls in a focused thread, if meaningful work, takeaways, or decisions accumulated
+- Before context compaction, handoff, model reset, or other memory-loss boundaries
+- At session end or prolonged idle when unsaved rationale would otherwise be lost
+- After a commit or similarly clear milestone, once the code and reasoning have stabilized
+
+Do not fire on every trivial edit. Batch around meaningful checkpoints so entries stay high-signal.
 
 ---
 
