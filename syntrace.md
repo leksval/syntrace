@@ -285,38 +285,36 @@ Same default behavior as `/syntrace`. Live session = evidence. Extract reusable 
 
 #### Extraction reasoning model
 
-Surface extraction ("we did X, it worked") decays to noise. Deep extraction converts raw experience into transferable knowledge. Eight principles from cognitive science guide what to extract and how:
+Surface extraction ("we did X, it worked") decays to noise. Deep extraction converts raw experience into transferable knowledge. Eight principles guide what to extract and how:
 
-1. **Episodic → semantic crystallization** (Tulving 1972) — Context/Episodes capture episodic detail; Insights distill semantic knowledge. Ask *what generalizes beyond this incident?* If nothing, Context is honest. Premature generalization = weak Insights.
-2. **Effortful retrieval over passive review** (Roediger & Karpicke 2006; Bjork 1992) — articulate the causal mechanism ("timeout too low *because* dev defaults leaked"), not the surface event ("we changed the timeout"). The effort of causal articulation is the point.
-3. **Double-loop over single-loop learning** (Argyris 1977) — beyond "config was wrong, we fixed it" → "our process doesn't catch dev defaults leaking — why?" Every FAIL/SURPRISE: *what assumption was wrong, and is it embedded elsewhere?*
-4. **Recognition-primed decision patterns** (Klein 1998) — experts recognize situations and apply learned patterns. Frame Insights as recognition cues: "when you see X in context Y" matches how pattern recognition actually fires.
-5. **Pre-mortem / prospective hindsight** (Klein 2007; Mitchell et al. 1989) — for Decision Risks, *assume this failed in 6 months — what went wrong?* Prospective hindsight surfaces threats forward-looking analysis misses.
-6. **Reflective practice** (Schön 1983) — reflection ≠ narration. "What happened" describes; "Takeaways" interrogates. *What surprised me? What would I do differently? What did I assume that turned out wrong?*
-7. **Sensemaking under ambiguity** (Weick 1995) — events become meaningful retrospectively. Beware post-hoc rationalization: if real cause was unclear, say so. "Root cause uncertain, two hypotheses" is higher-signal than a fabricated clean narrative.
-8. **Falsifiability as quality filter** (Popper 1959) — unfalsifiable insights are useless. "Always use best practices" teaches nothing. "Exp. backoff + jitter reduces timeout failures 50-70% on intermittent upstream errors" can be confirmed, refined, or killed.
+1. **Episodic → semantic crystallization** — Context/Episodes capture episodic detail; Insights distill semantic knowledge. Ask *what generalizes beyond this incident?* If nothing, Context is honest. Premature generalization = weak Insights.
+2. **Effortful retrieval over passive review** — articulate the causal mechanism ("timeout too low *because* dev defaults leaked"), not the surface event ("we changed the timeout"). The effort of causal articulation is the point.
+3. **Double-loop over single-loop learning** — beyond "config was wrong, we fixed it" → "our process doesn't catch dev defaults leaking — why?" Every FAIL/SURPRISE: *what assumption was wrong, and is it embedded elsewhere?*
+4. **Recognition-primed decision patterns** — experts recognize situations and apply learned patterns. Frame Insights as recognition cues: "when you see X in context Y" matches how pattern recognition actually fires.
+5. **Pre-mortem / prospective hindsight** — for Decision Risks, *assume this failed in 6 months — what went wrong?* Prospective hindsight surfaces threats forward-looking analysis misses.
+6. **Reflective practice** — reflection ≠ narration. "What happened" describes; "Takeaways" interrogates. *What surprised me? What would I do differently? What did I assume that turned out wrong?*
+7. **Sensemaking under ambiguity** — events become meaningful retrospectively. Beware post-hoc rationalization: if real cause was unclear, say so. "Root cause uncertain, two hypotheses" is higher-signal than a fabricated clean narrative.
+8. **Falsifiability as quality filter** — unfalsifiable insights are useless. "Always use best practices" teaches nothing. "Exp. backoff + jitter reduces timeout failures 50-70% on intermittent upstream errors" can be confirmed, refined, or killed.
 
-**Meta-insight**: extraction value ∝ friction applied. Every principle above adds productive resistance — causal articulation over summary (Roediger, Bjork), systems-questioning over symptom-treating (Argyris), falsifiable precision over truisms (Popper), honest uncertainty over rationalization (Weick), interrogation over narration (Schön). This is Bjork's "desirable difficulties" at the knowledge-management level. Effortless entries are almost certainly too shallow.
+**Meta-insight**: extraction value ∝ friction applied. Every principle above adds productive resistance — causal articulation over summary, systems-questioning over symptom-treating, falsifiable precision over truisms, honest uncertainty over rationalization, interrogation over narration. Effortless entries are almost certainly too shallow.
 
 #### Extraction checklist
 
 Apply after drafting, before output:
 
-- [ ] **Causal depth** — *why*, not just *what*? (Roediger; Bjork)
-- [ ] **Assumption audit** — what belief was tested or broken? (Argyris)
-- [ ] **Generalization** — does it generalize? One-off → Context. (Tulving)
-- [ ] **Recognition framing** — Insight as trigger + action? (Klein)
-- [ ] **Falsifiability** — could future evidence change confidence? (Popper)
-- [ ] **Honest ambiguity** — said "uncertain" rather than fabricating? (Weick)
-- [ ] **Prospective failure** — for Decisions, imagined 6-month failure mode? (Klein)
+- [ ] **Causal depth** — *why*, not just *what*?
+- [ ] **Assumption audit** — what belief was tested or broken?
+- [ ] **Generalization** — does it generalize? One-off → Context.
+- [ ] **Recognition framing** — Insight as trigger + action?
+- [ ] **Falsifiability** — could future evidence change confidence?
+- [ ] **Honest ambiguity** — said "uncertain" rather than fabricating?
+- [ ] **Prospective failure** — for Decisions, imagined 6-month failure mode?
 
 ### Adapter mappings
 
 All adapters: **Import** = map into Syntrace entries (preserve unmappable in body). **Export** = active, distilled, privacy-preserving.
 
-- **Claude Code (`CLAUDE.md`)** — each `##` section → entry. Conventions/guidance → **Insight**; architectural choices → **Decision**; loose notes → **Context**. `context_read: CLAUDE.md`. Export to concise sections (`## Key Commands`, `## Architecture`, `## Coding Conventions`) from accepted Decisions + medium/high Insights. Omit Changelog, low-signal Context, superseded Decisions.
-- **Cursor rules (`.cursor/rules/*.mdc` or legacy `.cursorrules`)** — each file = one source unit. Broadly applicable → **Insight**; path/workflow → **Context** (unless architectural → **Decision**). Tag with `cursor`/`tooling`. Export as multiple short topic-focused rule files grouped by concern.
-- **Generic markdown (`AGENTS.md`, `MEMORY.md`, `RULES.md`, similar)** — each heading block → candidate Context/Insight/Decision. Preserve unfamiliar structure in body. Tag `tooling`. Export concise project instructions from accepted Decisions + reusable Insights. Keep files short enough for agents to load reliably.
+- **Tool-specific guidance files (`CLAUDE.md`, `AGENTS.md`, `.cursor/rules/*.mdc`, `MEMORY.md`, `RULES.md`, etc.)** — each heading/section or rule file → candidate entry. Conventions/guidance → **Insight**; architectural choices → **Decision**; path/workflow or loose notes → **Context**. Preserve unfamiliar structure in body; tag with tool name + `tooling`. Export concise topic-focused sections/files from accepted Decisions + medium/high Insights (single-file targets get grouped sections like `## Key Commands`, `## Architecture`, `## Conventions`; directory targets get multiple short files grouped by concern). Omit Changelog, low-signal Context, superseded Decisions. Keep files short enough for agents to load reliably.
 - **Programmatic / API (SDKs, orchestrators, autonomous agents)** — accept JSON per entry; keys mirror markdown schema exactly (`slug`, `type`, `status`, `tags`, `context_read`, `derived_from`, `evidence`, `author`, `artifacts`, body sections as strings). Render into markdown, append under matching MEMORY section. Export as JSON array with envelope `schema_version`. **Round-trip rule**: JSON is a view; markdown wins on conflict. Never hand-edit exported JSON and re-import — treat as new source material.
 - **Vector store / retrieval index** — for each active Insight (optionally each Episode), emit an embedding record keyed by slug with summary/tags/`valid_from`/`valid_until` as filterable metadata. Re-embed on update (`confidence`/`evidence_count`/`evidence`/`updated` changes). Imports from external index → Context entry with `artifacts: embedding:<vector-uri>`; promote to Insight via distillation. File wins on conflict; index is rebuilt.
 - **Multi-agent handoff** — control transfer sends minimal packet `{memory_index, open_questions, last_session_id, last_author}`. Receiver reads packet for wake-up; full file only if deeper lineage is needed. Every entry MUST carry `author`. Orchestrator (or designated Librarian) enforces the single-writer invariant. **Conflict resolution**: two agents writing semantically overlapping entries → Librarian merges into one with combined `evidence` and both authors comma-separated in `author`.
@@ -398,15 +396,15 @@ Planning optional. Skip when small/concrete/low-risk. Use when multi-step, cross
 
 New roles are specialized Workers (Researcher, Tester), not new top-level roles.
 
-### Autonomous-loop checkpoints
+### Save checkpoints
 
-No human turn driving `/syntrace` → agent (or orchestrator) calls the save protocol:
+When no human turn drives `/syntrace` — IDE agents, autonomous loops, multi-agent orchestrators, hooks, wrappers — fire the save protocol at:
 
-- After 10-20 tool calls in a focused sub-goal when meaningful takeaways accumulated.
-- On goal completion, before returning to parent planner or user.
+- After 10-20 tool calls/messages in a focused thread with meaningful takeaways, decisions, or work.
+- On goal/task completion or milestone events (commit, ship, publish, handoff) once work has stabilized.
 - On error escalation, retry exhaustion, or abandoned branch — FAIL episodes are highest-signal.
-- On context-window pressure, before compaction/handoff would drop unsaved rationale.
-- On schedule for long-running agents (e.g., hourly) so mid-run learning survives a crash.
+- Before context-window pressure, compaction, handoff, or model reset would drop unsaved rationale.
+- Session end, prolonged idle, or scheduled interval for long-running agents (e.g., hourly) so mid-run learning survives a crash.
 
 Batch around meaningful checkpoints. Not every trivial step.
 
@@ -431,17 +429,6 @@ Batch around meaningful checkpoints. Not every trivial step.
 | Lineage walk | tracing a topic | follow `derived_from`/`evidence` 1-2 hops |
 
 At ~500 entries, split by domain (`syntrace-frontend.md`, `syntrace-infra.md`). Each file self-contained.
-
-### Hook triggers
-
-Recommended auto-save triggers (IDE agents, autonomous loops, multi-agent orchestrators, wrappers, hooks):
-
-- After 10-15 messages/tool calls in a focused thread with meaningful work/takeaways/decisions.
-- Before context compaction, handoff, model reset, or other memory-loss boundaries.
-- Session end or prolonged idle when unsaved rationale would be lost.
-- After milestone events (commit, ship, publish, task done, handoff) once work has stabilized.
-
-Batch around meaningful checkpoints. Not every trivial edit.
 
 ---
 
