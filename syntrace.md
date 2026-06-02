@@ -16,7 +16,8 @@
 - **Fresh-file rule**: empty history → skip clarification. Scan session, extract, save. Never reply "nothing to save" just because history is empty.
 - **Where to write**: append only under the six MEMORY sections at the end (Memory Index → Changelog). Never modify REFERENCE or EXAMPLES, except in-place Tag Canon table updates.
 - **Separators**: horizontal rule `---` between Changelog saves only. Not inside Context/Episodes/Decisions/Insights.
-- **Read before write**: scan existing Memory sections. Update reinforced Insights, don't duplicate. Link `supersedes`/`superseded_by` when reversing decisions.
+- **Read before write**: scan existing Memory sections. Update reinforced Insights, don't duplicate. Add reciprocal `related` links to connected entries; link `supersedes`/`superseded_by` when reversing or invalidating any entry.
+- **Invalidate, don't erase**: a now-wrong or outdated fact (Decision, Insight, or Context) → write the correction and supersede the old one (`status: superseded` + `superseded_by`). Never edit away or delete a stale fact; superseded entries stay for history and point-in-time queries.
 - **Trigger**: `/syntrace` is the shorthand, not a separate mode. Also fire when user/orchestrator/hook clearly asks to save memory, capture lessons, or extract learning.
 - **Intent inference**: figure out whether the ask is session save, lesson extraction, or both. Apply Output tiers. Don't treat "no direct filesystem" as grounds to refuse — use the next tier.
 - **Clarification**: on saves with existing history, may ask 2-3 questions only when scope/key decision/takeaway is genuinely ambiguous. Autonomous/pipeline modes → skip questions, save with honestly low confidence. Fresh file → never clarify.
@@ -79,10 +80,10 @@ One trigger, one procedure, always full depth.
 1. Review this session. Paste mode: live chat IS the session. Other modes: whatever bounded unit just finished (chat + files consulted, agent run, batch, shard). Don't require repaste.
 2. Fresh file → skip clarification. Existing history → may ask 2-3 brief questions only if scope is genuinely ambiguous.
 3. Scan existing Memory sections and session-relevant source material. If possible, check relevant git history for files/decisions involved.
-4. **Dedup before filing** — scan existing Insights for semantic overlap. Lesson already exists → update `confidence`/`evidence_count`/`evidence`/`updated` on the existing entry instead of creating a near-duplicate. If you still create a new entry, make the distinction explicit.
+4. **Dedup before filing** — scan existing Insights for semantic overlap. Lesson already exists → update `confidence`/`evidence_count`/`evidence`/`updated` on the existing entry instead of creating a near-duplicate. If you still create a new entry, make the distinction explicit. If a new entry **contradicts or invalidates** an existing Decision/Insight/Context, supersede the old one (old `status: superseded` + `superseded_by`, new `supersedes`) rather than editing or deleting it.
 5. Append an Episode entry (outcome, takeaways, concrete details).
 6. Design/architecture choice made → append a Decision entry.
-7. Update reinforced Insights (`confidence`, `evidence_count`, `evidence`); create new if a reusable pattern emerged.
+7. Update reinforced Insights (`confidence`, `evidence_count`, `evidence`); create new if a reusable pattern emerged. **Link & evolve**: scan the most semantically-related existing entries, add reciprocal `related` links, and refine connected neighbors' `tags`/`confidence` to reflect new understanding.
 8. Standalone observation → append a Context entry.
 9. One-liner to Changelog.
 10. **Distill** — when 5+ Context entries have `status: active`, promote reusable patterns to Insights and mark promoted entries `status: distilled`.
@@ -122,6 +123,7 @@ Each entry is a `###` heading under its section. Heading slug = entry's **stable
 ### Universal optional fields (any type)
 
 - **`author`** — `human`, an agent id (`planner-01`), or a role (`librarian`). Omit in single-actor paste mode. **Required** in multi-agent mode.
+- **`related`** — comma-separated slugs of laterally connected entries: conceptually linked, not strict lineage. Bidirectional — when you link A→B, add B→A. Distinct from `derived_from`/`evidence` (vertical origin/support); `related` is sideways association for multi-hop recall. `--` when none.
 - **`artifacts`** — comma-separated `type:uri` pointers to non-text memory. Types: `image`, `audio`, `video`, `tool_trace`, `log`, `metric`, `embedding`, `dataset`, `doc`. Example: `image:./screens/flow.png, tool_trace:runs/2026-04-16.jsonl, embedding:vec://insights/backoff-pattern`. File stays plain markdown; artifacts live wherever your system stores them.
 
 ### Context — lightest type; inbox item
@@ -135,6 +137,9 @@ Each entry is a `###` heading under its section. Heading slug = entry's **stable
 - **tags**: tag1, tag2
 - **context_read**: files consulted
 - **derived_from**: (slug or --)
+- **related**: (slugs or --)
+- **supersedes**: (slug or --)
+- **superseded_by**: (filled when superseded)
 - **valid_from**: YYYY-MM-DD or version-range (optional)
 - **valid_until**: YYYY-MM-DD or version-range (optional)
 - **author**, **artifacts**: (optional; author required in multi-agent)
@@ -142,7 +147,7 @@ Each entry is a `###` heading under its section. Heading slug = entry's **stable
 Body: a few sentences. Focus on surprises and what you'd want in 30 days. Skip anything obvious.
 ```
 
-Slugs descriptive (`2026-03-23-redis-eviction-policy-mismatch`, not `2026-03-23-bug`). `status`: `active` (default) or `distilled` (promoted to Insight). Use `valid_from`/`valid_until` when tied to a known date/release/version window. Longer than a paragraph → promote to Episode. When unsure, capture it — distillation sorts it out.
+Slugs descriptive (`2026-03-23-redis-eviction-policy-mismatch`, not `2026-03-23-bug`). `status`: `active` (default), `distilled` (promoted to Insight), or `superseded` (a newer entry corrected/invalidated it; kept for history). Use `valid_from`/`valid_until` when tied to a known date/release/version window. Longer than a paragraph → promote to Episode. When unsure, capture it — distillation sorts it out.
 
 ### Episode — structured work log; one per `/syntrace`
 
@@ -206,11 +211,15 @@ Must be **findable** (tags + title), **actionable** (concrete trigger in "When t
 ---
 ### YYYY-MM-DD-slug
 - **type**: concept | howto
+- **status**: active
 - **confidence**: low | medium | high
 - **evidence_count**: 1
 - **tags**: ...
 - **derived_from**: source slug
+- **related**: (slugs or --)
 - **evidence**: slug1, slug2
+- **supersedes**: (slug or --)
+- **superseded_by**: (filled when superseded)
 - **updated**: YYYY-MM-DD
 - **valid_from** / **valid_until**: optional
 - **author**, **artifacts**: (optional)
@@ -222,17 +231,19 @@ One paragraph precise enough that future evidence could confirm or kill it.
 Concrete trigger: "when you see X in context Y, do Z." Include counter-examples.
 ```
 
-**Type**: `concept` (mental model/principle) or `howto` (technique with steps). **Confidence**: `low` (1 observation, hypothesis), `medium` (2-3 evidence points or 1 validated), `high` (3+ across contexts or benchmarked). `evidence_count` = length of `evidence`; increment on reinforcement.
+**Type**: `concept` (mental model/principle) or `howto` (technique with steps). **Status**: `active` (default) or `superseded` (a newer Insight corrected/contradicted it; kept for history). **Confidence**: `low` (1 observation, hypothesis), `medium` (2-3 evidence points or 1 validated), `high` (3+ across contexts or benchmarked). `evidence_count` = length of `evidence`; increment on reinforcement. A still-valid Insight whose support weakens drops `confidence`; one proven wrong is **superseded**, not deleted.
 
 ## Lineage rules
 
 Entries are append-only.
 
-1. **Immutability**: slug and body permanent once written. Mutable in place: `status`, `superseded_by`, `confidence`, `evidence_count`, `evidence`, `updated`, `valid_from`, `valid_until`, `artifacts` (accumulates). `author` fixed at write time.
-2. **Supersession**: reverse a Decision → new one with `supersedes` → old slug. Old's `status` → `superseded`, `superseded_by` → new slug. Never delete.
-3. **Derivation**: `derived_from` traces origin (Insight from Episode; Episode building on Context).
-4. **Evidence accumulation**: Insights list supports in `evidence`; increment `evidence_count` on reinforcement.
-5. **Distillation**: 5+ active Contexts → promote reusable patterns to Insights, mark sources `status: distilled`. Never delete — retained for lineage.
+1. **Immutability**: slug and body permanent once written. Mutable in place: `status`, `tags`, `related`, `superseded_by`, `confidence`, `evidence_count`, `evidence`, `updated`, `valid_from`, `valid_until`, `artifacts` (accumulates). `author` fixed at write time.
+2. **Supersession (any type)**: a newer entry that reverses or invalidates an existing Decision, Insight, or Context → write the new one with `supersedes` → old slug. Old entry's `status` → `superseded`, `superseded_by` → new slug. Never delete — superseded entries stay for history and point-in-time queries.
+3. **Bi-temporal time**: the heading date is *transaction time* — when the fact was learned/recorded. `valid_from`/`valid_until` are *valid time* — when the fact is/was true in the world. An entry can be `superseded` (no longer current) while its `valid_from`/`valid_until` window stays accurate for "what was true at time T" queries.
+4. **Derivation**: `derived_from` traces origin (Insight from Episode; Episode building on Context).
+5. **Lateral linking & evolution**: `related` cross-links conceptually connected entries and is bidirectional — linking A→B means adding B→A. When a new entry connects to existing ones, add reciprocal `related` links and may evolve neighbors' mutable metadata (`tags`, `confidence`, `evidence`) to reflect new understanding. Slug and body never change.
+6. **Evidence accumulation**: Insights list supports in `evidence`; increment `evidence_count` on reinforcement.
+7. **Distillation**: 5+ active Contexts → promote reusable patterns to Insights, mark sources `status: distilled`. Never delete — retained for lineage.
 
 ## Auto-fill (never ask the user)
 
@@ -338,21 +349,21 @@ Errors break invariants. Warnings flag quality issues.
 
 | Type | Slug | Required fields | Required sections | Allowed values |
 |------|------|-----------------|-------------------|----------------|
-| Context | `YYYY-MM-DD-slug` | `status`, `tags`, `context_read`, `derived_from`, non-empty body | — | status: `active`/`distilled` |
+| Context | `YYYY-MM-DD-slug` | `status`, `tags`, `context_read`, `derived_from`, non-empty body | — | status: `active`/`distilled`/`superseded` |
 | Episode | `YYYY-MM-DD-slug` | `outcome`, `tags`, `context_read`, `derived_from` | What happened, Takeaways | outcome: `SUCCESS`/`FAIL`/`SURPRISE`/`PARTIAL` |
 | Decision | `YYYY-MM-DD-HHMM-slug` | `status`, `tags`, `context_read`, `supersedes`, `superseded_by` | Context, Decision, Alternatives considered, Consequences | status: `accepted`/`deprecated`/`superseded` |
-| Insight | `YYYY-MM-DD-slug` | `type`, `confidence`, `evidence_count`, `tags`, `derived_from`, `evidence`, `updated` | Summary, When to apply | type: `concept`/`howto`; confidence: `low`/`medium`/`high` |
+| Insight | `YYYY-MM-DD-slug` | `type`, `confidence`, `evidence_count`, `tags`, `derived_from`, `evidence`, `updated` | Summary, When to apply | type: `concept`/`howto`; confidence: `low`/`medium`/`high`; status: `active`/`superseded` |
 
-`valid_from`/`valid_until` optional on Context and Insight (time/version-bounded knowledge). `author` and `artifacts` optional on any type; `author` **required** in multi-agent. `artifacts` is a `type:uri` list; validator checks format, doesn't dereference.
+`valid_from`/`valid_until` optional on Context and Insight (time/version-bounded knowledge). `status`/`supersedes`/`superseded_by` optional on Context and Insight (default `status: active`). `related` optional on any type. `author` and `artifacts` optional on any type; `author` **required** in multi-agent. `artifacts` is a `type:uri` list; validator checks format, doesn't dereference.
 
 ### Lineage validation
 
 **Errors**:
 
-- `derived_from`, `supersedes`, `superseded_by` → existing slug or `--`.
+- `derived_from`, `supersedes`, `superseded_by`, `related` → existing slug or `--`.
 - Every slug in `evidence` must exist.
-- Decision with `status: superseded` must have non-empty `superseded_by`.
-- `supersedes` must point to a Decision, not another type.
+- Any entry with `status: superseded` must have non-empty `superseded_by`.
+- `supersedes` must point to an entry of the same type.
 
 **Warnings**:
 
@@ -360,6 +371,7 @@ Errors break invariants. Warnings flag quality issues.
 - Episode reinforces an Insight but doesn't mention it.
 - Context longer than a short paragraph (→ Episode).
 - Multi-agent entry missing `author`.
+- `related` link not reciprocated (A lists B but B doesn't list A).
 - `artifacts` value doesn't match `type:uri` or uses unknown type.
 
 ### Memory Index refresh
@@ -367,9 +379,11 @@ Errors break invariants. Warnings flag quality issues.
 Derived, not hand-authored. Rebuild each `/syntrace`:
 
 - **Active decisions** — `status: accepted`.
-- **High-confidence insights** — `confidence: high`.
+- **High-confidence insights** — `confidence: high` and `status: active`.
 - **Open questions** — unresolved questions from active Context or recent Episodes/Decisions.
 - **Last updated** — most recent entry date across all Memory sections.
+
+Surfaces **current state only** — never list `superseded` entries. Point-in-time / historical questions ("what was true at time T") walk superseded entries directly by their `valid_from`/`valid_until`, not the Index.
 
 Target ~200-400 tokens. Wake-up context — first snapshot an agent reads before any deeper scan. Replace snapshot each time. Link by slug. Render `_(none yet)_` for empty categories.
 
@@ -426,7 +440,7 @@ Batch around meaningful checkpoints. Not every trivial step.
 | Memory Index scan | always | read first — surfaces active decisions + high-confidence insights |
 | Tag scan | 30-100 entries | search tags matching task keywords |
 | Recency + confidence | 100+ entries | 15-20 most recent + `confidence: high` Insights |
-| Lineage walk | tracing a topic | follow `derived_from`/`evidence` 1-2 hops |
+| Lineage walk | tracing a topic | follow `derived_from`/`evidence`/`related` 1-2 hops |
 
 At ~500 entries, split by domain (`syntrace-frontend.md`, `syntrace-infra.md`). Each file self-contained.
 
