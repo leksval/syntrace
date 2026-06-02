@@ -16,7 +16,7 @@
 - **Fresh-file rule**: empty history → skip clarification. Scan session, extract, save. Never reply "nothing to save" just because history is empty.
 - **Where to write**: append only under the six MEMORY sections at the end (Memory Index → Changelog). Never modify REFERENCE or EXAMPLES, except in-place Tag Canon table updates.
 - **Separators**: horizontal rule `---` between Changelog saves only. Not inside Context/Episodes/Decisions/Insights.
-- **Read before write**: scan existing Memory sections. Update reinforced Insights, don't duplicate. Add reciprocal `related` links to connected entries; link `supersedes`/`superseded_by` when reversing or invalidating any entry.
+- **Read before write**: scan existing Memory sections. Update reinforced Insights, don't duplicate. Add reciprocal `related` links to connected entries.
 - **Invalidate, don't erase**: a now-wrong or outdated fact (Decision, Insight, or Context) → write the correction and supersede the old one (`status: superseded` + `superseded_by`). Never edit away or delete a stale fact; superseded entries stay for history and point-in-time queries.
 - **Trigger**: `/syntrace` is the shorthand, not a separate mode. Also fire when user/orchestrator/hook clearly asks to save memory, capture lessons, or extract learning.
 - **Intent inference**: figure out whether the ask is session save, lesson extraction, or both. Apply Output tiers. Don't treat "no direct filesystem" as grounds to refuse — use the next tier.
@@ -123,7 +123,7 @@ Each entry is a `###` heading under its section. Heading slug = entry's **stable
 ### Universal optional fields (any type)
 
 - **`author`** — `human`, an agent id (`planner-01`), or a role (`librarian`). Omit in single-actor paste mode. **Required** in multi-agent mode.
-- **`related`** — comma-separated slugs of laterally connected entries: conceptually linked, not strict lineage. Bidirectional — when you link A→B, add B→A. Distinct from `derived_from`/`evidence` (vertical origin/support); `related` is sideways association for multi-hop recall. `--` when none.
+- **`related`** — comma-separated slugs of laterally connected entries: sideways association for multi-hop recall, not vertical lineage like `derived_from`/`evidence`. Bidirectional — when you link A→B, add B→A. `--` when none.
 - **`artifacts`** — comma-separated `type:uri` pointers to non-text memory. Types: `image`, `audio`, `video`, `tool_trace`, `log`, `metric`, `embedding`, `dataset`, `doc`. Example: `image:./screens/flow.png, tool_trace:runs/2026-04-16.jsonl, embedding:vec://insights/backoff-pattern`. File stays plain markdown; artifacts live wherever your system stores them.
 
 ### Context — lightest type; inbox item
@@ -231,7 +231,7 @@ One paragraph precise enough that future evidence could confirm or kill it.
 Concrete trigger: "when you see X in context Y, do Z." Include counter-examples.
 ```
 
-**Type**: `concept` (mental model/principle) or `howto` (technique with steps). **Status**: `active` (default) or `superseded` (a newer Insight corrected/contradicted it; kept for history). **Confidence**: `low` (1 observation, hypothesis), `medium` (2-3 evidence points or 1 validated), `high` (3+ across contexts or benchmarked). `evidence_count` = length of `evidence`; increment on reinforcement. A still-valid Insight whose support weakens drops `confidence`; one proven wrong is **superseded**, not deleted.
+**Type**: `concept` (mental model/principle) or `howto` (technique with steps). **Status**: `active` (default) or `superseded` (a newer Insight corrected/contradicted it; kept for history). **Confidence**: `low` (1 observation, hypothesis), `medium` (2-3 evidence points or 1 validated), `high` (3+ across contexts or benchmarked). `evidence_count` = length of `evidence`; increment on reinforcement.
 
 ## Lineage rules
 
